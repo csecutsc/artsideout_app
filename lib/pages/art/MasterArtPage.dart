@@ -66,7 +66,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: ASOAppBar(),
       body: OrientationBuilder(builder: (context, orientation) {
         // Desktop Size
