@@ -116,7 +116,8 @@ class _HomePageState extends State<HomePage> {
                                     child: Stack(
                                       children: <Widget>[
                                         Positioned(
-                                          top: 0,
+                                          top: -20,
+                                          left: 10,
                                           child: PlatformSvg.asset(
                                             listHomeActions[index].imgUrl,
                                             width:
@@ -140,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   )))),
                       staggeredTileBuilder: (int index) =>
-                          new StaggeredTile.count(2, index.isOdd ? 1.5 : 2.2),
+                          new StaggeredTile.count(2, index.isOdd ? 1.5 : 1.96),
                       mainAxisSpacing: 15.0,
                       crossAxisSpacing: 5.0,
                     ),
