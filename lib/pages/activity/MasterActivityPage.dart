@@ -1,17 +1,16 @@
-import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/graphql/config.dart';
-import 'package:artsideout_app/graphql/Installation.dart';
+import 'package:artsideout_app/graphql/Activity.dart';
 // Common
 import 'package:artsideout_app/components/PageHeader.dart';
-import 'package:artsideout_app/components/card.dart';
+import 'package:artsideout_app/components/activitycard.dart';
 import 'package:artsideout_app/components/navigation.dart';
 // Art
-import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
-import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
+import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
+import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 
 class MasterActivityPage extends StatefulWidget {
   @override
@@ -24,7 +23,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   int numCards = 2;
   var isLargeScreen = false;
 
-  List<Installation> listInstallation = List<Installation>();
+  List<Activity> listActivity = List<Activity>();
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
 
   @override
@@ -33,45 +32,48 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     _fillList();
   }
 
-  // Installation GraphQL Query
+  // Activity GraphQL Query
   void _fillList() async {
-    InstallationQueries queryInstallation = InstallationQueries();
+    ActivityQueries queryActivity = ActivityQueries();
     GraphQLClient _client = graphQLConfiguration.clientToQuery();
     QueryResult result = await _client.query(
       QueryOptions(
-        documentNode: gql(queryInstallation.getAll),
+        documentNode: gql(queryActivity.getAll),
       ),
     );
     if (!result.hasException) {
-      for (var i = 0; i < result.data["installations"].length; i++) {
+      for (var i = 0; i < result.data["activities"].length; i++) {
+        print(result.data["activities"][i]);
+        // result.data["activities"][i]["image"]["url"] ??
+        String imgUrlTest = (result.data["activities"][i]["image"] != null)
+            ? result.data["activities"][i]["image"]["url"]
+            : "https://via.placeholder.com/350";
+        Map<String, double> location = (result.data["activities"][i]["location"] !=
+                null)
+            ? {
+                'latitude': result.data["activities"][i]["location"]
+                    ["latitude"],
+                'longitude': result.data["activities"][i]["location"]
+                    ["longitude"]
+              }
+            : {'latitude': -1.0, 'longitude': 43.78263096464635};
         setState(() {
-          // Profile profile = Profile(
-          //   result.data["installations"][i]["profile"]["name"],
-          //   result.data["installations"][i]["profile"]["desc"],
-          //   result.data["installations"][i]["profile"]["social"],
-          //   result.data["installations"][i]["profile"]["type"],
-          //   [],
-          //   []
-          // );
-          listInstallation.add(
-            Installation(
-                result.data["installations"][i]["title"],
-                result.data["installations"][i]["desc"],
-                zone: result.data["installations"][i]["zone"],
-                imgUrl: result.data["installations"][i]["image"]["url"],
-                location: {'latitude': result.data["installations"][i]["location"]["latitude"],
-                'longitude': result.data["installations"][i]["location"]["longitude"],
-                },
-                locationRoom: result.data["installations"][i]["locationroom"],
-                profiles: []
-            ),
+          listActivity.add(
+            Activity(
+                result.data["activities"][i]["title"],
+                result.data["activities"][i]["desc"],
+                result.data["activities"][i]["zone"],
+                imgUrl: imgUrlTest,
+                location: location,
+                profiles: []),
           );
         });
       }
     }
+    print(listActivity);
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -86,7 +88,9 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         } else if (MediaQuery.of(context).size.width > 600) {
           secondFlexSize = 1;
           isLargeScreen = true;
-          numCards = MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3;
+          numCards = MediaQuery.of(context).orientation == Orientation.portrait
+              ? 2
+              : 3;
           // Phone Size
         } else {
           isLargeScreen = false;
@@ -102,7 +106,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                 ),
                 child: Column(children: <Widget>[
                   Header(
-                    image: "assets/icons/installation.svg",
+                    image: "assets/icons/activities.svg",
                     textTop: "FUN",
                     textBottom: "ACTIVITIES",
                     subtitle: "Cool Beans",
@@ -116,23 +120,26 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     ),
                     child: Stack(
                       children: <Widget>[
-                        SizedBox(height:50),
+                        SizedBox(height: 50),
                         GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: numCards,
                             crossAxisSpacing: 3.0,
                             mainAxisSpacing: 3.0,
                           ),
                           // Let the ListView know how many items it needs to build.
-                          itemCount: listInstallation.length,
+                          itemCount: listActivity.length,
                           // Provide a builder function. This is where the magic happens.
                           // Convert each item into a widget based on the type of item it is.
                           itemBuilder: (context, index) {
-                            final item = listInstallation[index];
+                            final item = listActivity[index];
                             return Center(
-                              child: ArtListCard(
+                              child: ActivityCard(
                                   title: item.title,
-                                  artist: (item.profiles.length > 0) ? item.profiles[0].name : "",
+                                  desc: (item.profiles.length > 0)
+                                      ? item.profiles[0].name
+                                      : "",
                                   image: item.imgUrl,
                                   pageButton: Row(
                                     children: <Widget>[
@@ -146,7 +153,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                             Navigator.push(context,
                                                 CupertinoPageRoute(
                                               builder: (context) {
-                                                return ArtDetailPage(item);
+                                                return ActivityDetailPage(item);
                                               },
                                             ));
                                           }
@@ -162,10 +169,10 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   )),
                 ]),
               )),
-          // If large screen, render installation detail page
-          (isLargeScreen && listInstallation.length != 0)
+          // If large screen, render activity detail page
+          (isLargeScreen && listActivity.length != 0)
               ? Expanded(
-                  child: ArtDetailWidget(listInstallation[selectedValue]))
+                  child: ActivityDetailWidget(listActivity[selectedValue]))
               : Container(),
         ]);
       }),
