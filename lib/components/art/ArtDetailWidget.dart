@@ -14,7 +14,18 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration( // box/container design
+        color: Colors.white,
+        // borderRadius: BorderRadius.circular(25),
+        boxShadow: [ 
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5, 
+            blurRadius: 7, 
+            offset: Offset(10, 3),
+          ),
+        ],
+      ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

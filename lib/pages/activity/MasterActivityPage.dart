@@ -101,21 +101,36 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   color: Color(0xFFFCEAEB),
                 ),
                 child: Column(children: <Widget>[
-                  Header(
-                    image: "assets/icons/installation.svg",
-                    textTop: "FUN",
-                    textBottom: "ACTIVITIES",
-                    subtitle: "Cool Beans",
+                  Header( // title header
+                    image: "assets/icons/activities.svg",
+                    textTop: "ACTIVITIES",
+                    textBottom: "",
+                    subtitle: "",
                   ),
                   Expanded(
-                      child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white,
-                    ),
-                    child: Stack(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration( // calendar box design
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white,
+                        boxShadow: [ 
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5, 
+                            blurRadius: 7, 
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
                       children: <Widget>[
+                        Padding( 
+                          padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
+                          child: Text( // calendar title
+                              'Calendar',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                        ),
                         SizedBox(height:50),
                         GridView.builder(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
