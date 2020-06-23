@@ -14,7 +14,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration( // box/container design
+      decoration: BoxDecoration( 
         color: Colors.white,
         // borderRadius: BorderRadius.circular(25),
         boxShadow: [ 
