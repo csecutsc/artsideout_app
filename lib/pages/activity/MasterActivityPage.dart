@@ -83,7 +83,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         if (MediaQuery.of(context).size.width > 1200) {
           secondFlexSize = 3;
           isLargeScreen = true;
-          numCards = 5;
+          numCards = 2;
           // Tablet Size
         } else if (MediaQuery.of(context).size.width > 600) {
           secondFlexSize = 1;
@@ -115,7 +115,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration( // calendar box design
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(25),
                         color: Colors.white,
                         boxShadow: [ 
                           BoxShadow(

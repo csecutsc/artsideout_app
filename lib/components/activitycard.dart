@@ -21,7 +21,15 @@ class ActivityCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Image.network(image, height:80),
+          Align(
+            alignment: Alignment.centerRight,
+            //widthFactor: 0.25,
+            //heightFactor: 0.25,
+            child: FittedBox(
+              child: Image.network(image, width: 200, height: 200),
+              fit: BoxFit.fitHeight
+            )
+          ),  
           ListTile(
             leading: Icon(Icons.album),
             title: Text(title),
