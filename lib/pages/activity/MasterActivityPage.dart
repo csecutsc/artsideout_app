@@ -105,7 +105,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   color: Color(0xFFFCEAEB),
                 ),
                 child: Column(children: <Widget>[
-                  Header( // title header
+                  Header( 
                     image: "assets/icons/activities.svg",
                     textTop: "ACTIVITIES",
                     textBottom: "",
@@ -114,8 +114,8 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      decoration: BoxDecoration( // calendar box design
-                        borderRadius: BorderRadius.circular(25),
+                      decoration: BoxDecoration( 
+                        borderRadius: BorderRadius.circular(50),
                         color: Colors.white,
                         boxShadow: [ 
                           BoxShadow(
@@ -130,7 +130,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                       children: <Widget>[
                         Padding( 
                           padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text( // calendar title
+                          child: Text( 
                               'Calendar',
                               style: Theme.of(context).textTheme.headline4,
                             ),
