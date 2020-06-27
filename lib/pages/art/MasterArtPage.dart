@@ -46,18 +46,24 @@ class _MasterArtPageState extends State<MasterArtPage> {
         setState(() {
           listInstallation.add(
             Installation(
-                result.data["installations"][i]["title"],
-                result.data["installations"][i]["desc"],
-                zone: result.data["installations"][i]["zone"],
-                imgUrl: result.data["installations"][i]["image"]["url"],
-                location: {'latitude': result.data["installations"][i]["location"]["latitude"],
-                'longitude': result.data["installations"][i]["location"]["longitude"],
-                },
-                locationRoom: result.data["installations"][i]["locationroom"],
-                profiles: []
+              result.data["installations"][i]["title"],
+              result.data["installations"][i]["desc"],
+              zone: result.data["installations"][i]["zone"],
+              imgUrl: result.data["installations"][i]["image"] == null
+                  ? 'https://via.placeholder.com/350'
+                  : result.data["installations"][i]["image"]["url"],
+              location: {
+                'latitude': result.data["installations"][i]["location"] == null
+                    ? 0.0
+                    : result.data["installations"][i]["location"]["latitude"],
+                'longitude': result.data["installations"][i]["location"] == null
+                    ? 0.0
+                    : result.data["installations"][i]["location"]["longitude"],
+              },
+              locationRoom: result.data["installations"][i]["locationroom"],
+              profiles: [],
             ),
           );
-          
         });
       }
     }
@@ -78,14 +84,17 @@ class _MasterArtPageState extends State<MasterArtPage> {
         } else if (MediaQuery.of(context).size.width > 600) {
           secondFlexSize = 1;
           isLargeScreen = true;
-          numCards = MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3;
+          numCards = MediaQuery.of(context).orientation == Orientation.portrait
+              ? 2
+              : 3;
           // Phone Size
         } else {
           isLargeScreen = false;
           numCards = 2;
         }
-        return Row(children: <Widget>[
-          Expanded(
+        return Row(
+          children: <Widget>[
+            Expanded(
               flex: secondFlexSize,
               child: Container(
                 width: double.infinity,
@@ -100,66 +109,67 @@ class _MasterArtPageState extends State<MasterArtPage> {
                     subtitle: "Cool Beans",
                   ),
                   Expanded(
-                      child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
+                      child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      width: double.infinity,
                       color: Colors.white,
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        SizedBox(height:50),
-                        GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: numCards,
-                            crossAxisSpacing: 3.0,
-                            mainAxisSpacing: 3.0,
+                      child: Stack(
+                        children: <Widget>[
+                          SizedBox(height: 50),
+                          GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: numCards,
+                              crossAxisSpacing: 3.0,
+                              mainAxisSpacing: 3.0,
+                            ),
+                            // Let the ListView know how many items it needs to build.
+                            itemCount: listInstallation.length,
+                            // Provide a builder function. This is where the magic happens.
+                            // Convert each item into a widget based on the type of item it is.
+                            itemBuilder: (context, index) {
+                              final item = listInstallation[index];
+                              return Center(
+                                child: GestureDetector(
+                                  child: ArtListCard(
+                                    title: item.title,
+                                    artist: item.zone,
+                                    image: item.imgUrl,
+                                  ),
+                                  onTap: () {
+                                    if (isLargeScreen) {
+                                      selectedValue = index;
+                                      setState(() {});
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) {
+                                            return ArtDetailPage(item);
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
                           ),
-                          // Let the ListView know how many items it needs to build.
-                          itemCount: listInstallation.length,
-                          // Provide a builder function. This is where the magic happens.
-                          // Convert each item into a widget based on the type of item it is.
-                          itemBuilder: (context, index) {
-                            final item = listInstallation[index];
-                            return Center(
-                              child: ArtListCard(
-                                  title: item.title,
-                                  artist: item.zone,
-                                  image: item.imgUrl,
-                                  pageButton: Row(
-                                    children: <Widget>[
-                                      FlatButton(
-                                        child: const Text('VIEW'),
-                                        onPressed: () {
-                                          if (isLargeScreen) {
-                                            selectedValue = index;
-                                            setState(() {});
-                                          } else {
-                                            Navigator.push(context,
-                                                CupertinoPageRoute(
-                                              builder: (context) {
-                                                return ArtDetailPage(item);
-                                              },
-                                            ));
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  )),
-                            );
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )),
                 ]),
-              )),
-          // If large screen, render installation detail page
-          (isLargeScreen && listInstallation.length != 0)
-              ? Expanded(
-                  child: ArtDetailWidget(listInstallation[selectedValue]))
-              : Container(),
-        ]);
+              ),
+            ),
+            // If large screen, render installation detail page
+            (isLargeScreen && listInstallation.length != 0)
+                ? Expanded(
+                    child: ArtDetailWidget(listInstallation[selectedValue]))
+                : Container(),
+          ],
+        );
       }),
     );
   }
