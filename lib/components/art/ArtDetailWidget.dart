@@ -19,7 +19,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
         // borderRadius: BorderRadius.circular(25),
         boxShadow: [ 
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0),
             spreadRadius: 5, 
             blurRadius: 7, 
             offset: Offset(10, 3),
