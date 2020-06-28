@@ -131,7 +131,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                             itemBuilder: (context, index) {
                               final item = listInstallation[index];
                               return Center(
-                                child: GestureDetector(
+                                child: GestureDetector( 
                                   child: ArtListCard(
                                     title: item.title,
                                     artist: item.zone,
