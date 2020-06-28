@@ -1,3 +1,5 @@
+import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // GraphQL
@@ -22,6 +24,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   int secondFlexSize = 1;
   int numCards = 2;
   var isLargeScreen = false;
+  bool selected = false;
 
   List<Activity> listActivity = List<Activity>();
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
@@ -143,7 +146,10 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration( 
-                            borderRadius: BorderRadius.circular(50),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50), 
+                              topRight: Radius.circular(50)
+                            ),
                             color: Colors.white,
                             boxShadow: [ 
                               BoxShadow(
@@ -170,34 +176,58 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                           // Convert each item into a widget based on the type of item it is.
                           itemBuilder: (context, index) {
                             final item = listActivity[index];
-                            return Center(
-                              child: ActivityCard(
+                            return AnimatedContainer(
+                              duration: Duration(milliseconds: 50),
+                              curve: Curves.fastOutSlowIn,
+                              child: Material( 
+                                child: ActivityCard(
                                   title: item.title,
                                   desc: (item.profiles.length > 0)
                                       ? item.profiles[0].name
                                       : "",
                                   image: item.imgUrl,
                                   time: item.time,
-                                  pageButton: Row(
-                                    children: <Widget>[
-                                      FlatButton(
-                                        child: const Text('VIEW'),
-                                        onPressed: () {
-                                          if (isLargeScreen) {
-                                            selectedValue = index;
-                                            setState(() {});
-                                          } else {
-                                            Navigator.push(context,
-                                                CupertinoPageRoute(
-                                              builder: (context) {
-                                                return ActivityDetailPage(item);
-                                              },
-                                            ));
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  )),
+                                  detailPageButton: InkWell( 
+                                    splashColor: Colors.grey[200].withOpacity(0.25),
+                                    onTap: () {
+                                      if (isLargeScreen) {
+                                        selectedValue = index;
+                                        setState(() {});
+                                      } else {
+                                        Navigator.push(context, 
+                                          CupertinoPageRoute(
+                                            builder: (context) {
+                                              return ActivityDetailPage(item);
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  // Activity Card Button 
+                                  
+                                  // pageButton: Row(
+                                  //   children: <Widget>[
+                                  //     FlatButton(
+                                  //       child: const Text('VIEW'),
+                                  //       onPressed: () {
+                                  //         if (isLargeScreen) {
+                                  //           selectedValue = index;
+                                  //           setState(() {});
+                                  //         } else {
+                                  //           Navigator.push(context,
+                                  //               CupertinoPageRoute(
+                                  //             builder: (context) {
+                                  //               return ActivityDetailPage(item);
+                                  //             },
+                                  //           ));
+                                  //         }
+                                  //       },
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                ),
+                              ),
                             );
                           },
                         ),
