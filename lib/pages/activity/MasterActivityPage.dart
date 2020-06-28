@@ -45,9 +45,11 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
       for (var i = 0; i < result.data["activities"].length; i++) {
         print(result.data["activities"][i]);
         // result.data["activities"][i]["image"]["url"] ??
+
         String imgUrlTest = (result.data["activities"][i]["image"] != null)
             ? result.data["activities"][i]["image"]["url"]
             : "https://via.placeholder.com/350";
+
         Map<String, double> location = (result.data["activities"][i]["location"] !=
                 null)
             ? {
@@ -57,6 +59,14 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     ["longitude"]
               }
             : {'latitude': -1.0, 'longitude': 43.78263096464635};
+
+        Map<String, String> time = { 
+          'startTime': result.data["activities"][i]["startTime"] ?? "", 
+          'endTime': result.data["activities"][i]["endTime"] ?? ""
+        };
+
+        
+        
         setState(() {
           listActivity.add(
             Activity(
@@ -64,6 +74,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                 result.data["activities"][i]["desc"],
                 result.data["activities"][i]["zone"],
                 imgUrl: imgUrlTest,
+                time: time,
                 location: location,
                 profiles: []),
           );
@@ -112,6 +123,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     subtitle: "",
                   ),
                   Expanded(
+                    // Calendar Box 
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration( 
@@ -128,6 +140,21 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                       ),
                       child: Stack(
                       children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration( 
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white,
+                            boxShadow: [ 
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5, 
+                                blurRadius: 7, 
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                        ),
                         Padding( 
                           padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
                           child: Text( 
@@ -136,13 +163,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             ),
                         ),
                         SizedBox(height:50),
-                        GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: numCards,
-                            crossAxisSpacing: 3.0,
-                            mainAxisSpacing: 3.0,
-                          ),
+                        ListView.builder(
                           // Let the ListView know how many items it needs to build.
                           itemCount: listActivity.length,
                           // Provide a builder function. This is where the magic happens.
@@ -156,6 +177,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                       ? item.profiles[0].name
                                       : "",
                                   image: item.imgUrl,
+                                  time: item.time,
                                   pageButton: Row(
                                     children: <Widget>[
                                       FlatButton(
@@ -179,6 +201,50 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             );
                           },
                         ),
+                        // old Grid View for Activities
+                        // GridView.builder(
+                        //   gridDelegate:
+                        //       SliverGridDelegateWithFixedCrossAxisCount(
+                        //     crossAxisCount: numCards,
+                        //     crossAxisSpacing: 3.0,
+                        //     mainAxisSpacing: 3.0,
+                        //   ),
+                        //   // Let the ListView know how many items it needs to build.
+                        //   itemCount: listActivity.length,
+                        //   // Provide a builder function. This is where the magic happens.
+                        //   // Convert each item into a widget based on the type of item it is.
+                        //   itemBuilder: (context, index) {
+                        //     final item = listActivity[index];
+                        //     return Center(
+                        //       child: ActivityCard(
+                        //           title: item.title,
+                        //           desc: (item.profiles.length > 0)
+                        //               ? item.profiles[0].name
+                        //               : "",
+                        //           image: item.imgUrl,
+                        //           pageButton: Row(
+                        //             children: <Widget>[
+                        //               FlatButton(
+                        //                 child: const Text('VIEW'),
+                        //                 onPressed: () {
+                        //                   if (isLargeScreen) {
+                        //                     selectedValue = index;
+                        //                     setState(() {});
+                        //                   } else {
+                        //                     Navigator.push(context,
+                        //                         CupertinoPageRoute(
+                        //                       builder: (context) {
+                        //                         return ActivityDetailPage(item);
+                        //                       },
+                        //                     ));
+                        //                   }
+                        //                 },
+                        //               ),
+                        //             ],
+                        //           )),
+                        //     );
+                        //   },
+                        // ),
                       ],
                     ),
                   )),
