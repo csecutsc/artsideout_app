@@ -105,6 +105,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
           ),
 
           Container( 
+            padding: EdgeInsets.only(bottom: 25),
             child: Row( 
               children: <Widget>[ 
                 SizedBox(
@@ -118,6 +119,16 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
               ],
             ),
           ),
+
+          Divider( 
+            color: Colors.black, 
+            thickness: 1.0, 
+            height: 0.0, 
+            indent: 15.0, 
+            endIndent: 15.0,
+          ),
+
+          
         ],
       ),
     );
