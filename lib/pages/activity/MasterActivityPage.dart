@@ -230,6 +230,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                               ),
                             );
                           },
+                          physics: BouncingScrollPhysics(),
                         ),
                         // old Grid View for Activities
                         // GridView.builder(
