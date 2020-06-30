@@ -182,11 +182,10 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                               child: Material( 
                                 child: ActivityCard(
                                   title: item.title,
-                                  desc: (item.profiles.length > 0)
-                                      ? item.profiles[0].name
-                                      : "",
+                                  desc: item.desc,
                                   image: item.imgUrl,
                                   time: item.time,
+                                  zone: item.zone,
                                   detailPageButton: InkWell( 
                                     splashColor: Colors.grey[200].withOpacity(0.25),
                                     onTap: () {
