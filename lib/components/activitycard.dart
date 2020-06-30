@@ -1,5 +1,7 @@
 // import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
+// import 'dart:async';
 import 'package:flutter/material.dart';
+
 
 class ActivityCard extends StatelessWidget {
   final String title;
@@ -20,6 +22,47 @@ class ActivityCard extends StatelessWidget {
     this.detailPageButton,
     // this.pageButton,
   }) : super(key: key);
+
+  String startTimeDisplay(String startTimeGiven, BuildContext context) {
+    if (startTimeGiven == "") {
+      return "ALL DAY";
+    } else {
+      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven)).format(context);
+    }
+  }
+
+  // "to" divider function
+
+  // String to(String startTimeGiven) {
+  //   if (startTimeGiven != "") {
+  //     return "to";
+  //   }
+  //   else {
+  //     return "";
+  //   }
+  // } 
+
+  String endTimeDisplay(String endTimeGiven, BuildContext context) {
+    if (endTimeGiven == "") {
+      return "";
+    } else {
+      return TimeOfDay.fromDateTime(DateTime.parse(endTimeGiven)).format(context);
+    }
+  }
+
+  String displayDesc(String desc) {
+    if (desc == "") {
+      return "No Description available.";
+    }
+    return desc;
+  }
+
+  String displayZone(String zone) {
+    if (zone == null) {
+      return "Unknown Zone";
+    }
+    return zone;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,113 +85,91 @@ class ActivityCard extends StatelessWidget {
       child: Stack( 
         children: <Widget>[
           Row( 
-            mainAxisSize: MainAxisSize.min, 
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[ 
               Expanded( 
-                child: Align( 
-                  alignment: Alignment.centerLeft,
-                  child: Column( 
-                    children: <Widget>[ 
-                      Expanded(
-                        // flex: 3,
-                        child: Padding( 
-                          padding: EdgeInsets.only(left: 20),
-                          child: Text( 
-                            time["startTime"],
-                            style: TextStyle( 
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'Arial Black',
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded( 
-                        // flex: 1,
-                        child: Padding( 
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text( 
-                            'to'
-                          ),
-                        ),
-                      ),
-                      Expanded( 
-                        // flex: 2,
-                        child: Padding( 
-                          padding: EdgeInsets.only(left: 20),
-                          child: Text( 
-                            time["endTime"],
-                            style: TextStyle( 
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Arial Black',
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded( 
-                child: Align( 
-                  alignment: Alignment.centerLeft,
-                  child: Column( 
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[ 
-                      Expanded( 
+                flex: 3,
+                child: Column(
+                    children: <Widget>[
+                      Padding( 
+                        padding: EdgeInsets.only(left: 20.0, top: 10.0), 
                         child: Text( 
-                          title, 
+                          startTimeDisplay(time["startTime"], context),
                           style: TextStyle( 
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,  
+                            fontSize: 25.0,
+                            fontFamily: 'Roboto',
                           ),
                         ),
                       ),
-                      // Description on Activity Card
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Divider(
+                          color: Colors.black,
+                          thickness: 1.0,
+                          indent: 45.0,
+                          endIndent: 30.0,
+                        )
+                      ),
+                      // "to" divider
 
-                      // Expanded( 
-                      //   child: Text( 
-                      //     // remove placeholder description later
-                      //     desc + 'Description Here', 
-                      //   ),
+                      // Padding( 
+                      //   padding: EdgeInsets.all(10.0),
+                      //   child: Text(
+                      //     to(time["startTime"]),
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle( 
+                      //       fontSize: 16.0,
+                      //       fontWeight: FontWeight.bold,
+                      //     ),
+                      //   )
                       // ),
-                      ListTile( 
-                        leading: Icon( 
-                          Icons.location_on, 
-                          size: 32.0, 
-                          color: Color(0xFFBE4C59),
-                        ),
-                        // TODO: Add location of activity (if needed?)
-                        title: Text( 
-                          'Some Location',
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
+                        child: Text( 
+                          endTimeDisplay(time["endTime"], context),
                           style: TextStyle( 
-                            color: Colors.red[900],
+                            fontWeight: FontWeight.w900,  
+                            fontSize: 25.0,
+                            fontFamily: 'Roboto',
                           ),
                         ),
                       ),
-                      // Button to Art Details Page
-
-                      // Expanded( 
-                      //   child: ButtonBar( 
-                      //     children: <Widget>[ 
-                      //       pageButton
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                  ]
                 ),
               ),
               Expanded( 
-                child: Align( 
-                  alignment: Alignment.centerRight,
-                  child: FittedBox( 
-                    child: Image.network(image, width: 200, height: 200),
-                    fit: BoxFit.fitHeight,
-                  ),
+                flex: 7,
+                child: Column(
+                  children: <Widget>[
+                    // TODO: ELLIPSIS NOT WORKING PROPERLY
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                      child: Text( 
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle( 
+                          fontSize: 24.0, 
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container( 
+                      padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                      alignment: Alignment.topLeft,
+                      color: Colors.green[200],
+                      child: Text(
+                        displayDesc(desc),
+                        style: TextStyle( 
+                          fontSize: 14.0,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                    ),
+                    // TODO: Add Zone Info + Icon
+                  ],
                 ),
               ),
             ],
