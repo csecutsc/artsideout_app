@@ -141,7 +141,6 @@ class ActivityCard extends StatelessWidget {
                 flex: 7,
                 child: Column(
                   children: <Widget>[
-                    // TODO: ELLIPSIS NOT WORKING PROPERLY
                     Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
@@ -154,18 +153,26 @@ class ActivityCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
                     Container( 
                       padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
                       alignment: Alignment.topLeft,
-                      color: Colors.green[200],
+                      // testing purposes
+                      // width: 300,
+                      // height: 85,
+                      // width: MediaQuery.of(context).size.width*0.7,
+                      // height: MediaQuery.of(context).size.height*0.5,
+                      // color: Colors.green[200],
+                      //
                       child: Text(
                         displayDesc(desc),
                         style: TextStyle( 
                           fontSize: 14.0,
                         ),
-                        overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.clip,
                         maxLines: 3,
                         softWrap: true,
+                        textAlign: TextAlign.left,
                       ),
                     ),
                     // TODO: Add Zone Info + Icon
