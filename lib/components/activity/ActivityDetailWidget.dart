@@ -15,31 +15,29 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column( 
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[ 
-          Card( 
-            shape: RoundedRectangleBorder( 
-              borderRadius: BorderRadius.circular(25.0), 
+        children: <Widget>[
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
             ),
-            child: Container( 
-              width: 450.0, 
-              height: 250.0, 
-              decoration: BoxDecoration( 
-                image: DecorationImage( 
-                  fit: BoxFit.fill, 
+            child: Container(
+              width: 450.0,
+              height: 250.0,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
                   image: NetworkImage(widget.data.imgUrl),
                 ),
               ),
             ),
           ),
-
-          SizedBox( 
-            height: 15.0, 
+          SizedBox(
+            height: 15.0,
           ),
-
-          ListTile( 
-            leading: CircleAvatar( 
+          ListTile(
+            leading: CircleAvatar(
               backgroundColor: asoPrimary,
               radius: 25.0,
             ),
@@ -65,70 +63,72 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                 ),
               ],
             ),
-            trailing: IconButton( 
-              icon: Icon(Icons.bookmark), 
-              color: asoPrimary, 
+            trailing: IconButton(
+              icon: Icon(Icons.bookmark),
+              color: asoPrimary,
               onPressed: () {
                 print('Save button pressed! uwu');
               },
             ),
           ),
-
-          ListTile( 
-            leading: Text( 
-              widget.data.zone, 
-              style: TextStyle( 
-                color: asoPrimary, 
-                fontWeight: FontWeight.bold, 
-                fontSize: 18.0, 
-              )
-            )
-          ),
-
-          Divider( 
-            color: Colors.black, 
-            thickness: 3.0, 
-            height: 0.0, 
-            indent: 15.0, 
+          ListTile(
+              leading: Text(widget.data.zone,
+                  style: TextStyle(
+                    color: asoPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ))),
+          Divider(
+            color: Colors.black,
+            thickness: 3.0,
+            height: 0.0,
+            indent: 15.0,
             endIndent: 15.0,
-          ), 
-
-          ListTile( 
-            leading: Text( 
-              'OVERVIEW', 
-              style: TextStyle( 
+          ),
+          ListTile(
+            leading: Text(
+              'OVERVIEW',
+              style: TextStyle(
                 color: asoPrimary,
                 fontWeight: FontWeight.bold,
-                fontSize: 18.0, 
+                fontSize: 18.0,
               ),
             ),
           ),
-
-          Container( 
+          Container(
             padding: EdgeInsets.only(bottom: 25),
-            child: Row( 
-              children: <Widget>[ 
+            child: Row(
+              children: <Widget>[
                 SizedBox(
-                  width: 16.0, 
-                ), 
-                Flexible( 
-                  child: Text( 
+                  width: 16.0,
+                ),
+                Flexible(
+                  child: Text(
                     widget.data.desc,
-                  ),  
+                  ),
                 )
               ],
             ),
           ),
-
-          Divider( 
-            color: Colors.black, 
-            thickness: 1.0, 
-            height: 0.0, 
-            indent: 15.0, 
+          ListTile(
+              leading: Text('Organizers',
+                  style: TextStyle(
+                    color: asoPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ))),
+          Container(
+              padding: EdgeInsets.all(25),
+              child: Row(
+                children: [for (var i in widget.data.profiles) Text(i.name)],
+              )),
+          Divider(
+            color: Colors.black,
+            thickness: 1.0,
+            height: 0.0,
+            indent: 15.0,
             endIndent: 15.0,
           ),
-
-          
         ],
       ),
     );

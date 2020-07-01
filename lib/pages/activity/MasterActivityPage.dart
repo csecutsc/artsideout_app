@@ -1,4 +1,6 @@
-import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
+import 'dart:html';
+
+import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,30 +48,55 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     );
     if (!result.hasException) {
       for (var i = 0; i < result.data["activities"].length; i++) {
-        print(result.data["activities"][i]);
+        //print(result.data["activities"][i]);
         // result.data["activities"][i]["image"]["url"] ??
 
         String imgUrlTest = (result.data["activities"][i]["image"] != null)
             ? result.data["activities"][i]["image"]["url"]
             : "https://via.placeholder.com/350";
 
-        Map<String, double> location = (result.data["activities"][i]["location"] !=
-                null)
-            ? {
-                'latitude': result.data["activities"][i]["location"]
-                    ["latitude"],
-                'longitude': result.data["activities"][i]["location"]
-                    ["longitude"]
-              }
-            : {'latitude': -1.0, 'longitude': 43.78263096464635};
+        List<Profile> profilesList = [];
 
-        Map<String, String> time = { 
-          'startTime': result.data["activities"][i]["startTime"] ?? "", 
+        if (result.data["activities"][i]["profile"] != null) {
+          for (var j = 0;
+              j < result.data["activities"][i]["profile"].length;
+              j++) {
+            Object socialTest =
+                result.data["activities"][i]["profile"][j]["social"] ?? null;
+            profilesList.add(Profile(
+                    result.data["activities"][i]["profile"][j]["name"],
+                    result.data["activities"][i]["profile"][j][
+                        "desc"]) /*,
+                social: socialTest,
+                type: "",
+                installations: [],
+                activities: []*/
+                );
+            print(profilesList[j].name);
+          }
+        }
+
+        /*(result.data["activities"][i]["profiles"] != null)
+                ? result.data["activities"][i]["profiles"]
+                : []; */
+
+        print(profilesList);
+
+        Map<String, double> location =
+            (result.data["activities"][i]["location"] != null)
+                ? {
+                    'latitude': result.data["activities"][i]["location"]
+                        ["latitude"],
+                    'longitude': result.data["activities"][i]["location"]
+                        ["longitude"]
+                  }
+                : {'latitude': -1.0, 'longitude': -1.0};
+
+        Map<String, String> time = {
+          'startTime': result.data["activities"][i]["startTime"] ?? "",
           'endTime': result.data["activities"][i]["endTime"] ?? ""
         };
 
-        
-        
         setState(() {
           listActivity.add(
             Activity(
@@ -79,7 +106,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                 imgUrl: imgUrlTest,
                 time: time,
                 location: location,
-                profiles: []),
+                profiles: profilesList),
           );
         });
       }
@@ -119,56 +146,56 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   color: Color(0xFFFCEAEB),
                 ),
                 child: Column(children: <Widget>[
-                  Header( 
+                  Header(
                     image: "assets/icons/activities.svg",
                     textTop: "ACTIVITIES",
                     textBottom: "",
                     subtitle: "",
                   ),
                   Expanded(
-                    // Calendar Box 
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration( 
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white,
-                        boxShadow: [ 
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5, 
-                            blurRadius: 7, 
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
+                      // Calendar Box
+                      child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
                       children: <Widget>[
                         Container(
                           width: double.infinity,
-                          decoration: BoxDecoration( 
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50), 
-                              topRight: Radius.circular(50)
-                            ),
+                                topLeft: Radius.circular(50),
+                                topRight: Radius.circular(50)),
                             color: Colors.white,
-                            boxShadow: [ 
+                            boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5, 
-                                blurRadius: 7, 
+                                spreadRadius: 5,
+                                blurRadius: 7,
                                 offset: Offset(0, 3),
                               ),
                             ],
                           ),
                         ),
-                        Padding( 
-                          padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text( 
-                              'Calendar',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30.0, top: 15.0, bottom: 15.0),
+                          child: Text(
+                            'Calendar',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
                         ),
-                        SizedBox(height:50),
+                        SizedBox(height: 50),
                         ListView.builder(
                           // Let the ListView know how many items it needs to build.
                           itemCount: listActivity.length,
@@ -179,21 +206,23 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             return AnimatedContainer(
                               duration: Duration(milliseconds: 50),
                               curve: Curves.fastOutSlowIn,
-                              child: Material( 
+                              child: Material(
                                 child: ActivityCard(
                                   title: item.title,
                                   desc: item.desc,
                                   image: item.imgUrl,
                                   time: item.time,
                                   zone: item.zone,
-                                  detailPageButton: InkWell( 
-                                    splashColor: Colors.grey[200].withOpacity(0.25),
+                                  detailPageButton: InkWell(
+                                    splashColor:
+                                        Colors.grey[200].withOpacity(0.25),
                                     onTap: () {
                                       if (isLargeScreen) {
                                         selectedValue = index;
                                         setState(() {});
                                       } else {
-                                        Navigator.push(context, 
+                                        Navigator.push(
+                                          context,
                                           CupertinoPageRoute(
                                             builder: (context) {
                                               return ActivityDetailPage(item);
@@ -203,8 +232,8 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                       }
                                     },
                                   ),
-                                  // Activity Card Button 
-                                  
+                                  // Activity Card Button
+
                                   // pageButton: Row(
                                   //   children: <Widget>[
                                   //     FlatButton(
