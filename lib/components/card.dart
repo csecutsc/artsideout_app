@@ -59,10 +59,13 @@ class ArtListCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 16.0,
-                          color: Color(0xFFBE4C59),
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Icon(
+                            Icons.location_on,
+                            size: 16.0,
+                            color: Color(0xFFBE4C59),
+                          ),
                         ),
                         FittedBox(
                           fit: BoxFit.fitWidth,
