@@ -33,17 +33,18 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
           alignment: Alignment.bottomCenter,
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Colors.white,
-                  Colors.white,
+              color: Colors.white,
+//              gradient: LinearGradient(
+//                begin: Alignment.topCenter,
+//                end: Alignment.bottomCenter,
+//                colors: <Color>[
+//                  Colors.white,
+//                  Colors.white,
 //                  Color(0xFFfaa2d3),
 //                  Color(0xFFed79b9),
 //                  asoSecondary,
-                ],
-              ),
+//                ],
+//              ),
             ),
             height: MediaQuery.of(context).size.height - 330,
           ),
