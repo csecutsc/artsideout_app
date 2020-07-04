@@ -61,18 +61,28 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           for (var j = 0;
               j < result.data["activities"][i]["profile"].length;
               j++) {
-            Object socialTest =
-                result.data["activities"][i]["profile"][j]["social"] ?? null;
+            Map<String, String> socialMap =
+                (result.data["activities"][i]["profile"][j]["social"] != null)
+                    ? {
+                        'website': result.data["activities"][i]["profile"][j]
+                                ["social"]["website"] ??
+                            "",
+                        'pinterest': result.data["activities"][i]["profile"][j]
+                                ["social"]["website"] ??
+                            ""
+                      }
+                    : {'website': "", 'pinterest': ""};
+
             profilesList.add(Profile(
-                    result.data["activities"][i]["profile"][j]["name"],
-                    result.data["activities"][i]["profile"][j][
-                        "desc"]) /*,
-                social: socialTest,
-                type: "",
+                result.data["activities"][i]["profile"][j]["name"],
+                result.data["activities"][i]["profile"][j]["desc"],
+                social: socialMap,
+                type: result.data["activities"][i]["profile"][j]["type"] ?? "",
                 installations: [],
-                activities: []*/
-                );
+                activities: []));
             print(profilesList[j].name);
+            print(profilesList[j].social);
+            print(profilesList[j].type);
           }
         }
 
