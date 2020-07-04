@@ -122,6 +122,13 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
               child: Row(
                 children: [for (var i in widget.data.profiles) Text(i.name)],
               )),
+          Container(
+              padding: EdgeInsets.all(25),
+              child: Row(
+                children: [
+                  for (var i in widget.data.profiles) Text(i.social.toString())
+                ],
+              )),
           Divider(
             color: Colors.black,
             thickness: 1.0,
