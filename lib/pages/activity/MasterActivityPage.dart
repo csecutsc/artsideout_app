@@ -68,7 +68,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                 ["social"]["website"] ??
                             "",
                         'pinterest': result.data["activities"][i]["profile"][j]
-                                ["social"]["website"] ??
+                                ["social"]["pinterest"] ??
                             ""
                       }
                     : {'website': "", 'pinterest': ""};
@@ -85,10 +85,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
             print(profilesList[j].type);
           }
         }
-
-        /*(result.data["activities"][i]["profiles"] != null)
-                ? result.data["activities"][i]["profiles"]
-                : []; */
 
         print(profilesList);
 

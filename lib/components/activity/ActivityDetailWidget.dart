@@ -1,7 +1,11 @@
+import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:artsideout_app/graphql/Activity.dart';
 import 'package:artsideout_app/theme.dart';
-import 'package:artsideout_app/components/activitycard.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class ActivityDetailWidget extends StatefulWidget {
   final Activity data;
@@ -46,9 +50,9 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
@@ -142,16 +146,88 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             ),
           ),
           ListTile(
-              leading: Text('Organizers',
+              leading: Text('ORGANIZERS',
                   style: TextStyle(
                     color: asoPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                   ))),
           Container(
-              padding: EdgeInsets.all(25),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var profile in widget.data.profiles)
+                    RichText(
+                        text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: "${profile.name} \t\t\tClick for more",
+                          //style: defaultStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (BuildContext context) {
+                                    return ProfileDetailPage(profile);
+                                  },
+                                ),
+                              );
+                            })
+                    ])),
+                  /* Text(
+                  //   i.name + "\t\t\t" + i.type,
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  for (var j in widget.data.profiles)
+                    IconButton(
+                      icon: Icon(
+                        Icons.web,
+                      ),
+                      onPressed: () async {
+                        var url = j.social["website"];
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch';
+                        }
+                      },
+                    ),
+                  for (var k in widget.data.profiles)
+                    IconButton(
+                      icon: Icon(
+                        Icons.web,
+                      ),
+                      onPressed: () async {
+                        var url = k.social["pinterest"];
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch';
+                        }
+                      },
+                    )
+                ],
+              )),
+          Container(
+              padding: EdgeInsets.only(bottom: 25),
               child: Row(
-                children: [for (var i in widget.data.profiles) Text(i.name)],
+                children: [
+                  for (var i in widget.data.profiles)
+                    Text(
+                      i.social.toString(),
+                      textAlign: TextAlign.end,
+                    ),
+                ],
+              )), */
+                  Divider(
+                    color: Colors.black,
+                    thickness: 1.0,
+                    height: 0.0,
+                    indent: 15.0,
+                    endIndent: 15.0,
+                  ),
+                ],
               )),
           Container(
               padding: EdgeInsets.all(25),
