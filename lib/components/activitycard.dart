@@ -1,7 +1,7 @@
 // import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 // import 'dart:async';
 import 'package:flutter/material.dart';
-
+import 'package:artsideout_app/theme.dart';
 
 class ActivityCard extends StatelessWidget {
   final String title;
@@ -30,17 +30,6 @@ class ActivityCard extends StatelessWidget {
       return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven)).format(context);
     }
   }
-
-  // "to" divider function
-
-  // String to(String startTimeGiven) {
-  //   if (startTimeGiven != "") {
-  //     return "to";
-  //   }
-  //   else {
-  //     return "";
-  //   }
-  // } 
 
   String endTimeDisplay(String endTimeGiven, BuildContext context) {
     if (endTimeGiven == "") {
@@ -71,7 +60,7 @@ class ActivityCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width, 
       margin: EdgeInsets.all(7),
       decoration: BoxDecoration( 
-        color: Colors.grey[200], 
+        color: Color(0xFFFCEAEB), 
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -98,13 +87,14 @@ class ActivityCard extends StatelessWidget {
                             fontWeight: FontWeight.w900,  
                             fontSize: 25.0,
                             fontFamily: 'Roboto',
+                            color: asoPrimary,
                           ),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Divider(
-                          color: Colors.black,
+                          color: Color(0xFFBE4C59),
                           thickness: 1.0,
                           indent: 45.0,
                           endIndent: 30.0,
@@ -131,6 +121,7 @@ class ActivityCard extends StatelessWidget {
                             fontWeight: FontWeight.w900,  
                             fontSize: 25.0,
                             fontFamily: 'Roboto',
+                            color: asoPrimary,
                           ),
                         ),
                       ),
@@ -141,41 +132,100 @@ class ActivityCard extends StatelessWidget {
                 flex: 7,
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-                      child: Text( 
-                        title,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle( 
-                          fontSize: 24.0, 
-                          fontWeight: FontWeight.bold,
+                    Expanded( 
+                      flex: 30,
+                      child: Container(
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                        child: Text( 
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle( 
+                            fontSize: 24.0, 
+                            fontWeight: FontWeight.bold,
+                            color: asoPrimary,
+                          ),
                         ),
                       ),
                     ),
-                    // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
-                    Container( 
-                      padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-                      alignment: Alignment.topLeft,
-                      // testing purposes
-                      // width: 300,
-                      // height: 85,
-                      // width: MediaQuery.of(context).size.width*0.7,
-                      // height: MediaQuery.of(context).size.height*0.5,
-                      // color: Colors.green[200],
-                      //
-                      child: Text(
-                        displayDesc(desc),
-                        style: TextStyle( 
-                          fontSize: 14.0,
+                    Expanded( 
+                      flex: 45,
+                      child: Container( 
+                        // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
+                        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+                        alignment: Alignment.topLeft,
+                        // testing purposes
+                        // width: 300,
+                        // height: 85,
+                        // width: MediaQuery.of(context).size.width*0.7,
+                        // height: MediaQuery.of(context).size.height*0.5,
+                        // color: Colors.green[200],
+                        //
+                        child: Text(
+                          displayDesc(desc),
+                          style: TextStyle( 
+                            fontSize: 14.0,
+                            color: Color(0xFFBE4C59),
+                          ),
+                          overflow: TextOverflow.clip,
+                          maxLines: 3,
+                          softWrap: true,
+                          textAlign: TextAlign.left,
                         ),
-                        overflow: TextOverflow.clip,
-                        maxLines: 3,
-                        softWrap: true,
-                        textAlign: TextAlign.left,
                       ),
                     ),
-                    // TODO: Add Zone Info + Icon
+                    Expanded( 
+                      flex: 25, 
+                      child: Row(
+                        children: <Widget>[
+                          Container( 
+                            padding: EdgeInsets.only(left: 20.0, right: 5.0, bottom: 15.0, top: 3.0),
+                            alignment: Alignment.topLeft,
+                            child: Icon(
+                              Icons.location_on,
+                              size: 23.0,
+                              color: Color(0xFFBE4C59),
+                            ),
+                          ),
+                          Container( 
+                            padding: EdgeInsets.only(left: 5.0, right: 20.0, bottom: 10.0, top: 3.0),
+                            alignment: Alignment.topLeft,
+                            child: Text( 
+                              displayZone(zone),
+                              style: TextStyle( 
+                                fontSize: 18.0,
+                                color: asoPrimary,
+                              ),
+                              overflow: TextOverflow.clip,
+                              maxLines: 3,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: [
+                    //     Icon(
+                    //       Icons.location_on,
+                    //       size: 16.0,
+                    //       color: Color(0xFFBE4C59),
+                    //     ),
+                    //     FittedBox(
+                    //       fit: BoxFit.fitWidth,
+                    //       child: Text(
+                    //         '  ' + zone,
+                    //         style: TextStyle(
+                    //           color: asoPrimary,
+                    //           fontWeight: FontWeight.w500,
+                    //           fontSize: 16.0,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

@@ -17,6 +17,36 @@ class ActivityDetailWidget extends StatefulWidget {
 }
 
 class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
+  String startTimeDisplay(String startTimeGiven, BuildContext context) {
+    if (startTimeGiven == "") {
+      return "ALL DAY";
+    } else {
+      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven)).format(context);
+    }
+  }
+
+  String endTimeDisplay(String endTimeGiven, BuildContext context) {
+    if (endTimeGiven == "") {
+      return "";
+    } else {
+      return TimeOfDay.fromDateTime(DateTime.parse(endTimeGiven)).format(context);
+    }
+  }
+
+  String displayDesc(String desc) {
+    if (desc == "") {
+      return "No Description available.";
+    }
+    return desc;
+  }
+
+  String displayZone(String zone) {
+    if (zone == null) {
+      return "Unknown Zone";
+    }
+    return zone;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,7 +79,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             title: Column(
               children: <Widget>[
                 Text(
-                  widget.data.time["startTime"],
+                  startTimeDisplay(widget.data.time["startTime"], context),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -61,7 +91,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                   ),
                 ),
                 Text(
-                  widget.data.time["endTime"],
+                  endTimeDisplay(widget.data.time["endTime"], context),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -77,7 +107,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             ),
           ),
           ListTile(
-              leading: Text(widget.data.zone,
+              leading: Text(displayZone(widget.data.zone),
                   style: TextStyle(
                     color: asoPrimary,
                     fontWeight: FontWeight.bold,
@@ -109,7 +139,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                 ),
                 Flexible(
                   child: Text(
-                    widget.data.desc,
+                    displayDesc(widget.data.desc),
                   ),
                 )
               ],
@@ -199,6 +229,22 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                   ),
                 ],
               )),
-        ]));
+          Container(
+              padding: EdgeInsets.all(25),
+              child: Row(
+                children: [
+                  for (var i in widget.data.profiles) Text(i.social.toString())
+                ],
+              )),
+          Divider(
+            color: Colors.black,
+            thickness: 1.0,
+            height: 0.0,
+            indent: 15.0,
+            endIndent: 15.0,
+          ),
+        ],
+      ),
+    );
   }
 }
