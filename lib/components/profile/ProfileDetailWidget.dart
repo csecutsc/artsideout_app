@@ -3,7 +3,6 @@ import 'package:artsideout_app/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProfileDetailWidget extends StatefulWidget {
   final Profile profile;
@@ -18,61 +17,80 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(0),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(20),
-                width: 450.0,
-                height: 200.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage("https://via.placeholder.com/350x150"),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Text(widget.profile.desc,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    )),
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.pinkAccent,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              /*ListView.builder(
-                itemCount: widget.profile.social.keys.length,
-                itemBuilder: null)*/
-              ListView(children: <Widget>[
-                for (var key in widget.profile.social.keys)
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, top: 30, right: 20, bottom: 30),
-                    child: ListTile(
-                        leading: IconButton(
-                          icon: Icon(MdiIcons.web),
-                          onPressed: () async {
-                            var socialLink = widget.profile.social["$key"];
-                            if (await canLaunch(socialLink)) {
-                              await launch(socialLink);
-                            } else {
-                              throw 'Could not launch';
-                            }
-                          },
-                        ),
-                        title: Text((widget.profile.social["$key"] != "")
-                            ? "Click the icon to see this person's $key"
-                            : "This person has not added their $key information")),
-                  )
-              ]),
-            ]));
+          Text(widget.profile.desc),
+          // widget.profile.social.forEach((key, value) => ListTile(
+          //     leading: Icon(Icons.web),
+          //     title: InkWell(
+          //       child: Text("$key"),
+          //       onTap: () => launch("$value"),
+          //     ))),
+          ListTile(
+            leading: Icon(Icons.web),
+            title: InkWell(
+              child: Text((widget.profile.social["instagram"] != null)
+                  ? "Website"
+                  : "This artist has not added their Instagram information."),
+              onTap: () async {
+                var instagramLink = widget.profile.social["instagram"];
+                if (await canLaunch(instagramLink)) {
+                  await launch(instagramLink);
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.web),
+            title: InkWell(
+              child: Text((widget.profile.social["facebook"] != null)
+                  ? "Website"
+                  : "This artist has not added their Facebook information."),
+              onTap: () async {
+                var facebookLink = widget.profile.social["facebook"];
+                if (await canLaunch(facebookLink)) {
+                  await launch(facebookLink);
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.web),
+            title: InkWell(
+              child: Text((widget.profile.social["pinterest"] != null)
+                  ? "Pinterest"
+                  : "This artist has not added their Pinterest information."),
+              onTap: () async {
+                var pinterestLink = widget.profile.social["pinterest"];
+                if (await canLaunch(pinterestLink)) {
+                  await launch(pinterestLink);
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.web),
+            title: InkWell(
+              child: Text((widget.profile.social["website"] != null)
+                  ? "Website"
+                  : "This artist has not added their Website information."),
+              onTap: () async {
+                var websiteLink = widget.profile.social["website"];
+                if (await canLaunch(websiteLink)) {
+                  await launch(websiteLink);
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+            ),
+          ),
+        ]));
   }
 }
