@@ -64,6 +64,12 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
             Map<String, String> socialMap =
                 (result.data["activities"][i]["profile"][j]["social"] != null)
                     ? {
+                        'facebook': result.data["activities"][i]["profile"][j]
+                                ["social"]["facebook"] ??
+                            "",
+                        'instagram': result.data["activities"][i]["profile"][j]
+                                ["social"]["instagram"] ??
+                            "",
                         'website': result.data["activities"][i]["profile"][j]
                                 ["social"]["website"] ??
                             "",
@@ -71,7 +77,12 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                 ["social"]["pinterest"] ??
                             ""
                       }
-                    : {'website': "", 'pinterest': ""};
+                    : {
+                        'facebook': "",
+                        'instagram': "",
+                        'website': "",
+                        'pinterest': ""
+                      };
 
             profilesList.add(Profile(
                 result.data["activities"][i]["profile"][j]["name"],
