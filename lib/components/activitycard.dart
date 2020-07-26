@@ -52,7 +52,7 @@ class ActivityCard extends StatelessWidget {
     }
     return zone;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -102,7 +102,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           'startTime': result.data["activities"][i]["startTime"] ?? "",
           'endTime': result.data["activities"][i]["endTime"] ?? ""
         };
-
         setState(() {
           listActivity.add(
             Activity(
