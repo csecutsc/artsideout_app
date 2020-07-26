@@ -15,6 +15,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   bool isMarked = false;
 
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Stack(
       children: <Widget>[
         Align(
@@ -24,6 +25,36 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(widget.data.imgUrl),
+=======
+    return Container(
+      decoration: BoxDecoration( 
+        color: Colors.white,
+        // borderRadius: BorderRadius.circular(25),
+        boxShadow: [ 
+          BoxShadow(
+            color: Colors.grey.withOpacity(0),
+            spreadRadius: 5, 
+            blurRadius: 7, 
+            offset: Offset(10, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            child: Container(
+              width: 450,
+              height: 250,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(widget.data.imgUrl),
+                ),
+>>>>>>> Activity Page Functionality Update (#14)
               ),
             ),
             height: 330,
