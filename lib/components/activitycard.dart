@@ -59,13 +59,13 @@ class ActivityCard extends StatelessWidget {
       height: MediaQuery.of(context).size.height / 6, 
       width: MediaQuery.of(context).size.width, 
       margin: EdgeInsets.all(7),
-      decoration: BoxDecoration( 
-        color: Color(0xFFFCEAEB), 
+      decoration: BoxDecoration(  
+        color: Colors.white, 
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
-            blurRadius: 4,
+            offset: Offset(0, 1),
+            blurRadius: 1,
             spreadRadius: 1,
             color: Colors.grey[500],
           ),
