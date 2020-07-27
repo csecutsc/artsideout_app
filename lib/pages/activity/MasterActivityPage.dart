@@ -1,6 +1,7 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:artsideout_app/graphql/Profile.dart';
+import 'package:artsideout_app/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:artsideout_app/components/navigation.dart';
 // Art
 import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
+import 'package:artsideout_app/components/common.dart';
 
 class MasterActivityPage extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   int selectedValue = 0;
   int secondFlexSize = 1;
   int numCards = 2;
+  double containerHeight = 0.0;
   var isLargeScreen = false;
   bool selected = false;
 
@@ -64,12 +67,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
             Map<String, String> socialMap =
                 (result.data["activities"][i]["profile"][j]["social"] != null)
                     ? {
-                        'facebook': result.data["activities"][i]["profile"][j]
-                                ["social"]["facebook"] ??
-                            "",
-                        'instagram': result.data["activities"][i]["profile"][j]
-                                ["social"]["instagram"] ??
-                            "",
                         'website': result.data["activities"][i]["profile"][j]
                                 ["social"]["website"] ??
                             "",
@@ -77,12 +74,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                 ["social"]["pinterest"] ??
                             ""
                       }
-                    : {
-                        'facebook': "",
-                        'instagram': "",
-                        'website': "",
-                        'pinterest': ""
-                      };
+                    : {'website': "", 'pinterest': ""};
 
             profilesList.add(Profile(
                 result.data["activities"][i]["profile"][j]["name"],
@@ -113,7 +105,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           'startTime': result.data["activities"][i]["startTime"] ?? "",
           'endTime': result.data["activities"][i]["endTime"] ?? ""
         };
-
         setState(() {
           listActivity.add(
             Activity(
@@ -133,6 +124,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
 
   @override
   Widget build(BuildContext context) {
+    // if statements for render
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ASOAppBar(),
@@ -163,167 +155,104 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   color: Color(0xFFFCEAEB),
                 ),
                 child: Column(children: <Widget>[
-                  Header(
-                    image: "assets/icons/activities.svg",
-                    textTop: "ACTIVITIES",
-                    textBottom: "",
-                    subtitle: "",
+                  // Header(
+                  //   image: "assets/icons/activities.svg",
+                  //   textTop: "ACTIVITIES",
+                  //   textBottom: "",
+                  //   subtitle: "",
+                  // ),
+                  // Container(
+                  //   padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
+                  //   color: Color(0xFFFCEAEB),
+                  //   alignment: Alignment.centerLeft,
+                  //   child: Text(
+                  //     "Activities",
+                  //     style: TextStyle( 
+                  //       fontWeight: FontWeight.bold,  
+                  //       fontSize: 35.0,
+                  //       fontFamily: 'Roboto',
+                  //       color: asoPrimary,
+                  //     ),
+                  //   ),
+                  // ),
+                  Stack( 
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
+                        color: Color(0xFFFCEAEB),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Activities",
+                          style: TextStyle( 
+                            fontWeight: FontWeight.bold,  
+                            fontSize: 35.0,
+                            fontFamily: 'Roboto',
+                            color: asoPrimary,
+                          ),
+                        ),
+                      ),  
+                      Positioned(
+                        top: 0.0,
+                        right: 0.0,
+                        child: PlatformSvg.asset(
+                          "assets/icons/activities.svg",
+                          width: 300,
+                          height: 125,
+                          fit: BoxFit.contain,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),                    
+                    ],
                   ),
                   Expanded(
-                      // Calendar Box
-                      child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                topRight: Radius.circular(50)),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text(
-                            'Calendar',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ),
-                        SizedBox(height: 50),
-                        ListView.builder(
-                          // Let the ListView know how many items it needs to build.
-                          itemCount: listActivity.length,
-                          // Provide a builder function. This is where the magic happens.
-                          // Convert each item into a widget based on the type of item it is.
-                          itemBuilder: (context, index) {
-                            final item = listActivity[index];
-                            return AnimatedContainer(
-                              duration: Duration(milliseconds: 50),
-                              curve: Curves.fastOutSlowIn,
-                              child: Material(
-                                child: ActivityCard(
-                                  title: item.title,
-                                  desc: item.desc,
-                                  image: item.imgUrl,
-                                  time: item.time,
-                                  zone: item.zone,
-                                  detailPageButton: InkWell(
-                                    splashColor:
-                                        Colors.grey[200].withOpacity(0.25),
-                                    onTap: () {
-                                      if (isLargeScreen) {
-                                        selectedValue = index;
-                                        setState(() {});
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                            builder: (context) {
-                                              return ActivityDetailPage(item);
-                                            },
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  // Activity Card Button
-
-                                  // pageButton: Row(
-                                  //   children: <Widget>[
-                                  //     FlatButton(
-                                  //       child: const Text('VIEW'),
-                                  //       onPressed: () {
-                                  //         if (isLargeScreen) {
-                                  //           selectedValue = index;
-                                  //           setState(() {});
-                                  //         } else {
-                                  //           Navigator.push(context,
-                                  //               CupertinoPageRoute(
-                                  //             builder: (context) {
-                                  //               return ActivityDetailPage(item);
-                                  //             },
-                                  //           ));
-                                  //         }
-                                  //       },
-                                  //     ),
-                                  //   ],
-                                  // ),
+                    flex: secondFlexSize,
+                    child: Container( 
+                      color: Color(0xFFFCEAEB),
+                      child: ListView.builder(
+                        // Let the ListView know how many items it needs to build.
+                        itemCount: listActivity.length,
+                        // Provide a builder function. This is where the magic happens.
+                        // Convert each item into a widget based on the type of item it is.
+                        itemBuilder: (context, index) {
+                          final item = listActivity[index];
+                          return AnimatedContainer(
+                            duration: Duration(milliseconds: 50),
+                            curve: Curves.fastOutSlowIn,
+                            child: Material(
+                              color: Color(0xFFFCEAEB),
+                              child: ActivityCard(
+                                title: item.title,
+                                desc: item.desc,
+                                image: item.imgUrl,
+                                time: item.time,
+                                zone: item.zone,
+                                detailPageButton: InkWell(
+                                  splashColor:
+                                      Colors.grey[200].withOpacity(0.25),
+                                  onTap: () {
+                                    if (isLargeScreen) {
+                                      selectedValue = index;
+                                      setState(() {});
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) {
+                                            return ActivityDetailPage(item);
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
-                            );
-                          },
-                          physics: BouncingScrollPhysics(),
-                        ),
-                        // old Grid View for Activities
-                        // GridView.builder(
-                        //   gridDelegate:
-                        //       SliverGridDelegateWithFixedCrossAxisCount(
-                        //     crossAxisCount: numCards,
-                        //     crossAxisSpacing: 3.0,
-                        //     mainAxisSpacing: 3.0,
-                        //   ),
-                        //   // Let the ListView know how many items it needs to build.
-                        //   itemCount: listActivity.length,
-                        //   // Provide a builder function. This is where the magic happens.
-                        //   // Convert each item into a widget based on the type of item it is.
-                        //   itemBuilder: (context, index) {
-                        //     final item = listActivity[index];
-                        //     return Center(
-                        //       child: ActivityCard(
-                        //           title: item.title,
-                        //           desc: (item.profiles.length > 0)
-                        //               ? item.profiles[0].name
-                        //               : "",
-                        //           image: item.imgUrl,
-                        //           pageButton: Row(
-                        //             children: <Widget>[
-                        //               FlatButton(
-                        //                 child: const Text('VIEW'),
-                        //                 onPressed: () {
-                        //                   if (isLargeScreen) {
-                        //                     selectedValue = index;
-                        //                     setState(() {});
-                        //                   } else {
-                        //                     Navigator.push(context,
-                        //                         CupertinoPageRoute(
-                        //                       builder: (context) {
-                        //                         return ActivityDetailPage(item);
-                        //                       },
-                        //                     ));
-                        //                   }
-                        //                 },
-                        //               ),
-                        //             ],
-                        //           )),
-                        //     );
-                        //   },
-                        // ),
-                      ],
+                            ),
+                          );
+                        },
+                        physics: BouncingScrollPhysics(),
+                      ),
                     ),
-                  )),
+                  ),
                 ]),
               )),
           // If large screen, render activity detail page
@@ -333,6 +262,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
               : Container(),
         ]);
       }),
+      // TODO: add bottom nav bar
     );
   }
 }
