@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:artsideout_app/theme.dart';
@@ -105,7 +105,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           'startTime': result.data["activities"][i]["startTime"] ?? "",
           'endTime': result.data["activities"][i]["endTime"] ?? ""
         };
-
         setState(() {
           listActivity.add(
             Activity(
