@@ -1,3 +1,4 @@
+import 'package:artsideout_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:artsideout_app/components/common.dart';
 
@@ -26,19 +27,21 @@ class _HeaderState extends State<Header> {
     return ClipPath(
       clipper: MyClipper(),
       child: Container(
-        padding: EdgeInsets.only(left: 20, top: 60, right: 20),
+        //padding: EdgeInsets.only(left: 20, top: 60, right: 20),
         height: 20,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color(0xFFE5549B),
-              Color(0xfff30075),
-            ],
-          ),
-        ),
+//        decoration: widget.isLargeScreen
+//            ? null
+//            : BoxDecoration(
+//                gradient: LinearGradient(
+//                  begin: Alignment.topRight,
+//                  end: Alignment.bottomLeft,
+//                  colors: [
+//                    Color(0xFFE5549B),
+//                    Color(0xfff30075),
+//                  ],
+//                ),
+//              ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
@@ -49,13 +52,14 @@ class _HeaderState extends State<Header> {
                     top: (widget.offset < 0) ? 0 : widget.offset,
                     child: PlatformSvg.asset(
                       widget.image,
-                      width: 300,
+                      width: 1200, //300,
                       fit: BoxFit.fitWidth,
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.topLeft,
                     ),
                   ),
                   Positioned(
                     top: 20 - widget.offset / 2,
+                    left: 20 - widget.offset / 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -65,14 +69,14 @@ class _HeaderState extends State<Header> {
                                 .headline4
                                 .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
+                                    color: asoPrimary)),
                         Text(widget.subtitle,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
                                 .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white))
+                                    color: Colors.black))
                       ],
                     ),
                   ),
