@@ -32,7 +32,7 @@ class ArtListCard extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                     image: NetworkImage(image),
                   ),
                 ),

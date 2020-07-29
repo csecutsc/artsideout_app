@@ -9,7 +9,7 @@ class Profile {
   List<Installation> installations;
   List<Activity> activities;
 
-  Profile(this.name, this.desc, this.social, {this.type, this.installations,
+  Profile(this.name, this.desc, {this.social, this.type, this.installations,
       this.activities});
 }
 
