@@ -1,4 +1,3 @@
-import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // GraphQL
@@ -54,24 +53,25 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           //   []
           // );
           listInstallation.add(
-            Installation(
-                result.data["installations"][i]["title"],
+            Installation(result.data["installations"][i]["title"],
                 result.data["installations"][i]["desc"],
                 zone: result.data["installations"][i]["zone"],
                 imgUrl: result.data["installations"][i]["image"]["url"],
-                location: {'latitude': result.data["installations"][i]["location"]["latitude"],
-                'longitude': result.data["installations"][i]["location"]["longitude"],
+                location: {
+                  'latitude': result.data["installations"][i]["location"]
+                      ["latitude"],
+                  'longitude': result.data["installations"][i]["location"]
+                      ["longitude"],
                 },
                 locationRoom: result.data["installations"][i]["locationroom"],
-                profiles: []
-            ),
+                profiles: []),
           );
         });
       }
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -86,7 +86,9 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         } else if (MediaQuery.of(context).size.width > 600) {
           secondFlexSize = 1;
           isLargeScreen = true;
-          numCards = MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3;
+          numCards = MediaQuery.of(context).orientation == Orientation.portrait
+              ? 2
+              : 3;
           // Phone Size
         } else {
           isLargeScreen = false;
@@ -101,39 +103,40 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   color: Color(0xFFFCEAEB),
                 ),
                 child: Column(children: <Widget>[
-                  Header( 
+                  Header(
                     image: "assets/icons/activities.svg",
                     textTop: "ACTIVITIES",
-                    textBottom: "",
                     subtitle: "",
                   ),
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration( 
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white,
-                        boxShadow: [ 
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5, 
-                            blurRadius: 7, 
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                      children: <Widget>[
-                        Padding( 
-                          padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text( 
-                              'Calendar',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
+                      child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
                         ),
-                        SizedBox(height:50),
+                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30.0, top: 15.0, bottom: 15.0),
+                          child: Text(
+                            'Calendar',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ),
+                        SizedBox(height: 50),
                         GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: numCards,
                             crossAxisSpacing: 3.0,
                             mainAxisSpacing: 3.0,
@@ -147,7 +150,9 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             return Center(
                               child: ArtListCard(
                                   title: item.title,
-                                  artist: (item.profiles.length > 0) ? item.profiles[0].name : "",
+                                  artist: (item.profiles.length > 0)
+                                      ? item.profiles[0].name
+                                      : "",
                                   image: item.imgUrl,
                                   pageButton: Row(
                                     children: <Widget>[

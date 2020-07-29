@@ -7,7 +7,6 @@ import 'package:artsideout_app/graphql/Installation.dart';
 // Common
 import 'package:artsideout_app/components/PageHeader.dart';
 import 'package:artsideout_app/components/card.dart';
-import 'package:artsideout_app/components/navigation.dart';
 // Art
 import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
@@ -73,7 +72,11 @@ class _MasterArtPageState extends State<MasterArtPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ASOAppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: OrientationBuilder(builder: (context, orientation) {
         // Desktop Size
         if (MediaQuery.of(context).size.width > 1200) {
@@ -104,8 +107,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                 child: Column(children: <Widget>[
                   Header(
                     image: "assets/icons/installation.svg",
-                    textTop: "ART ",
-                    textBottom: "INSTALLATIONS",
+                    textTop: "INSTALLATIONS",
                     subtitle: "Cool Beans",
                   ),
                   Expanded(
@@ -121,8 +123,8 @@ class _MasterArtPageState extends State<MasterArtPage> {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: numCards,
-                              crossAxisSpacing: 3.0,
-                              mainAxisSpacing: 3.0,
+                              crossAxisSpacing: 5.0,
+                              mainAxisSpacing: 5.0,
                             ),
                             // Let the ListView know how many items it needs to build.
                             itemCount: listInstallation.length,
