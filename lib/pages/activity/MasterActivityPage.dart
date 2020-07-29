@@ -56,23 +56,21 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
             ? result.data["activities"][i]["image"]["url"]
             : "https://via.placeholder.com/350";
 
-        Map<String, double> location = (result.data["activities"][i]["location"] !=
-                null)
-            ? {
-                'latitude': result.data["activities"][i]["location"]
-                    ["latitude"],
-                'longitude': result.data["activities"][i]["location"]
-                    ["longitude"]
-              }
-            : {'latitude': -1.0, 'longitude': 43.78263096464635};
+        Map<String, double> location =
+            (result.data["activities"][i]["location"] != null)
+                ? {
+                    'latitude': result.data["activities"][i]["location"]
+                        ["latitude"],
+                    'longitude': result.data["activities"][i]["location"]
+                        ["longitude"]
+                  }
+                : {'latitude': -1.0, 'longitude': 43.78263096464635};
 
-        Map<String, String> time = { 
-          'startTime': result.data["activities"][i]["startTime"] ?? "", 
+        Map<String, String> time = {
+          'startTime': result.data["activities"][i]["startTime"] ?? "",
           'endTime': result.data["activities"][i]["endTime"] ?? ""
         };
 
-        
-        
         setState(() {
 <<<<<<< HEAD
           // Profile profile = Profile(
@@ -152,6 +150,10 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   ),
                   Expanded(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                      // Calendar Box
+>>>>>>> fixed all merge conflicts
                       child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -167,6 +169,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                       ],
                     ),
                     child: Stack(
+<<<<<<< HEAD
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(
@@ -201,33 +204,35 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                         ],
                       ),
                       child: Stack(
+=======
+>>>>>>> fixed all merge conflicts
                       children: <Widget>[
                         Container(
                           width: double.infinity,
-                          decoration: BoxDecoration( 
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50), 
-                              topRight: Radius.circular(50)
-                            ),
+                                topLeft: Radius.circular(50),
+                                topRight: Radius.circular(50)),
                             color: Colors.white,
-                            boxShadow: [ 
+                            boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5, 
-                                blurRadius: 7, 
+                                spreadRadius: 5,
+                                blurRadius: 7,
                                 offset: Offset(0, 3),
                               ),
                             ],
                           ),
                         ),
-                        Padding( 
-                          padding: const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text( 
-                              'Calendar',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30.0, top: 15.0, bottom: 15.0),
+                          child: Text(
+                            'Calendar',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
                         ),
-                        SizedBox(height:50),
+                        SizedBox(height: 50),
                         ListView.builder(
 >>>>>>> Activity Page Functionality Update (#14)
                           // Let the ListView know how many items it needs to build.
@@ -239,7 +244,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             return AnimatedContainer(
                               duration: Duration(milliseconds: 50),
                               curve: Curves.fastOutSlowIn,
-                              child: Material( 
+                              child: Material(
                                 child: ActivityCard(
                                   title: item.title,
 <<<<<<< HEAD
@@ -251,14 +256,16 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                       : "",
                                   image: item.imgUrl,
                                   time: item.time,
-                                  detailPageButton: InkWell( 
-                                    splashColor: Colors.grey[200].withOpacity(0.25),
+                                  detailPageButton: InkWell(
+                                    splashColor:
+                                        Colors.grey[200].withOpacity(0.25),
                                     onTap: () {
                                       if (isLargeScreen) {
                                         selectedValue = index;
                                         setState(() {});
                                       } else {
-                                        Navigator.push(context, 
+                                        Navigator.push(
+                                          context,
                                           CupertinoPageRoute(
                                             builder: (context) {
                                               return ActivityDetailPage(item);
@@ -268,8 +275,8 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                                       }
                                     },
                                   ),
-                                  // Activity Card Button 
-                                  
+                                  // Activity Card Button
+
                                   // pageButton: Row(
                                   //   children: <Widget>[
                                   //     FlatButton(
