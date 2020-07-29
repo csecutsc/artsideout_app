@@ -8,6 +8,7 @@ import 'package:artsideout_app/components/home/HomeHeader.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:artsideout_app/components/common.dart';
+import 'package:artsideout_app/components/home/Sidebar.dart';
 
 class HomeDetailWidget extends StatefulWidget {
   HomeDetailWidget(
@@ -27,55 +28,7 @@ class _HomeDetailWidgetState extends State<HomeDetailWidget> {
       color: Colors.white,
       child: Row(
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: 85,
-            decoration: BoxDecoration(
-              color: asoPrimary,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  minRadius: 30.0,
-                ),
-                SizedBox(
-                  height: 40.0,
-                ),
-                Icon(
-                  Icons.map,
-                  size: 40.0,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Icon(
-                  Icons.search,
-                  size: 40.0,
-                ),
-                SizedBox(height: 145),
-                Icon(
-                  Icons.palette,
-                  size: 40.0,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Icon(
-                  Icons.local_activity,
-                  size: 40.0,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Icon(
-                  Icons.bookmark,
-                  size: 40.0,
-                )
-              ],
-            ),
-          ),
+          Sidebar(),
           Expanded(
             flex: 8,
             child: Stack(
