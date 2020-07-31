@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+import 'package:artsideout_app/components/activity/ActivityWebMenu.dart';
+import 'package:artsideout_app/components/home/HomeDetailWidget.dart';
 import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:artsideout_app/theme.dart';
 import 'package:flutter/gestures.dart';
@@ -12,11 +14,14 @@ import 'package:artsideout_app/graphql/Activity.dart';
 // Common
 import 'package:artsideout_app/components/PageHeader.dart';
 import 'package:artsideout_app/components/activitycard.dart';
-import 'package:artsideout_app/components/navigation.dart';
+import 'package:artsideout_app/pages/home/HomePage.dart';
+import 'package:artsideout_app/components/home/Sidebar.dart';
+// import 'package:artsideout_app/components/navigation.dart';
 // Art
 import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 import 'package:artsideout_app/components/common.dart';
+import 'package:artsideout_app/pages/art/MasterArtPage.dart';
 
 class MasterActivityPage extends StatefulWidget {
   @override
@@ -28,7 +33,8 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   int secondFlexSize = 1;
   int numCards = 2;
   double containerHeight = 0.0;
-  var isLargeScreen = false;
+  bool isLargeScreen = false;
+  bool isMediumScreen = false;
   bool selected = false;
 
   List<Activity> listActivity = List<Activity>();
@@ -39,6 +45,23 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     super.initState();
     _fillList();
   }
+
+  final List<HomeAction> listHomeActions = [
+  HomeAction("Event Information", asoPrimary, "assets/icons/asoBg.svg", 300,
+      MasterActivityPage()),
+  HomeAction("About Connections", Color(0xFF62BAA6),
+      "assets/icons/aboutConnections.svg", 350, MasterActivityPage()),
+  HomeAction("News", Colors.purple[200], "assets/icons/activities.svg", 300,
+      MasterArtPage()),
+  HomeAction("Art", Colors.blue[200], "assets/icons/installation.svg", 200,
+      MasterArtPage()),
+  HomeAction("Schedule", Colors.yellow[200], "assets/icons/activities.svg",
+      300, MasterActivityPage()),
+  HomeAction("Activities", Colors.yellow[200], "assets/icons/activities.svg",
+      300, MasterActivityPage()),
+  HomeAction("Saved", Colors.orange[200], "assets/icons/saved.svg", 200,
+      MasterArtPage())
+  ];
 
   // Activity GraphQL Query
   void _fillList() async {
@@ -127,28 +150,87 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     // if statements for render
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ASOAppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: OrientationBuilder(builder: (context, orientation) {
         // Desktop Size
         if (MediaQuery.of(context).size.width > 1200) {
           secondFlexSize = 3;
           isLargeScreen = true;
+          isMediumScreen = false;
           numCards = 2;
           // Tablet Size
         } else if (MediaQuery.of(context).size.width > 600) {
           secondFlexSize = 1;
           isLargeScreen = true;
+          isMediumScreen = true;
           numCards = MediaQuery.of(context).orientation == Orientation.portrait
               ? 2
               : 3;
           // Phone Size
         } else {
           isLargeScreen = false;
+          isMediumScreen = false;
           numCards = 2;
         }
         return Row(children: <Widget>[
-          Expanded(
-              flex: secondFlexSize,
+          (isLargeScreen)
+            ? Expanded( 
+                flex: 4, 
+                child: Sidebar(),
+              )
+            : Container(), 
+          (isLargeScreen)
+            ? ActivityWebMenu( 
+                ListView.builder(
+                        // Let the ListView know how many items it needs to build.
+                        itemCount: listActivity.length,
+                        // Provide a builder function. This is where the magic happens.
+                        // Convert each item into a widget based on the type of item it is.
+                        itemBuilder: (context, index) {
+                          final item = listActivity[index];
+                          return AnimatedContainer(
+                            duration: Duration(milliseconds: 50),
+                            curve: Curves.fastOutSlowIn,
+                            child: Material(
+                              color: Color(0xFFFCEAEB),
+                              child: ActivityCard(
+                                title: item.title,
+                                desc: item.desc,
+                                image: item.imgUrl,
+                                time: item.time,
+                                zone: item.zone,
+                                detailPageButton: InkWell(
+                                  splashColor:
+                                      Colors.grey[200].withOpacity(0.25),
+                                  onTap: () {
+                                    if (isLargeScreen) {
+                                      selectedValue = index;
+                                      setState(() {});
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) {
+                                            return ActivityDetailPage(item);
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        physics: BouncingScrollPhysics(),
+                      ),
+            )
+          : Expanded(
+              flex: 71,
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -255,14 +337,16 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   ),
                 ]),
               )),
-          // If large screen, render activity detail page
-          (isLargeScreen && listActivity.length != 0)
+                        // If large screen, render activity detail page
+        (isLargeScreen && listActivity.length != 0)
               ? Expanded(
-                  child: ActivityDetailWidget(listActivity[selectedValue]))
-              : Container(),
+                flex: 25,
+                  child: ActivityDetailWidget(listActivity[selectedValue]
+                  )
+              )
+              : Container(), 
         ]);
       }),
-      // TODO: add bottom nav bar
     );
   }
 }
