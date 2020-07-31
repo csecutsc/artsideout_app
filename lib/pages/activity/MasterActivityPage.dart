@@ -149,6 +149,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   Widget build(BuildContext context) {
     // if statements for render
     return Scaffold(
+      backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -196,7 +197,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             duration: Duration(milliseconds: 50),
                             curve: Curves.fastOutSlowIn,
                             child: Material(
-                              color: Color(0xFFFCEAEB),
+                              color: Colors.transparent,
                               child: ActivityCard(
                                 title: item.title,
                                 desc: item.desc,
@@ -301,7 +302,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                             duration: Duration(milliseconds: 50),
                             curve: Curves.fastOutSlowIn,
                             child: Material(
-                              color: Color(0xFFFCEAEB),
+                              color: Colors.transparent,
                               child: ActivityCard(
                                 title: item.title,
                                 desc: item.desc,
