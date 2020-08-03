@@ -78,21 +78,27 @@ class ActivityCard extends StatelessWidget {
               Expanded( 
                 flex: 3,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Padding( 
-                        padding: EdgeInsets.only(left: 20.0, top: 10.0), 
-                        child: Text( 
-                          startTimeDisplay(time["startTime"], context),
-                          style: TextStyle( 
-                            fontWeight: FontWeight.w900,  
-                            fontSize: 25.0,
-                            fontFamily: 'Roboto',
-                            color: asoPrimary,
+                      FittedBox( 
+                        fit: BoxFit.scaleDown, 
+                        child: SizedBox( 
+                          child:  Padding( 
+                            padding: EdgeInsets.only(left: 20.0, top: 9.0), 
+                            child: Text( 
+                              startTimeDisplay(time["startTime"], context),
+                              style: TextStyle( 
+                                fontWeight: FontWeight.w900,  
+                                fontSize: 20.0,
+                                fontFamily: 'Roboto',
+                                color: asoPrimary,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
                         child: Divider(
                           color: Color(0xFFBE4C59),
                           thickness: 1.0,
@@ -113,15 +119,20 @@ class ActivityCard extends StatelessWidget {
                       //     ),
                       //   )
                       // ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
-                        child: Text( 
-                          endTimeDisplay(time["endTime"], context),
-                          style: TextStyle( 
-                            fontWeight: FontWeight.w900,  
-                            fontSize: 25.0,
-                            fontFamily: 'Roboto',
-                            color: asoPrimary,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: SizedBox( 
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 20.0, bottom: 9.0),
+                            child: Text( 
+                              endTimeDisplay(time["endTime"], context),
+                              style: TextStyle( 
+                                fontWeight: FontWeight.w900,  
+                                fontSize: 20.0,
+                                fontFamily: 'Roboto',
+                                color: asoPrimary,
+                              ),
+                            ),
                           ),
                         ),
                       ),
