@@ -22,7 +22,7 @@ class _SpeedDialMenuState extends State<SpeedDialMenu> {
     return SpeedDial(
       backgroundColor: asoPrimary,
       animatedIcon: AnimatedIcons.home_menu,
-      marginBottom: (height / 10) - 30,
+      marginBottom: (height / 10),
       marginRight: (width / 2) - 15,
       children: [
         SpeedDialChild(

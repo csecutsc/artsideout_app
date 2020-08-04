@@ -1,3 +1,4 @@
+import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -6,13 +7,18 @@ import 'package:artsideout_app/theme.dart';
 import 'package:artsideout_app/graphql/config.dart';
 import 'package:artsideout_app/graphql/Installation.dart';
 import 'package:artsideout_app/components/common.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 // Home
 import 'package:artsideout_app/components/home/HomeDetailWidget.dart';
 import 'package:artsideout_app/components/home/HomeHeader.dart';
 import 'package:artsideout_app/pages/home/HomeDetailPage.dart';
 // Pages
 import 'package:artsideout_app/pages/art/MasterArtPage.dart';
+import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
+import 'package:artsideout_app/components/home/Sidebar.dart';
+
+const int HOMEPAGE_INDEX = 10;
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int selectedValue = 0;
+  int _selectedValue = HOMEPAGE_INDEX;
   int secondFlexSize = 1;
   bool isLargeScreen = false;
   bool isMediumScreen = false; // tablet
@@ -34,10 +40,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<HomeAction> listHomeActions = [
-    HomeAction("Event Information", asoPrimary, "assets/icons/asoBg.svg", 300,
-        MasterActivityPage()),
     HomeAction("About Connections", Color(0xFF62BAA6),
         "assets/icons/aboutConnections.svg", 350, MasterActivityPage()),
+    HomeAction("Event Information", asoPrimary, "assets/icons/asoBg.svg", 300,
+        MasterActivityPage()),
     HomeAction("News", Colors.purple[200], "assets/icons/activities.svg", 300,
         MasterArtPage()),
     HomeAction("Art", Colors.blue[200], "assets/icons/installation.svg", 200,
@@ -68,19 +74,18 @@ class _HomePageState extends State<HomePage> {
             isMediumScreen = false;
           }
           return Row(children: <Widget>[
+            (isLargeScreen) ? Sidebar(onTabTapped) : Container(),
             (isLargeScreen)
                 ? Expanded(
                     flex: secondFlexSize,
-                    child: HomeDetailWidget(
-                        isMediumScreen, isLargeScreen, listHomeActions))
+                    child: _selectedValue != HOMEPAGE_INDEX
+                        ? listHomeActions[_selectedValue].page
+                        : HomeDetailWidget(isMediumScreen, isLargeScreen,
+                            listHomeActions, onTabTapped),
+                  )
                 : Container(),
             (isLargeScreen)
-                ? Expanded(
-                    flex: (secondFlexSize / 2).round(),
-                    child: Center(
-                      child: Text("About Page"),
-                    ),
-                  )
+                ? Container()
                 : Expanded(
                     flex: 1,
                     child: Stack(
@@ -127,13 +132,16 @@ class _HomePageState extends State<HomePage> {
                                         const EdgeInsets.fromLTRB(10, 0, 10, 0),
                                     child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context,
-                                              CupertinoPageRoute(
-                                            builder: (context) {
-                                              return listHomeActions[index]
-                                                  .page;
-                                            },
-                                          ));
+                                          setState(() {
+                                            onTabTapped(index);
+                                          });
+//                                          Navigator.push(context,
+//                                              CupertinoPageRoute(
+//                                            builder: (context) {
+//                                              return listHomeActions[index]
+//                                                  .page;
+//                                            },
+//                                          ));
                                         },
                                         child: ClipRRect(
                                             borderRadius:
@@ -198,6 +206,12 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _selectedValue = index;
+    });
   }
 }
 

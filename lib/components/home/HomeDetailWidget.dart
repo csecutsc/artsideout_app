@@ -1,4 +1,3 @@
-import 'package:artsideout_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 // Pages
@@ -8,15 +7,15 @@ import 'package:artsideout_app/components/home/HomeHeader.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:artsideout_app/components/common.dart';
-import 'package:artsideout_app/components/home/Sidebar.dart';
 
 class HomeDetailWidget extends StatefulWidget {
-  HomeDetailWidget(
-      this.isMediumScreen, this.isLargeScreen, this.listHomeActions);
+  HomeDetailWidget(this.isMediumScreen, this.isLargeScreen,
+      this.listHomeActions, this.onTabTapped);
 
   final bool isMediumScreen;
   final bool isLargeScreen;
   final List<HomeAction> listHomeActions;
+  final Function onTabTapped;
 
   @override
   _HomeDetailWidgetState createState() => _HomeDetailWidgetState();
@@ -28,9 +27,8 @@ class _HomeDetailWidgetState extends State<HomeDetailWidget> {
       color: Colors.white,
       child: Row(
         children: <Widget>[
-          Sidebar(),
           Expanded(
-            flex: 8,
+            flex: 6,
             child: Stack(
               fit: StackFit.passthrough,
               overflow: Overflow.clip,
@@ -90,11 +88,14 @@ class _HomeDetailWidgetState extends State<HomeDetailWidget> {
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: GestureDetector(
                             onTap: () {
-                              Navigator.push(context, CupertinoPageRoute(
-                                builder: (context) {
-                                  return widget.listHomeActions[index].page;
-                                },
-                              ));
+                              setState(() {
+                                widget.onTabTapped(index);
+                              });
+//                              Navigator.push(context, CupertinoPageRoute(
+//                                builder: (context) {
+//                                  return widget.listHomeActions[index].page;
+//                                },
+//                              ));
                             },
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
@@ -144,6 +145,13 @@ class _HomeDetailWidgetState extends State<HomeDetailWidget> {
               ],
             ),
           ),
+          Expanded(
+              flex: 3,
+              child: Center(
+                child: Container(
+                  child: Text("Hello Bye"),
+                ),
+              )),
         ],
       ),
     );
