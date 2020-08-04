@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
 import 'package:flutter/gestures.dart';
->>>>>>> Activity Page Functionality Update (#14)
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // GraphQL
@@ -72,28 +69,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         };
 
         setState(() {
-<<<<<<< HEAD
-          // Profile profile = Profile(
-          //   result.data["installations"][i]["profile"]["name"],
-          //   result.data["installations"][i]["profile"]["desc"],
-          //   result.data["installations"][i]["profile"]["social"],
-          //   result.data["installations"][i]["profile"]["type"],
-          //   [],
-          //   []
-          // );
-          listInstallation.add(
-            Installation(result.data["installations"][i]["title"],
-                result.data["installations"][i]["desc"],
-                zone: result.data["installations"][i]["zone"],
-                imgUrl: result.data["installations"][i]["image"]["url"],
-                location: {
-                  'latitude': result.data["installations"][i]["location"]
-                      ["latitude"],
-                  'longitude': result.data["installations"][i]["location"]
-                      ["longitude"],
-                },
-                locationRoom: result.data["installations"][i]["locationroom"],
-=======
           listActivity.add(
             Activity(
                 result.data["activities"][i]["title"],
@@ -102,7 +77,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                 imgUrl: imgUrlTest,
                 time: time,
                 location: location,
->>>>>>> Activity Page Functionality Update (#14)
                 profiles: []),
           );
         });
@@ -149,11 +123,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     subtitle: "",
                   ),
                   Expanded(
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
                       // Calendar Box
->>>>>>> fixed all merge conflicts
                       child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -169,43 +139,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                       ],
                     ),
                     child: Stack(
-<<<<<<< HEAD
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30.0, top: 15.0, bottom: 15.0),
-                          child: Text(
-                            'Calendar',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ),
-                        SizedBox(height: 50),
-                        GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: numCards,
-                            crossAxisSpacing: 3.0,
-                            mainAxisSpacing: 3.0,
-                          ),
-=======
-                    // Calendar Box 
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration( 
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white,
-                        boxShadow: [ 
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5, 
-                            blurRadius: 7, 
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-=======
->>>>>>> fixed all merge conflicts
                       children: <Widget>[
                         Container(
                           width: double.infinity,
@@ -234,7 +167,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                         ),
                         SizedBox(height: 50),
                         ListView.builder(
->>>>>>> Activity Page Functionality Update (#14)
                           // Let the ListView know how many items it needs to build.
                           itemCount: listActivity.length,
                           // Provide a builder function. This is where the magic happens.
@@ -247,11 +179,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                               child: Material(
                                 child: ActivityCard(
                                   title: item.title,
-<<<<<<< HEAD
-                                  artist: (item.profiles.length > 0)
-=======
                                   desc: (item.profiles.length > 0)
->>>>>>> Activity Page Functionality Update (#14)
                                       ? item.profiles[0].name
                                       : "",
                                   image: item.imgUrl,
