@@ -165,10 +165,15 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           isMediumScreen = false;
           numCards = 2;
           // Tablet Size
-        } else if (MediaQuery.of(context).size.width > 600) {
+        } else if (MediaQuery.of(context).size.width > 1000) {
           secondFlexSize = 1;
-          isLargeScreen = true;
-          isMediumScreen = true;
+          isLargeScreen = false;
+          if (MediaQuery.of(context).size.height > 1300) {
+            isMediumScreen = false;
+          }
+          else {
+            isMediumScreen = true;
+          }
           numCards = MediaQuery.of(context).orientation == Orientation.portrait
               ? 2
               : 3;
@@ -191,13 +196,13 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         }
 
         return Row(children: <Widget>[
-          (isLargeScreen)
+          (isLargeScreen || isMediumScreen)
             ? Expanded( 
                 flex: 5, 
                 child: Sidebar(),
               )
             : Container(), 
-          (isLargeScreen)
+          (isLargeScreen || isMediumScreen)
             ? ActivityWebMenu( 
                 ListView.builder(
                         // Let the ListView know how many items it needs to build.
@@ -274,16 +279,18 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   Stack( 
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 25.0),
+                        padding: const EdgeInsets.only(top: 2.0, left: 15.0, bottom: 25.0),
                         color: Color(0xFFFCEAEB),
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: SafeArea(
+                          child: Text(
                           "Activities",
                           style: TextStyle( 
-                            fontWeight: FontWeight.bold,  
-                            fontSize: headerFontSize,
-                            fontFamily: 'Roboto',
-                            color: asoPrimary,
+                              fontWeight: FontWeight.bold,  
+                              fontSize: headerFontSize,
+                              fontFamily: 'Roboto',
+                              color: asoPrimary,
+                            ),
                           ),
                         ),
                       ),  

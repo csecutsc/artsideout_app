@@ -80,8 +80,8 @@ class ActivityCard extends StatelessWidget {
       descFontSize = 13.0;
       zoneFontSize = 18.0;
       zoneIconSize = 23.0;
-      startFontSize = 20.0;
-      endFontSize = 20.0;
+      startFontSize = 22.0;
+      endFontSize = 22.0;
       cardHeight = MediaQuery.of(context).size.height / 6;
       cardWidth = MediaQuery.of(context).size.width;
     } else if (MediaQuery.of(context).size.width > 400 && MediaQuery.of(context).size.height > 700) { // Pixel, iPhone 6/7/8 Plus
@@ -129,6 +129,12 @@ class ActivityCard extends StatelessWidget {
       endFontSize = 20.0;
       cardHeight = MediaQuery.of(context).size.height / 6;
       cardWidth = MediaQuery.of(context).size.width;
+    }
+
+    if (MediaQuery.of(context).size.height < 500 && MediaQuery.of(context).size.width > 700) { 
+      cardHeight = 150.0;
+    } else if (MediaQuery.of(context).size.height < 500) {
+      cardHeight = 100.0;
     }
 
     return Container(
