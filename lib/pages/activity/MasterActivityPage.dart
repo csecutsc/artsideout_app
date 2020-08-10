@@ -36,6 +36,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   bool isLargeScreen = false;
   bool isMediumScreen = false;
   bool selected = false;
+  double headerFontSize;
 
   List<Activity> listActivity = List<Activity>();
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
@@ -177,10 +178,22 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           isMediumScreen = false;
           numCards = 2;
         }
+
+        // "Activity" header font size
+        if (MediaQuery.of(context).size.width > 700) {
+          headerFontSize = 50.0;
+        } else if (MediaQuery.of(context).size.width > 440) { 
+          headerFontSize = 40.0;
+        } else if (MediaQuery.of(context).size.width > 330) {
+          headerFontSize = 35.0;
+        } else {
+          headerFontSize = 30.0;
+        }
+
         return Row(children: <Widget>[
           (isLargeScreen)
             ? Expanded( 
-                flex: 4, 
+                flex: 5, 
                 child: Sidebar(),
               )
             : Container(), 
@@ -231,7 +244,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                       ),
             )
           : Expanded(
-              flex: 71,
+              flex: 70,
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -261,14 +274,14 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                   Stack( 
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
+                        padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 25.0),
                         color: Color(0xFFFCEAEB),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Activities",
                           style: TextStyle( 
                             fontWeight: FontWeight.bold,  
-                            fontSize: 35.0,
+                            fontSize: headerFontSize,
                             fontFamily: 'Roboto',
                             color: asoPrimary,
                           ),
@@ -279,7 +292,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                         right: 0.0,
                         child: PlatformSvg.asset(
                           "assets/icons/activities.svg",
-                          width: 300,
+                          width: MediaQuery.of(context).size.width / 2,
                           height: 125,
                           fit: BoxFit.contain,
                           alignment: Alignment.topCenter,

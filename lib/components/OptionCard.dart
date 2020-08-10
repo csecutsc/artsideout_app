@@ -24,14 +24,17 @@ class _OptionCardState extends State<OptionCard> {
       ),
       child: Stack( 
         children: <Widget>[
-          PlatformSvg.asset( 
-            widget.image, 
-            width: 300,
-            fit: BoxFit.fill, 
+          ClipRRect( 
+            borderRadius: BorderRadius.circular(30),
+            child: PlatformSvg.asset( 
+              widget.image, 
+              width: 300,
+              fit: BoxFit.fill, 
+            ),
           ),
           Positioned( 
             left: 30,
-            top: 115,
+            top: MediaQuery.of(context).size.height / 7,
             bottom: 0,
             right: 0, 
             child: Text(

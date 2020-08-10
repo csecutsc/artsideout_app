@@ -55,9 +55,86 @@ class ActivityCard extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    // Font Sizes
+    double titleFontSize;
+    double descFontSize;
+    double zoneFontSize;
+    double zoneIconSize;
+    double startFontSize;
+    double endFontSize;
+    double cardHeight;
+    double cardWidth;
+
+    if (MediaQuery.of(context).size.width > 1300) { // Web, big tablet
+      titleFontSize = 24.0;
+      descFontSize = 14.0;
+      zoneFontSize = 18.0;
+      zoneIconSize = 23.0;
+      startFontSize = 24.0;
+      endFontSize = 24.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;      
+    }
+    else if (MediaQuery.of(context).size.width > 700) { // small tablet
+      titleFontSize = 24.0;
+      descFontSize = 13.0;
+      zoneFontSize = 18.0;
+      zoneIconSize = 23.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;
+    } else if (MediaQuery.of(context).size.width > 400 && MediaQuery.of(context).size.height > 700) { // Pixel, iPhone 6/7/8 Plus
+      titleFontSize = 22.0;
+      descFontSize = 12.0;
+      zoneFontSize = 16.0;
+      zoneIconSize = 23.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;
+    } else if (MediaQuery.of(context).size.width > 370 && MediaQuery.of(context).size.height > 810) { // iPhone X
+      titleFontSize = 22.0;
+      descFontSize = 12.0;
+      zoneFontSize = 16.0;
+      zoneIconSize = 23.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6.75;
+      cardWidth = MediaQuery.of(context).size.width;
+    } else if (MediaQuery.of(context).size.width > 350 && MediaQuery.of(context).size.height > 630) { // Moto G4, Galaxy S5, iPhone 6/7/8/X
+      titleFontSize = 20.0;
+      descFontSize = 10.0;
+      zoneFontSize = 13.0;
+      zoneIconSize = 18.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;
+    } else if (MediaQuery.of(context).size.width > 310) { // iPhone 5/SE
+      titleFontSize = 16.0;
+      descFontSize = 9.0;
+      zoneFontSize = 10.0;
+      zoneIconSize = 12.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;
+    } else { // small width folding phones
+      titleFontSize = 16.0;
+      descFontSize = 9.0;
+      zoneFontSize = 13.0;
+      zoneIconSize = 16.0;
+      startFontSize = 20.0;
+      endFontSize = 20.0;
+      cardHeight = MediaQuery.of(context).size.height / 6;
+      cardWidth = MediaQuery.of(context).size.width;
+    }
+
     return Container(
-      height: MediaQuery.of(context).size.height / 6, 
-      width: MediaQuery.of(context).size.width, 
+      //height: 125.0,
+      height: cardHeight,
+      width: cardWidth,
       margin: EdgeInsets.all(7),
       decoration: BoxDecoration(  
         color: Colors.white, 
@@ -89,7 +166,7 @@ class ActivityCard extends StatelessWidget {
                               startTimeDisplay(time["startTime"], context),
                               style: TextStyle( 
                                 fontWeight: FontWeight.w900,  
-                                fontSize: 20.0,
+                                fontSize: startFontSize,
                                 fontFamily: 'Roboto',
                                 color: asoPrimary,
                               ),
@@ -98,7 +175,7 @@ class ActivityCard extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                        padding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
                         child: Divider(
                           color: Color(0xFFBE4C59),
                           thickness: 1.0,
@@ -128,7 +205,7 @@ class ActivityCard extends StatelessWidget {
                               endTimeDisplay(time["endTime"], context),
                               style: TextStyle( 
                                 fontWeight: FontWeight.w900,  
-                                fontSize: 20.0,
+                                fontSize: endFontSize,
                                 fontFamily: 'Roboto',
                                 color: asoPrimary,
                               ),
@@ -152,7 +229,7 @@ class ActivityCard extends StatelessWidget {
                           title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle( 
-                            fontSize: 24.0, 
+                            fontSize: titleFontSize, 
                             fontWeight: FontWeight.bold,
                             color: asoPrimary,
                           ),
@@ -175,7 +252,7 @@ class ActivityCard extends StatelessWidget {
                         child: Text(
                           displayDesc(desc),
                           style: TextStyle( 
-                            fontSize: 14.0,
+                            fontSize: descFontSize,
                             color: Color(0xFFBE4C59),
                           ),
                           overflow: TextOverflow.clip,
@@ -194,7 +271,7 @@ class ActivityCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: Icon(
                               Icons.location_on,
-                              size: 23.0,
+                              size: zoneIconSize,
                               color: Color(0xFFBE4C59),
                             ),
                           ),
@@ -204,7 +281,7 @@ class ActivityCard extends StatelessWidget {
                             child: Text( 
                               displayZone(zone),
                               style: TextStyle( 
-                                fontSize: 18.0,
+                                fontSize: zoneFontSize,
                                 color: asoPrimary,
                               ),
                               overflow: TextOverflow.clip,
