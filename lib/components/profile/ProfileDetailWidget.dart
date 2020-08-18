@@ -21,10 +21,23 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
 //move titlie to wiget
   @override
   Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
+    return ListView(shrinkWrap: true, children: <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
-            alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(top: 25, bottom: 25),
+          alignment: Alignment.center,
+          child: Text(widget.profile.name,
+              style: TextStyle(
+                backgroundColor: Colors.transparent,
+                fontSize: 40,
+                foreground: Paint()
+                  ..style = PaintingStyle.fill
+                  ..strokeWidth = 15
+                  ..color = Colors.red[300],
+              )),
+        ),
+        Container(
+            alignment: Alignment.centerRight,
             margin: EdgeInsets.only(left: 50, right: 200),
             width: 200.0,
             height: 200.0,

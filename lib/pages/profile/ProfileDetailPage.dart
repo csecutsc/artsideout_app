@@ -17,15 +17,10 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          title: Text(widget.profile.name,
-              style: TextStyle(
-                color: asoPrimary,
-              ))),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+      ),
       body: ProfileDetailWidget(widget.profile),
     );
   }
