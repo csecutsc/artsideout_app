@@ -16,7 +16,7 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: double.infinity,
       width: 100,
       decoration: BoxDecoration(
         color: asoPrimary,
