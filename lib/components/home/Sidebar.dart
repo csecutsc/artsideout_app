@@ -16,7 +16,7 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
+      height: MediaQuery.of(context).size.height,
       width: 100,
       decoration: BoxDecoration(
         color: asoPrimary,
@@ -24,67 +24,72 @@ class _SidebarState extends State<Sidebar> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            minRadius: 30.0,
+          Expanded(
+            flex: 1,
+            child: CircleAvatar(
+              radius: 35.0,
+              backgroundColor: Colors.white,
+            ),
           ),
-          SizedBox(
-            height: 40.0,
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.home),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(HOMEPAGE_INDEX);
+              },
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.home),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(HOMEPAGE_INDEX);
-            },
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.map),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(0);
+              },
+            ),
           ),
-          SizedBox(
-            height: 25,
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.search),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(0);
+              },
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.map),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(0);
-            },
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.palette),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(3);
+              },
+            ),
           ),
-          SizedBox(
-            height: 25,
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.local_activity),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(5);
+              },
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.search),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(0);
-            },
-          ),
-          SizedBox(height: 145),
-          IconButton(
-            icon: Icon(Icons.palette),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(3);
-            },
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          IconButton(
-            icon: Icon(Icons.local_activity),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(5);
-            },
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          IconButton(
-            icon: Icon(Icons.bookmark),
-            iconSize: 40.0,
-            onPressed: () {
-              changeScreen(0);
-            },
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: Icon(Icons.bookmark),
+              iconSize: 40.0,
+              onPressed: () {
+                changeScreen(0);
+              },
+            ),
           ),
         ],
       ),
