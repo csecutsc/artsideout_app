@@ -134,13 +134,13 @@ class _HomePageState extends State<HomePage> {
                                           setState(() {
                                             onTabTapped(index);
                                           });
-//                                          Navigator.push(context,
-//                                              CupertinoPageRoute(
-//                                            builder: (context) {
-//                                              return listHomeActions[index]
-//                                                  .page;
-//                                            },
-//                                          ));
+                                         Navigator.push(context,
+                                             CupertinoPageRoute(
+                                           builder: (context) {
+                                             return listHomeActions[index]
+                                                 .page;
+                                           },
+                                         ));
                                         },
                                         child: ClipRRect(
                                             borderRadius:
