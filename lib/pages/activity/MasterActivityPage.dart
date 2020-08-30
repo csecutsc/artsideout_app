@@ -209,12 +209,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
 
         return Row(children: <Widget>[
           (isLargeScreen || isMediumScreen)
-            ? Expanded( 
-                flex: 5, 
-                child: Sidebar(),
-              )
-            : Container(), 
-          (isLargeScreen || isMediumScreen)
             ? ActivityWebMenu( 
                 ListView.builder(
                         // Let the ListView know how many items it needs to build.
