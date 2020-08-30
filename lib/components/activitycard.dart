@@ -234,7 +234,7 @@ class ActivityCard extends StatelessWidget {
                         child: Text( 
                           title,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle( 
+                          style: TextStyle(
                             fontSize: titleFontSize, 
                             fontWeight: FontWeight.bold,
                             color: asoPrimary,
@@ -257,7 +257,7 @@ class ActivityCard extends StatelessWidget {
                         //
                         child: Text(
                           displayDesc(desc),
-                          style: TextStyle( 
+                          style: TextStyle(
                             fontSize: descFontSize,
                             color: Color(0xFFBE4C59),
                           ),
@@ -286,7 +286,7 @@ class ActivityCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: Text( 
                               displayZone(zone),
-                              style: TextStyle( 
+                              style: TextStyle(
                                 fontSize: zoneFontSize,
                                 color: asoPrimary,
                               ),

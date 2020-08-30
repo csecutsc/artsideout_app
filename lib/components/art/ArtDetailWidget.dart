@@ -14,14 +14,14 @@ class ArtDetailWidget extends StatefulWidget {
 class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration( 
+      decoration: BoxDecoration(
         color: Colors.white,
         // borderRadius: BorderRadius.circular(25),
-        boxShadow: [ 
+        boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0),
-            spreadRadius: 5, 
-            blurRadius: 7, 
+            spreadRadius: 5,
+            blurRadius: 7,
             offset: Offset(10, 3),
           ),
         ],

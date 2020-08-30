@@ -58,7 +58,6 @@ class _HeaderState extends State<Header> {
                     ),
                   ),
                   Positioned(
-                    top: 20 - widget.offset / 2,
                     left: 20 - widget.offset / 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

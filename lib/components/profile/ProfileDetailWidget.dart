@@ -18,7 +18,7 @@ class ProfileDetailWidget extends StatefulWidget {
 
 class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
   List<String> socials = List<String>();
-//move titlie to wiget
+//move title to widget
   @override
   Widget build(BuildContext context) {
     return ListView(shrinkWrap: true, children: <Widget>[
