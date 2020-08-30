@@ -20,7 +20,7 @@ class _SidebarState extends State<Sidebar> {
         children: [
           CircleAvatar(
             backgroundColor: Colors.white,
-            minRadius: 25.0,
+            minRadius: 30.0,
           ),
           SizedBox(
             height: 40.0,
