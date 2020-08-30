@@ -95,7 +95,6 @@ class _SidebarState extends State<Sidebar> {
       ),
     );
   }
-
   changeScreen(int index) {
     setState(() {
       widget.onTabTapped(index);

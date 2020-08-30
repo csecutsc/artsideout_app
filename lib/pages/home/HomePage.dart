@@ -19,7 +19,6 @@ import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
 import 'package:artsideout_app/components/home/Sidebar.dart';
 
 const int HOMEPAGE_INDEX = 10;
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -212,6 +211,23 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedValue = index;
     });
+  }
+}
+
+double getItemHeight(index) {
+  if (index == 0 || index == 1) //height
+    return 0.6;
+  else if (index == 4) {
+    return 1.0;
+  } else
+    return 0.9;
+}
+
+int getItemWidth(index) {
+  if (index == 0 || index == 1 || index == 4) {
+    return 2;
+  } else {
+    return 1;
   }
 }
 
