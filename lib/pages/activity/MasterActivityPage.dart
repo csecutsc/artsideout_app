@@ -1,10 +1,6 @@
-// import 'dart:html';
-
 import 'package:artsideout_app/components/activity/ActivityWebMenu.dart';
-import 'package:artsideout_app/components/home/HomeDetailWidget.dart';
 import 'package:artsideout_app/graphql/Profile.dart';
 import 'package:artsideout_app/theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // GraphQL
@@ -12,11 +8,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/graphql/config.dart';
 import 'package:artsideout_app/graphql/Activity.dart';
 // Common
-import 'package:artsideout_app/components/PageHeader.dart';
 import 'package:artsideout_app/components/activitycard.dart';
 import 'package:artsideout_app/pages/home/HomePage.dart';
-import 'package:artsideout_app/components/home/Sidebar.dart';
-// import 'package:artsideout_app/components/navigation.dart';
 // Art
 import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
@@ -47,20 +40,20 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   }
 
   final List<HomeAction> listHomeActions = [
-  HomeAction("Event Information", asoPrimary, "assets/icons/asoBg.svg", 300,
-      MasterActivityPage()),
-  HomeAction("About Connections", Color(0xFF62BAA6),
-      "assets/icons/aboutConnections.svg", 350, MasterActivityPage()),
-  HomeAction("News", Colors.purple[200], "assets/icons/activities.svg", 300,
-      MasterArtPage()),
-  HomeAction("Art", Colors.blue[200], "assets/icons/installation.svg", 200,
-      MasterArtPage()),
-  HomeAction("Schedule", Colors.yellow[200], "assets/icons/activities.svg",
-      300, MasterActivityPage()),
-  HomeAction("Activities", Colors.yellow[200], "assets/icons/activities.svg",
-      300, MasterActivityPage()),
-  HomeAction("Saved", Colors.orange[200], "assets/icons/saved.svg", 200,
-      MasterArtPage())
+    HomeAction("Event Information", asoPrimary, "assets/icons/asoBg.svg", 300,
+        MasterActivityPage()),
+    HomeAction("About Connections", Color(0xFF62BAA6),
+        "assets/icons/aboutConnections.svg", 350, MasterActivityPage()),
+    HomeAction("News", Colors.purple[200], "assets/icons/activities.svg", 300,
+        MasterArtPage()),
+    HomeAction("Art", Colors.blue[200], "assets/icons/installation.svg", 200,
+        MasterArtPage()),
+    HomeAction("Schedule", Colors.yellow[200], "assets/icons/activities.svg",
+        300, MasterActivityPage()),
+    HomeAction("Activities", Colors.yellow[200], "assets/icons/activities.svg",
+        300, MasterActivityPage()),
+    HomeAction("Saved", Colors.orange[200], "assets/icons/saved.svg", 200,
+        MasterArtPage())
   ];
 
   // Activity GraphQL Query
@@ -178,173 +171,165 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         }
         return Row(children: <Widget>[
           (isLargeScreen)
-            ? Expanded( 
-                flex: 4, 
-                child: Sidebar(),
-              )
-            : Container(), 
-          (isLargeScreen)
-            ? ActivityWebMenu( 
-                ListView.builder(
-                        // Let the ListView know how many items it needs to build.
-                        itemCount: listActivity.length,
-                        // Provide a builder function. This is where the magic happens.
-                        // Convert each item into a widget based on the type of item it is.
-                        itemBuilder: (context, index) {
-                          final item = listActivity[index];
-                          return AnimatedContainer(
-                            duration: Duration(milliseconds: 50),
-                            curve: Curves.fastOutSlowIn,
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ActivityCard(
-                                title: item.title,
-                                desc: item.desc,
-                                image: item.imgUrl,
-                                time: item.time,
-                                zone: item.zone,
-                                detailPageButton: InkWell(
-                                  splashColor:
-                                      Colors.grey[200].withOpacity(0.25),
-                                  onTap: () {
-                                    if (isLargeScreen) {
-                                      selectedValue = index;
-                                      setState(() {});
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) {
-                                            return ActivityDetailPage(item);
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
+              ? ActivityWebMenu(
+                  ListView.builder(
+                    // Let the ListView know how many items it needs to build.
+                    itemCount: listActivity.length,
+                    // Provide a builder function. This is where the magic happens.
+                    // Convert each item into a widget based on the type of item it is.
+                    itemBuilder: (context, index) {
+                      final item = listActivity[index];
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 50),
+                        curve: Curves.fastOutSlowIn,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: ActivityCard(
+                            title: item.title,
+                            desc: item.desc,
+                            image: item.imgUrl,
+                            time: item.time,
+                            zone: item.zone,
+                            detailPageButton: InkWell(
+                              splashColor: Colors.grey[200].withOpacity(0.25),
+                              onTap: () {
+                                if (isLargeScreen) {
+                                  selectedValue = index;
+                                  setState(() {});
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) {
+                                        return ActivityDetailPage(item);
+                                      },
+                                    ),
+                                  );
+                                }
+                              },
                             ),
-                          );
-                        },
-                        physics: BouncingScrollPhysics(),
-                      ),
-            )
-          : Expanded(
-              flex: 71,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFCEAEB),
-                ),
-                child: Column(children: <Widget>[
-                  // Header(
-                  //   image: "assets/icons/activities.svg",
-                  //   textTop: "ACTIVITIES",
-                  //   textBottom: "",
-                  //   subtitle: "",
-                  // ),
-                  // Container(
-                  //   padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
-                  //   color: Color(0xFFFCEAEB),
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     "Activities",
-                  //     style: TextStyle( 
-                  //       fontWeight: FontWeight.bold,  
-                  //       fontSize: 35.0,
-                  //       fontFamily: 'Roboto',
-                  //       color: asoPrimary,
-                  //     ),
-                  //   ),
-                  // ),
-                  Stack( 
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
-                        color: Color(0xFFFCEAEB),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Activities",
-                          style: TextStyle( 
-                            fontWeight: FontWeight.bold,  
-                            fontSize: 35.0,
-                            fontFamily: 'Roboto',
-                            color: asoPrimary,
                           ),
                         ),
-                      ),  
-                      Positioned(
-                        top: 0.0,
-                        right: 0.0,
-                        child: PlatformSvg.asset(
-                          "assets/icons/activities.svg",
-                          width: 300,
-                          height: 125,
-                          fit: BoxFit.contain,
-                          alignment: Alignment.topCenter,
-                        ),
-                      ),                    
-                    ],
+                      );
+                    },
+                    physics: BouncingScrollPhysics(),
                   ),
-                  Expanded(
-                    flex: secondFlexSize,
-                    child: Container( 
+                )
+              : Expanded(
+                  flex: 71,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
                       color: Color(0xFFFCEAEB),
-                      child: ListView.builder(
-                        // Let the ListView know how many items it needs to build.
-                        itemCount: listActivity.length,
-                        // Provide a builder function. This is where the magic happens.
-                        // Convert each item into a widget based on the type of item it is.
-                        itemBuilder: (context, index) {
-                          final item = listActivity[index];
-                          return AnimatedContainer(
-                            duration: Duration(milliseconds: 50),
-                            curve: Curves.fastOutSlowIn,
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ActivityCard(
-                                title: item.title,
-                                desc: item.desc,
-                                image: item.imgUrl,
-                                time: item.time,
-                                zone: item.zone,
-                                detailPageButton: InkWell(
-                                  splashColor:
-                                      Colors.grey[200].withOpacity(0.25),
-                                  onTap: () {
-                                    if (isLargeScreen) {
-                                      selectedValue = index;
-                                      setState(() {});
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) {
-                                            return ActivityDetailPage(item);
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
+                    ),
+                    child: Column(children: <Widget>[
+                      // Header(
+                      //   image: "assets/icons/activities.svg",
+                      //   textTop: "ACTIVITIES",
+                      //   textBottom: "",
+                      //   subtitle: "",
+                      // ),
+                      // Container(
+                      //   padding: const EdgeInsets.only(top: 60.0, left: 15.0, bottom: 20.0),
+                      //   color: Color(0xFFFCEAEB),
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text(
+                      //     "Activities",
+                      //     style: TextStyle(
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 35.0,
+                      //       fontFamily: 'Roboto',
+                      //       color: asoPrimary,
+                      //     ),
+                      //   ),
+                      // ),
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(
+                                top: 60.0, left: 15.0, bottom: 20.0),
+                            color: Color(0xFFFCEAEB),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Activities",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 35.0,
+                                fontFamily: 'Roboto',
+                                color: asoPrimary,
                               ),
                             ),
-                          );
-                        },
-                        physics: BouncingScrollPhysics(),
+                          ),
+                          Positioned(
+                            top: 0.0,
+                            right: 0.0,
+                            child: PlatformSvg.asset(
+                              "assets/icons/activities.svg",
+                              width: 300,
+                              height: 125,
+                              fit: BoxFit.contain,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ]),
-              )),
-                        // If large screen, render activity detail page
-        (isLargeScreen && listActivity.length != 0)
+                      Expanded(
+                        flex: secondFlexSize,
+                        child: Container(
+                          color: Color(0xFFFCEAEB),
+                          child: ListView.builder(
+                            // Let the ListView know how many items it needs to build.
+                            itemCount: listActivity.length,
+                            // Provide a builder function. This is where the magic happens.
+                            // Convert each item into a widget based on the type of item it is.
+                            itemBuilder: (context, index) {
+                              final item = listActivity[index];
+                              return AnimatedContainer(
+                                duration: Duration(milliseconds: 50),
+                                curve: Curves.fastOutSlowIn,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: ActivityCard(
+                                    title: item.title,
+                                    desc: item.desc,
+                                    image: item.imgUrl,
+                                    time: item.time,
+                                    zone: item.zone,
+                                    detailPageButton: InkWell(
+                                      splashColor:
+                                          Colors.grey[200].withOpacity(0.25),
+                                      onTap: () {
+                                        if (isLargeScreen) {
+                                          selectedValue = index;
+                                          setState(() {});
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) {
+                                                return ActivityDetailPage(item);
+                                              },
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            physics: BouncingScrollPhysics(),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )),
+          // If large screen, render activity detail page
+          (isLargeScreen && listActivity.length != 0)
               ? Expanded(
-                flex: 25,
-                  child: ActivityDetailWidget(listActivity[selectedValue]
-                  )
-              )
-              : Container(), 
+                  flex: 25,
+                  child: ActivityDetailWidget(listActivity[selectedValue]))
+              : Container(),
         ]);
       }),
     );

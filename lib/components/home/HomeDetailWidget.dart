@@ -160,8 +160,8 @@ class _HomeDetailWidgetState extends State<HomeDetailWidget> {
 }
 
 double getItemHeightPC(index) {
-  if (index == 0 || index == 1) { //height
-    return 1.
+  if (index == 0 || index == 1) {
+    return 1;
   } else if (index == 4) {
     return 1.4;
   } else
