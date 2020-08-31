@@ -13,6 +13,7 @@ import 'package:artsideout_app/components/common.dart';
 import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
 import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MasterArtPage extends StatefulWidget {
   @override
@@ -52,9 +53,12 @@ class _MasterArtPageState extends State<MasterArtPage> {
               result.data["installations"][i]["title"],
               result.data["installations"][i]["desc"],
               zone: result.data["installations"][i]["zone"],
-              imgUrl: result.data["installations"][i]["image"] == null
+              imgURL: result.data["installations"][i]["image"] == null
                   ? 'https://via.placeholder.com/350'
                   : result.data["installations"][i]["image"]["url"],
+              videoURL: result.data["installations"][i]["videoUrl"] == null
+                  ? 'empty'
+                  : result.data["installations"][i]["videoUrl"],
               location: {
                 'latitude': result.data["installations"][i]["location"] == null
                     ? 0.0
@@ -276,7 +280,9 @@ class _MasterArtPageState extends State<MasterArtPage> {
                                       child: ArtListCard(
                                         title: item.title,
                                         artist: item.zone,
-                                        image: item.imgUrl,
+                                        image: item.videoURL == 'empty'
+                                            ? item.imgURL
+                                            : getThumbnail(item.videoURL),
                                       ),
                                       onTap: () {
                                         if (isLargeScreen) {
@@ -315,12 +321,19 @@ class _MasterArtPageState extends State<MasterArtPage> {
             ((isLargeScreen || isMediumScreen) && listInstallation.length != 0)
                 ? Expanded(
                     flex: 3,
-                    child: ArtDetailWidget(listInstallation[selectedValue]))
+                    key: UniqueKey(),
+                    child:
+                        ArtDetailWidget(data: listInstallation[selectedValue]))
                 : Container(),
           ],
         );
       }),
     );
+  }
+
+  String getThumbnail(String videoURL) {
+    return YoutubePlayerController.getThumbnail(
+        videoId: YoutubePlayerController.convertUrlToId(videoURL));
   }
 }
 

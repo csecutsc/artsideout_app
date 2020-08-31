@@ -36,7 +36,7 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
 //          style: TextStyle(color: asoPrimary),
 //        ),
       ),
-      body: ArtDetailWidget(widget.data),
+      body: ArtDetailWidget(data: widget.data),
     );
   }
 }
