@@ -32,7 +32,7 @@ class NoResultBanner extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              'No results founds for: $searchTerm',
+              'No results found for: $searchTerm',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),

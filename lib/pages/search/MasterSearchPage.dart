@@ -16,10 +16,10 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MasterSearchPage extends StatefulWidget {
   @override
-  _MasterArtPageState createState() => _MasterArtPageState();
+  _MasterSearchPageState createState() => _MasterSearchPageState();
 }
 
-class _MasterArtPageState extends State<MasterSearchPage> {
+class _MasterSearchPageState extends State<MasterSearchPage> {
   Widget selectedItem;
   int columnCount = 2;
 
@@ -159,7 +159,7 @@ class _MasterArtPageState extends State<MasterSearchPage> {
 
     return MasterPageLayout(
       pageName: "Search",
-      pageDesc: "Connections",
+      pageDesc: "The all seeing eye",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
     );

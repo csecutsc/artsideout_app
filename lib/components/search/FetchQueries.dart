@@ -24,6 +24,7 @@ class FetchResults {
     listInstallations = await getInstallationsByTypes(input, options);
     listActivities = await getActivitiesByTypes(input, options);
     listProfiles = await getProfilesByTypes(input, options);
+    print([...listInstallations, ...listActivities, ...listProfiles]);
 
     return [...listInstallations, ...listActivities, ...listProfiles];
   }
@@ -150,10 +151,13 @@ class FetchResults {
               j < result.data["activities"][i]["profile"].length;
               j++) {
             Map<String, String> socialMap = new Map();
-            for (var key
-                in result.data["activities"][i]["profile"][j]["social"].keys) {
-              socialMap[key] =
-                  result.data["activities"][i]["profile"][j]["social"][key];
+            if (result.data["activities"][i]["profile"][j]["social"] != null) {
+              print(result.data["activities"][i]["profile"][j]["social"]);
+              for (var key
+              in result.data["activities"][i]["profile"][j]["social"].keys) {
+                socialMap[key] =
+                result.data["activities"][i]["profile"][j]["social"][key];
+              }
             }
             profilesList.add(Profile(
                 result.data["activities"][i]["profile"][j]["name"],
@@ -214,10 +218,11 @@ class FetchResults {
     if (!profilesResult.hasException) {
       for (int i = 0; i < profilesResult.data["profiles"].length; i++) {
         Map<String, String> socialMap = new Map();
-        for (var key in profilesResult.data["profiles"][i]["social"].keys) {
-          socialMap[key] = profilesResult.data["profiles"][i]["social"][key];
+        if (profilesResult.data["profiles"][i]["social"] != null) {
+          for (var key in profilesResult.data["profiles"][i]["social"].keys) {
+            socialMap[key] = profilesResult.data["profiles"][i]["social"][key];
+          }
         }
-
         String profileType = profilesResult.data["profiles"][i]["type"];
         if (types[profileType] == true ||
             (profileType == null && types["Other"] == true)) {

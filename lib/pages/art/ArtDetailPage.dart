@@ -52,6 +52,7 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
               j < result.data["installation"]["profile"].length;
               j++) {
             Map<String, String> socialMap = new Map();
+
             for (var key
                 in result.data["installation"]["profile"][j]["social"].keys) {
               socialMap[key] =

@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:flutter/material.dart';
@@ -247,14 +251,13 @@ class ImageDialog extends StatelessWidget {
   ImageDialog(this.imgURL);
 
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        width: 200,
-        height: 200,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(imgURL), fit: BoxFit.cover)),
-      ),
+    return AlertDialog(
+      backgroundColor: ColorConstants.PRIMARY,
+      content: Image.network(imgURL, fit: BoxFit.cover),
+      actions: [
+        new FlatButton(
+            child: const Text("Close"), onPressed: () => Navigator.pop(context)),
+      ],
     );
   }
 }
