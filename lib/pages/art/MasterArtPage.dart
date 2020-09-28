@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:artsideout_app/helpers/ArtFillList.dart';
 
 class MasterArtPage extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class MasterArtPage extends StatefulWidget {
 
 class _MasterArtPageState extends State<MasterArtPage> {
   int selectedValue = 0;
+  bool loading = true;
 
   List<Installation> listInstallation = List<Installation>();
   GraphQLConfiguration graphQLConfiguration =
@@ -42,10 +44,15 @@ class _MasterArtPageState extends State<MasterArtPage> {
     "Other": true,
   };
 
+  Future<void> setList() async {
+    listInstallation = await fillList().whenComplete(() => loading = false);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    _fillList();
+    setList();
   }
 
   void handleTextChange(String text) async {
@@ -186,14 +193,15 @@ class _MasterArtPageState extends State<MasterArtPage> {
       NoResultBanner(queryResult, noResults),
     ]);
 
-    Widget secondPageWidget = (listInstallation.length != 0)
+    Widget secondPageWidget = ((listInstallation.length != 0)
         ? ArtDetailWidget(data: listInstallation[selectedValue])
-        : Container();
+        : Container());
     return MasterPageLayout(
       pageName: "Studio Installations",
       pageDesc: "Blah Blah Blah",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
+      loading: loading,
     );
   }
 

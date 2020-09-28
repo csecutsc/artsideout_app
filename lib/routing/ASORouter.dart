@@ -14,12 +14,15 @@ import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
 // TODO add route that handles side widget
 class ASORouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    WidgetBuilder builder;
+    Widget Function(BuildContext, Animation<double>, Animation<double>)
+        pageBuilder;
     final parts = settings.name.split('?');
     // final args = (settings.arguments);
     switch (parts[0]) {
       case ASORoutes.HOME:
-        builder = (BuildContext context) => HomePage();
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            HomePage());
         break;
       case ASORoutes.INSTALLATIONS:
         var pageRoute;
@@ -29,7 +32,9 @@ class ASORouter {
         } else if (parts.length == 1) {
           pageRoute = MasterArtPage();
         }
-        builder = (BuildContext context) => pageRoute;
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            pageRoute);
         break;
       case ASORoutes.ACTIVITIES:
         var pageRoute;
@@ -39,7 +44,9 @@ class ASORouter {
         } else if (parts.length == 1) {
           pageRoute = MasterActivityPage();
         }
-        builder = (BuildContext context) => pageRoute;
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            pageRoute);
         break;
       case ASORoutes.SEARCH:
         var pageRoute;
@@ -49,15 +56,32 @@ class ASORouter {
         } else if (parts.length == 1) {
           pageRoute = MasterSearchPage();
         }
-        builder = (BuildContext context) => pageRoute;
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        pageRoute);
         break;
       case ASORoutes.UNDEFINED_ROUTE:
       default:
-        builder = (BuildContext context) => UndefinedRoute();
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            UndefinedRoute());
     }
-    return MaterialPageRoute(
-      builder: builder,
-      settings: settings,
-    );
+    return PageRouteBuilder(
+        pageBuilder: pageBuilder,
+        settings: settings,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: child,
+          );
+        });
   }
 }
