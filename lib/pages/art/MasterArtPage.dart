@@ -23,6 +23,7 @@ import 'package:artsideout_app/components/art/ArtListCard.dart';
 // Art
 import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:artsideout_app/helpers/ArtFillList.dart';
 
 class MasterArtPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
   ScrollController _scrollController;
   int selectedValue = 0;
   int currentScrollPos = 0;
+  bool loading = true;
 
   List<Installation> listInstallation = List<Installation>();
   GraphQLConfiguration graphQLConfiguration =
@@ -50,13 +52,15 @@ class _MasterArtPageState extends State<MasterArtPage> {
     "Other": true,
   };
 
-
-
+  Future<void> setList() async {
+    listInstallation = await fillList().whenComplete(() => loading = false);
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    _fillList();
+    setList();
   }
 
   void handleTextChange(String text) async {
@@ -80,7 +84,6 @@ class _MasterArtPageState extends State<MasterArtPage> {
 
   // Installation GraphQL Query
   void _fillList() async {
-
     listInstallation =
         await fetchResults.getInstallationsByTypes("", optionsMap);
     setState(() {
@@ -114,9 +117,15 @@ class _MasterArtPageState extends State<MasterArtPage> {
 
   @override
   Widget build(BuildContext context) {
+    int numCards = 2;
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
     FetchResultCard fetchResultCard = FetchResultCard();
+    if (_displaySize == DisplaySize.LARGE) {
+      numCards = 3;
+    } else {
+      numCards = 2;
+    }
     Widget mainPageWidget = Stack(children: [
       Positioned(
         top: 45,
@@ -183,7 +192,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                 cacheExtent: 200,
                 addAutomaticKeepAlives: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: numCards,
                   crossAxisSpacing: 5.0,
                   mainAxisSpacing: 5.0,
                 ),
@@ -215,14 +224,16 @@ class _MasterArtPageState extends State<MasterArtPage> {
       NoResultBanner(queryResult, noResults),
     ]);
 
-    Widget secondPageWidget = (listInstallation.length != 0)
+    Widget secondPageWidget = ((listInstallation.length != 0)
         ? ArtDetailWidget(data: listInstallation[selectedValue])
-        : Container();
+        : Container());
     return MasterPageLayout(
       pageName: "Studio Installations",
-      pageDesc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      pageDesc:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
+      loading: loading,
     );
   }
 

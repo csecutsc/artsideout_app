@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ActivityCard extends StatelessWidget {
   final String title;
   final String desc;
-  final String image;
+  final Map<String, String> image;
   final Map<String, String> time;
   final String zone;
   final Widget detailPageButton;

@@ -31,7 +31,7 @@ class FetchResultCard {
       return ActivityCard(
           title: item.title,
           desc: item.desc,
-          image: item.images,
+          image: item.images[0],
           time: item.time,
           zone: item.zone);
     else if (type == "Profile")

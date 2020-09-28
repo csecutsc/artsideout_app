@@ -11,12 +11,14 @@ class MasterPageLayout extends StatelessWidget {
   final String pageDesc;
   final Widget mainPageWidget;
   final Widget secondPageWidget;
+  final bool loading;
   const MasterPageLayout(
       {Key key,
       this.pageName,
       this.pageDesc,
       this.mainPageWidget,
-      this.secondPageWidget})
+      this.secondPageWidget,
+      this.loading = false})
       : super(key: key);
 
   @override
@@ -70,11 +72,19 @@ class MasterPageLayout extends StatelessWidget {
                       bottom: MediaQuery.of(context).size.height / 3,
                       child: pageHeader),
                   Positioned(
-                      top: MediaQuery.of(context).size.height / 10,
-                      right: 0,
-                      left: 0,
-                      bottom: 0,
-                      child: mainPageWidget),
+                    top: MediaQuery.of(context).size.height / 10,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: (loading == false)
+                            ? mainPageWidget
+                            : Align(
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(),
+                              )),
+                  )
                 ],
               ),
             ),

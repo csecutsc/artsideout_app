@@ -1,6 +1,10 @@
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/GraphQLImageService.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // TODO Merge with Art Detail Widget
@@ -14,6 +18,8 @@ class ArtDetailWidget extends StatefulWidget {
 }
 
 class _ArtDetailWidgetState extends State<ArtDetailWidget> {
+  GraphQlImageService _graphQlImageService =
+      serviceLocator<GraphQlImageService>();
   YoutubePlayerController videoController;
   ScrollController _scrollController;
   int currentScrollPos = 0;
@@ -64,6 +70,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+
     Widget imageFeed = SizedBox(
         height: 400,
         width: width,
@@ -74,14 +81,17 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              String url = widget.data.images[index]["url"];
+              String url = _graphQlImageService.getResizedImage(
+                  widget.data.images[index]["url"], 300);
               return Center(
                 child: Semantics(
                   label: widget.data.images[index]["altText"],
                   child: GestureDetector(
                     onTap: () async {
                       await showDialog(
-                          context: context, builder: (_) => ImageDialog(url));
+                          context: context,
+                          builder: (_) =>
+                              ImageDialog(widget.data.images[index]));
                     },
                     child: Container(
                         width: 400,
@@ -242,16 +252,58 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
 }
 
 class ImageDialog extends StatelessWidget {
-  final String imgURL;
-  ImageDialog(this.imgURL);
+  final Map<String, String> image;
+  ImageDialog(this.image);
 
   Widget build(BuildContext context) {
+    GraphQlImageService _graphQlImageService =
+        serviceLocator<GraphQlImageService>();
+    String fullResUrl =
+        _graphQlImageService.getResizedImage(image["url"], 1000);
     return AlertDialog(
       backgroundColor: ColorConstants.PRIMARY,
-      content: Image.network(imgURL, fit: BoxFit.cover),
+      content: Semantics(
+        child: CachedNetworkImage(
+          height: MediaQuery.of(context).size.height / 1.2,
+          width: MediaQuery.of(context).size.width / 1.2,
+          imageUrl: fullResUrl,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(
+            Icons.error,
+            size: 50,
+          ),
+        ),
+        label: image["altText"],
+      ),
       actions: [
         new FlatButton(
-            child: const Text("Close"), onPressed: () => Navigator.pop(context)),
+            child: const Text(
+              "Download Full Resolution",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
+            onPressed: () async {
+              await launch(_graphQlImageService.getFullImage(image["url"]));
+            }),
+        new FlatButton(
+            child: const Text(
+              "Close",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
+            onPressed: () => Navigator.pop(context)),
       ],
     );
   }

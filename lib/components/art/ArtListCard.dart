@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -17,7 +19,7 @@ class ArtListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    GraphQlImageService _graphQlImageService = serviceLocator<GraphQlImageService>();
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25.0),
@@ -34,7 +36,9 @@ class ArtListCard extends StatelessWidget {
                 height: 100,
                 child: Semantics(
                   child: CachedNetworkImage(
-                    imageUrl: image["url"].contains("graphcms") ? resizeImage(image["url"], 200) : image["url"],
+                    imageUrl: image["url"].contains("graphcms")
+                        ? _graphQlImageService.getResizedImage(image["url"], 200)
+                        : image["url"],
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -91,10 +95,4 @@ class ArtListCard extends StatelessWidget {
       ),
     );
   }
-}
-
-String resizeImage(String imgUrl, int width, {int quality = 100}) {
-  String baseUrl = "https://media.graphcms.com/resize=width:$width/quality=value:$quality/compress/";
-  final a = Uri.parse(imgUrl);
-  return baseUrl + a.pathSegments.last;
 }

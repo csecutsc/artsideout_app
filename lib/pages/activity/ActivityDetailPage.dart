@@ -70,10 +70,12 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
       if (result.data["activity"]["profile"] != null) {
         for (var j = 0; j < result.data["activity"]["profile"].length; j++) {
           Map<String, String> socialMap = new Map();
-          for (var key
-              in result.data["activity"]["profile"][j]["social"].keys) {
-            socialMap[key] =
-                result.data["activity"]["profile"][j]["social"][key];
+          if (result.data["activity"]["profile"][j]["social"] != null) {
+            for (var key
+                in result.data["activity"]["profile"][j]["social"].keys) {
+              socialMap[key] =
+                  result.data["activity"]["profile"][j]["social"][key];
+            }
           }
           profilesList.add(Profile(
               result.data["activity"]["profile"][j]["name"],
@@ -117,12 +119,6 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
         ),
         elevation: 0.0,
         backgroundColor: ColorConstants.SCAFFOLD,
-        // title: Text(
-        //   activityDetails.title,
-        //   style: TextStyle(
-        //     color: ColorConstants.asoPrimary,
-        //   ),
-        // ),
       ),
       body: cool,
     );
