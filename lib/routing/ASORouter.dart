@@ -1,4 +1,3 @@
-import 'package:artsideout_app/components/common/Placeholder.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
@@ -6,6 +5,7 @@ import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import "package:artsideout_app/pages/home/HomePage.dart";
 import 'package:artsideout_app/pages/art/MasterArtPage.dart';
 import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
+import 'package:artsideout_app/pages/search/MasterSearchPage.dart';
 import 'package:artsideout_app/pages/undefined_routes/UndefinedRoute.dart';
 
 // Detailed pages
@@ -42,7 +42,14 @@ class ASORouter {
         builder = (BuildContext context) => pageRoute;
         break;
       case ASORoutes.SEARCH:
-        builder = (BuildContext context) => PlaceholderWidget(Colors.amber);
+        var pageRoute;
+        if (parts.length == 2) {
+          String searchDetails = parts[1].substring(3);
+          pageRoute = ActivityDetailPage(searchDetails);
+        } else if (parts.length == 1) {
+          pageRoute = MasterSearchPage();
+        }
+        builder = (BuildContext context) => pageRoute;
         break;
       case ASORoutes.UNDEFINED_ROUTE:
       default:

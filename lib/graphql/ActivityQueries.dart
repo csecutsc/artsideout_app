@@ -52,4 +52,32 @@ class ActivityQueries {
     }
   """;
   }
+
+  String getAllByTitleAndDesc(String term) {
+    return """
+    {
+      activities(where: {OR: [{title_contains: "$term"}, {desc_contains: "$term"}]}) {
+        title
+        desc
+        zone
+        performanceType
+        image {
+          url
+        }
+        startTime
+        endTime
+        location {
+          latitude
+          longitude
+        }
+        profile {
+          name
+          desc
+          social
+          type
+        }
+      }
+  	}
+    """;
+  }
 }

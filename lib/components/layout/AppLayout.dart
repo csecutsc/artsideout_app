@@ -107,7 +107,7 @@ class AppLayout extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(8.0, 8.0, 50.0, 12.0),
                   child: IconButton(
                     onPressed: () {
-                      _navigationService.navigateTo(ASORoutes.ACTIVITIES);
+                      _navigationService.navigateTo(ASORoutes.SEARCH);
                     },
                     icon: Icon(
                       Icons.search,

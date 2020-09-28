@@ -7,7 +7,7 @@ class InstallationQueries {
         desc
         zone
         videoUrl
-        image {
+        images {
           url
         }
         location {
@@ -33,7 +33,7 @@ class InstallationQueries {
         desc
         zone
         videoUrl
-        image {
+        images {
           url
         }
         location {
@@ -50,5 +50,34 @@ class InstallationQueries {
       }
     }
   """;
+  }
+
+  String getAllByTitleAndDesc(String titleDesc) {
+    return """
+    {
+      installations(where: {OR: [{title_contains: "$titleDesc"}, {desc_contains: "$titleDesc"}]}) {
+        id
+        title
+        desc
+        mediumType
+        zone
+        videoUrl
+        images {
+          url
+        }
+        location {
+          latitude
+          longitude
+        }
+        locationRoom
+        profile {
+          name
+          desc
+          social
+          type
+        }
+      }
+    }
+    """;
   }
 }
