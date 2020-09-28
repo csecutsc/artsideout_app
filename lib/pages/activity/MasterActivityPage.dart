@@ -1,4 +1,5 @@
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
+import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
@@ -9,7 +10,6 @@ import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // Common
-import 'package:artsideout_app/components/activity/ActivityCard.dart';
 import 'package:artsideout_app/helpers/ActivityFillList.dart';
 // Art
 import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
@@ -50,29 +50,21 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
         final item = listActivity[index];
-        return AnimatedContainer(
-          duration: Duration(milliseconds: 50),
-          curve: Curves.fastOutSlowIn,
-          child: Material(
-            color: Colors.transparent,
-            child: GestureDetector(
-                child: ActivityCard(
-                    title: item.title,
-                    desc: item.desc,
-                    image: item.imgUrl,
-                    time: item.time,
-                    zone: item.zone),
-                onTap: () {
-                  if (_displaySize == DisplaySize.LARGE ||
-                      _displaySize == DisplaySize.MEDIUM) {
-                    selectedValue = index;
-                    setState(() {});
-                  } else {
-                    _navigationService.navigateToWithId(
-                        ASORoutes.ACTIVITIES, item.id);
-                  }
-                }),
-          ),
+        FetchResultCard fetchResultCard = new FetchResultCard();
+        return Material(
+          color: Colors.transparent,
+          child: GestureDetector(
+              child: fetchResultCard.getCard("Activity", item),
+              onTap: () {
+                if (_displaySize == DisplaySize.LARGE ||
+                    _displaySize == DisplaySize.MEDIUM) {
+                  selectedValue = index;
+                  setState(() {});
+                } else {
+                  _navigationService.navigateToWithId(
+                      ASORoutes.ACTIVITIES, item.id);
+                }
+              }),
         );
       },
       physics: BouncingScrollPhysics(),
@@ -81,32 +73,11 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     Widget secondPageWidget = (listActivity.length != 0)
         ? ActivityDetailWidget(data: listActivity[selectedValue])
         : Container();
-    return AnimatedSwitcher(
-        duration: Duration(milliseconds: 250),
-        transitionBuilder: (child, animation) {
-          return Align(
-              child: ScaleTransition(
-            scale: Tween<double>(
-              begin: 0.0,
-              end: 1.0,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.fastOutSlowIn,
-              ),
-            ),
-            child: child,
-          ));
-        },
-        child: (loading == false)
-            ? MasterPageLayout(
-                pageName: "PERFORMANCES",
-                pageDesc: "Blah Blah Blah",
-                mainPageWidget: mainPageWidget,
-                secondPageWidget: secondPageWidget)
-            : Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              ));
+    return MasterPageLayout(
+        pageName: "PERFORMANCES",
+        pageDesc: "Blah Blah Blah",
+        mainPageWidget: mainPageWidget,
+        secondPageWidget: secondPageWidget,
+        loading: loading);
   }
 }
