@@ -22,6 +22,7 @@ Future<List<Installation>> fillList() async {
   if (!result.hasException) {
     for (var i = 0; i < result.data["installations"].length; i++) {
       List<Profile> profilesList = [];
+      List<String> images = [];
 
       if (result.data["installations"][i]["profile"] != null) {
         for (var j = 0;
@@ -45,15 +46,20 @@ Future<List<Installation>> fillList() async {
         }
       }
 
+      for (var k = 0;
+          k < result.data["installations"][i]["images"].length;
+          k++) {
+        print(result.data["installations"][i]["images"][k]["url"]);
+        images.add(result.data["installations"][i]["images"][k]["url"]);
+      }
+
       listInstallation.add(
         Installation(
           id: result.data["installations"][i]["id"],
           title: result.data["installations"][i]["title"],
           desc: result.data["installations"][i]["desc"],
           zone: result.data["installations"][i]["zone"] ?? "",
-          imgURL: result.data["installations"][i]["image"] == null
-              ? PlaceholderConstants.GENERIC_IMAGE
-              : result.data["installations"][i]["image"]["url"],
+          imgURL: images,
           videoURL: result.data["installations"][i]["videoUrl"] ?? "",
           location: {
             'latitude': result.data["installations"][i]["location"] == null
