@@ -32,10 +32,10 @@ class AppLayout extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 child: PlatformSvg.asset(
-                  "assets/icons/asobg.svg",
-                  fit: BoxFit.fitHeight,
+                  "assets/common/background.png",
+                  fit: BoxFit.cover,
                 )),
-            Row(children: <Widget>[new Sidebar(), Expanded(child: childPage)])
+            Row(children: <Widget>[Sidebar(), Expanded(child: childPage)])
           ]));
     }
 
@@ -52,10 +52,10 @@ class AppLayout extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 child: PlatformSvg.asset(
-                  "assets/icons/asobg.svg",
+                  "assets/common/background.png",
                   fit: BoxFit.fitHeight,
                 )),
-            Row(children: <Widget>[new Sidebar(), Expanded(child: childPage)])
+            Row(children: <Widget>[Sidebar(), Expanded(child: childPage)])
           ]));
     }
 

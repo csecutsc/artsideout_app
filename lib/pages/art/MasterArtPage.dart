@@ -145,7 +145,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
             child: GridView.builder(
               padding: EdgeInsets.zero,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: 3,
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
               ),
@@ -188,7 +188,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
         : Container();
     return MasterPageLayout(
       pageName: "Studio Installations",
-      pageDesc: "Blah Blah Blah",
+      pageDesc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
     );
