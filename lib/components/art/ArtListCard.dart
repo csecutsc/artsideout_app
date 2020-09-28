@@ -1,9 +1,12 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ArtListCard extends StatelessWidget {
   final String title;
   final String artist;
-  final String image;
+  final Map<String, String> image;
 
   const ArtListCard({
     Key key,
@@ -14,6 +17,7 @@ class ArtListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25.0),
@@ -28,11 +32,24 @@ class ArtListCard extends StatelessWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 100,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(image),
+                child: Semantics(
+                  child: CachedNetworkImage(
+                    imageUrl: image["url"].contains("graphcms") ? resizeImage(image["url"], 200) : image["url"],
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      size: 50,
+                    ),
                   ),
+                  label: image["altText"],
                 ),
               ),
             ),
@@ -43,17 +60,18 @@ class ArtListCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                      child: FittedBox(
-                    fit: BoxFit.fitWidth,
                     child: Text(
                       title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                  )),
+                  ),
                   Center(
                     child: Text(
                       '  ' + artist,
@@ -73,4 +91,10 @@ class ArtListCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String resizeImage(String imgUrl, int width, {int quality = 100}) {
+  String baseUrl = "https://media.graphcms.com/resize=width:$width/quality=value:$quality/compress/";
+  final a = Uri.parse(imgUrl);
+  return baseUrl + a.pathSegments.last;
 }

@@ -1,5 +1,4 @@
 import 'package:artsideout_app/constants/ColorConstants.dart';
-import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -15,25 +14,28 @@ class ArtDetailWidget extends StatefulWidget {
 }
 
 class _ArtDetailWidgetState extends State<ArtDetailWidget> {
-  YoutubePlayerController controller;
+  YoutubePlayerController videoController;
+  ScrollController _scrollController;
+  int currentScrollPos = 0;
   Widget videoPlayer = YoutubePlayerIFrame();
 
   @override
   void initState() {
     super.initState();
-    initController();
+    initVideoController();
+    initScrollController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller?.drain();
-    controller?.close();
+    videoController?.drain();
+    videoController?.close();
   }
 
-  void initController() {
+  void initVideoController() {
     String url = (widget.data.videoURL.isEmpty) ? 'xd' : widget.data.videoURL;
-    controller = YoutubePlayerController(
+    videoController = YoutubePlayerController(
       initialVideoId: YoutubePlayerController.convertUrlToId(url),
       params: const YoutubePlayerParams(
         showControls: true,
@@ -44,9 +46,60 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
     );
   }
 
+  void initScrollController() {
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.hasClients)
+          setState(() {
+            for (int i = 0; i < widget.data.images.length; i++) {
+              if (_scrollController.position.pixels < 270 * (i + 1) &&
+                  _scrollController.position.pixels > 270 * i) {
+                currentScrollPos = i;
+              }
+            }
+          });
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
-    RaisedButton likeAndSaveButtons(Icon icon, int numInteractions) {
+    double width = MediaQuery.of(context).size.width;
+    Widget imageFeed = SizedBox(
+        height: 400,
+        width: width,
+        child: Center(
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: widget.data.images.length,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              String url = widget.data.images[index]["url"];
+              return Center(
+                child: Semantics(
+                  label: widget.data.images[index]["altText"],
+                  child: GestureDetector(
+                    onTap: () async {
+                      await showDialog(
+                          context: context, builder: (_) => ImageDialog(url));
+                    },
+                    child: Container(
+                        width: 400,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.scaleDown,
+                            image: NetworkImage(url),
+                          ),
+                        )),
+                  ),
+                ),
+              );
+            },
+          ),
+        ));
+
+    Widget likeAndSaveButtons(Icon icon, int numInteractions) {
       return RaisedButton.icon(
         onPressed: () {},
         padding: EdgeInsets.all(13.0),
@@ -60,9 +113,21 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
       );
     }
 
+    Widget imageIndicator(int index) {
+      return Container(
+        width: 8.0,
+        height: 8.0,
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: index == currentScrollPos
+                ? Color.fromRGBO(0, 0, 0, 0.9)
+                : Colors.grey),
+      );
+    }
+
     return YoutubePlayerControllerProvider(
-      // Passing controller to widgets below.
-      controller: controller,
+      controller: videoController,
       child: Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: LayoutBuilder(
@@ -71,28 +136,19 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
               removeTop: true,
               context: context,
               child: ListView(
-                //physics: NeverScrollableScrollPhysics(),
                 children: [
-                  widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
-                  widget.data.videoURL.isNotEmpty &&
-                          widget.data.imgURL !=
-                              PlaceholderConstants.GENERIC_IMAGE
-                      ? SizedBox(height: 30)
-                      : Container(),
-                  widget.data.imgURL == PlaceholderConstants.GENERIC_IMAGE
-                      ? Container()
-                      : Container(
-                          height: 250,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(widget.data.imgURL),
-                            ),
-                          ),
-                        ),
-                  SizedBox(
-                    height: 15.0,
+                  widget.data.images.isNotEmpty ? imageFeed : Container(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < widget.data.images.length; i++)
+                        imageIndicator(i),
+                    ],
                   ),
+                  widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
+                  widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
+                      ? SizedBox(height: 12)
+                      : Container(),
                   Card(
                     margin: EdgeInsets.all(16.0),
                     color: Color(0xFFF9EBEB),
@@ -167,7 +223,11 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         SizedBox(
                           width: 16.0,
                         ),
-                        Flexible(child: SelectableText(widget.data.desc)),
+                        Flexible(
+                            child: Padding(
+                          padding: const EdgeInsets.only(bottom: 14.0),
+                          child: SelectableText(widget.data.desc),
+                        )),
                       ],
                     ),
                   ),
@@ -177,6 +237,22 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
           },
         ),
       ),
+    );
+  }
+}
+
+class ImageDialog extends StatelessWidget {
+  final String imgURL;
+  ImageDialog(this.imgURL);
+
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: ColorConstants.PRIMARY,
+      content: Image.network(imgURL, fit: BoxFit.cover),
+      actions: [
+        new FlatButton(
+            child: const Text("Close"), onPressed: () => Navigator.pop(context)),
+      ],
     );
   }
 }

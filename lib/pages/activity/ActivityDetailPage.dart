@@ -38,9 +38,19 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
       ),
     );
     if (!result.hasException) {
-      String imgUrl = (result.data["activity"]["image"] != null)
-          ? result.data["activity"]["image"]["url"]
-          : PlaceholderConstants.GENERIC_IMAGE;
+      List<Map<String, String>> images = [];
+
+      if (result.data["activity"]["images"] != null) {
+        for (int j = 0;
+        j < result.data["activity"]["images"].length;
+        j++) {
+          String url = result.data["activity"]["images"]
+          [j]["url"];
+          String altText = result.data["activity"]["images"]
+          [j]["altText"];
+          images.add({"url": url, "altText": altText});
+        }
+      }
 
       Map<String, double> location =
           (result.data["activity"]["location"] != null)
@@ -83,7 +93,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
             zone: result.data["activity"]["zone"],
             location: location,
             profiles: profilesList,
-            imgUrl: imgUrl,
+            images: images,
             time: time);
       });
     } else {

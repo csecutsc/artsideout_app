@@ -22,7 +22,7 @@ class Sidebar extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: 100,
-      color: Colors.transparent,
+      color: ColorConstants.PRIMARY.withOpacity(0.85),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

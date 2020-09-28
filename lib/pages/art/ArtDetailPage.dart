@@ -42,58 +42,83 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
         documentNode: gql(queryInstallation.getOneByID(pageId)),
       ),
     );
-    if (!result.hasException) {
-      List<Profile> profilesList = [];
 
-      if (result.data["installation"]["profile"] != null) {
-        for (var j = 0;
-            j < result.data["installation"]["profile"].length;
-            j++) {
-          Map<String, String> socialMap = new Map();
-          for (var key
-              in result.data["installation"]["profile"][j]["social"].keys) {
-            socialMap[key] =
-                result.data["installation"]["profile"][j]["social"][key];
-          }
-          profilesList.add(Profile(
-              result.data["installation"]["profile"][j]["name"],
-              result.data["installation"]["profile"][j]["desc"],
-              social: socialMap,
-              type: result.data["installation"]["profile"][j]["type"] ?? "",
-              installations: [],
-              activities: []));
+    if (!result.hasException) {
+      List<Map<String, String>> images = [];
+
+      if (result.data["installation"]["images"] != null) {
+        for (int j = 0;
+        j < result.data["installation"]["images"].length;
+        j++) {
+          String url = result.data["installation"]["images"]
+          [j]["url"];
+          String altText = result.data["installation"]["images"]
+          [j]["altText"];
+          images.add({"url": url, "altText": altText});
         }
       }
-      setState(() {
-        artDetails = Installation(
-          id: result.data["installation"]["id"],
-          title: result.data["installation"]["title"] == null
-              ? "N/A"
-              : result.data["installation"]["title"],
-          desc: result.data["installation"]["desc"] == null
-              ? "N/A"
-              : result.data["installation"]["desc"],
-          zone: result.data["installation"]["zone"] == null
-              ? "N/A"
-              : result.data["installation"]["zone"],
-          imgURL: result.data["installation"]["image"] == null
-              ? PlaceholderConstants.GENERIC_IMAGE
-              : result.data["installation"]["image"]["url"],
-          videoURL: result.data["installation"]["videoUrl"] ?? "",
-          location: {
-            'latitude': result.data["installation"]["location"] == null
-                ? 0.0
-                : result.data["installation"]["location"]["latitude"],
-            'longitude': result.data["installation"]["location"] == null
-                ? 0.0
-                : result.data["installation"]["location"]["longitude"],
-          },
-          // locationRoom: result.data["installation"]["locationroom"],
-          profiles: profilesList,
-        );
-      });
-    } else {
-      print("CANNOT GET ART DETAILS");
+
+      List<Profile> profilesList = [];
+      if (result.data["installation"] != null) {
+        if (result.data["installation"]["profile"] != null) {
+          for (var j = 0;
+              j < result.data["installation"]["profile"].length;
+              j++) {
+            Map<String, String> socialMap = new Map();
+
+            for (var key
+                in result.data["installation"]["profile"][j]["social"].keys) {
+              socialMap[key] =
+                  result.data["installation"]["profile"][j]["social"][key];
+            }
+            profilesList.add(Profile(
+                result.data["installation"]["profile"][j]["name"],
+                result.data["installation"]["profile"][j]["desc"],
+                social: socialMap,
+                type: result.data["installation"]["profile"][j]["type"] ?? "",
+                installations: [],
+                activities: []));
+          }
+        }
+
+        List<String> imgsURL = [];
+
+        if (result.data["installation"]["images"] != null) {
+          for (int j = 0;
+              j < result.data["installation"]["images"].length;
+              j++) {
+            imgsURL.add(result.data["installation"]["images"][j]["url"]);
+          }
+        }
+        setState(() {
+          artDetails = Installation(
+            id: result.data["installation"]["id"],
+            title: result.data["installation"]["title"] == null
+                ? "N/A"
+                : result.data["installation"]["title"],
+            desc: result.data["installation"]["desc"] == null
+                ? "N/A"
+                : result.data["installation"]["desc"],
+            zone: result.data["installation"]["zone"] == null
+                ? "N/A"
+                : result.data["installation"]["zone"],
+            images: images,
+            videoURL: result.data["installation"]["videoUrl"] ?? "",
+            location: {
+              'latitude': result.data["installation"]["location"] == null
+                  ? 0.0
+                  : result.data["installation"]["location"]["latitude"],
+              'longitude': result.data["installation"]["location"] == null
+                  ? 0.0
+                  : result.data["installation"]["location"]["longitude"],
+            },
+            // locationRoom: result.data["installation"]["locationroom"],
+            profiles: profilesList,
+          );
+        });
+      } else {
+        print("CANNOT GET ART DETAILS");
+      }
     }
     // return artDetails;
   }

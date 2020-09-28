@@ -6,8 +6,9 @@ class ActivityQueries {
         title
         desc
         zone
-        image {
+        images {
           url
+          altText
         }
         startTime
         endTime
@@ -32,8 +33,9 @@ class ActivityQueries {
         title
         desc
         zone
-        image {
+        images {
           url
+          altText
         }
         startTime
         endTime
@@ -51,5 +53,34 @@ class ActivityQueries {
       }
     }
   """;
+  }
+
+  String getAllByTitleAndDesc(String term) {
+    return """
+    {
+      activities(where: {OR: [{title_contains: "$term"}, {desc_contains: "$term"}]}) {
+        title
+        desc
+        zone
+        performanceType
+        images {
+          url
+          altText
+        }
+        startTime
+        endTime
+        location {
+          latitude
+          longitude
+        }
+        profile {
+          name
+          desc
+          social
+          type
+        }
+      }
+  	}
+    """;
   }
 }

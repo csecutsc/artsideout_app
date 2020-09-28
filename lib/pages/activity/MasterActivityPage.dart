@@ -1,5 +1,5 @@
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
-import 'package:artsideout_app/constants/ASORouteConstants.dart';
+import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
@@ -13,8 +13,6 @@ import 'package:flutter/cupertino.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/graphql/ActivityQueries.dart';
-// Common
-import 'package:artsideout_app/components/activity/ActivityCard.dart';
 // Art
 import 'package:artsideout_app/components/activity/ActivityDetailWidget.dart';
 
@@ -48,9 +46,19 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     );
     if (!result.hasException) {
       for (var i = 0; i < result.data["activities"].length; i++) {
-        String imgUrl = (result.data["activities"][i]["image"] != null)
-            ? result.data["activities"][i]["image"]["url"]
-            : PlaceholderConstants.GENERIC_IMAGE;
+        List<Map<String, String>> images = [];
+
+        if (result.data["activities"][i]["images"] != null) {
+          for (int j = 0;
+          j < result.data["activities"][i]["images"].length;
+          j++) {
+            String url = result.data["activities"][i]["images"]
+            [j]["url"];
+            String altText = result.data["activities"][i]["images"]
+            [j]["altText"];
+            images.add({"url": url, "altText": altText});
+          }
+        }
 
         List<Profile> profilesList = [];
 
@@ -93,7 +101,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                 title: result.data["activities"][i]["title"],
                 desc: result.data["activities"][i]["desc"],
                 zone: result.data["activities"][i]["zone"],
-                imgUrl: imgUrl,
+                images: images,
                 time: time,
                 location: location,
                 profiles: profilesList),
@@ -114,26 +122,23 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
         final item = listActivity[index];
+        FetchResultCard fetchResultCard = new FetchResultCard();
         return AnimatedContainer(
           duration: Duration(milliseconds: 50),
           curve: Curves.fastOutSlowIn,
           child: Material(
             color: Colors.transparent,
             child: GestureDetector(
-                child: ActivityCard(
-                    title: item.title,
-                    desc: item.desc,
-                    image: item.imgUrl,
-                    time: item.time,
-                    zone: item.zone),
+                child: fetchResultCard.getCard("Activity", item),
                 onTap: () {
                   if (_displaySize == DisplaySize.LARGE ||
                       _displaySize == DisplaySize.MEDIUM) {
                     selectedValue = index;
                     setState(() {});
                   } else {
+                    print(item.id);
                     _navigationService.navigateToWithId(
-                        ASORoutes.ACTIVITIES, item.id);
+                        fetchResultCard.getRouteConstant("Activity"), item.id);
                   }
                 }),
           ),

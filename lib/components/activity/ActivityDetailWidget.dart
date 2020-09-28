@@ -83,7 +83,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(widget.data.imgUrl),
+                    image: NetworkImage(widget.data.images[0]["url"]),
                   ),
                 ),
               ),

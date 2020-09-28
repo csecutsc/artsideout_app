@@ -1,5 +1,4 @@
 import 'package:artsideout_app/components/common/ASOCard.dart';
-import 'package:artsideout_app/components/common/PageHeader.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';

@@ -22,4 +22,32 @@ class ProfileQueries {
     }
     """;
   }
+
+  String getOneByName(String id) {
+    return """
+    {
+      profile (where: {id: $id}) {
+          id
+          name
+          desc
+          social 
+          type
+        }
+    }
+    """;
+  }
+
+  String getAllByName(String name) {
+    return """
+    {
+      profiles(where: {name_contains: "$name"}) {
+          id
+          name
+          desc
+          social 
+          type
+      }
+    }
+    """;
+  }
 }

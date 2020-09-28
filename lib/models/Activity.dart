@@ -5,7 +5,7 @@ class Activity {
   String title;
   String desc;
   String zone;
-  String imgUrl;
+  List<Map<String, String>> images;
   Map<String, String> time;
   Map<String, double> location;
   List<Profile> profiles;
@@ -15,7 +15,7 @@ class Activity {
       this.title,
       this.desc,
       this.zone,
-      this.imgUrl,
+      this.images,
       this.time,
       this.location,
       this.profiles});
