@@ -39,7 +39,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
               width: 200,
               height: 200,
             )),
-        SelectableText(widget.profile.desc,
+        SelectableText(widget.profile.desc ?? "",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black87,
