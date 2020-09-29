@@ -15,14 +15,16 @@ class Sidebar extends StatelessWidget {
       _SidebarAction("Search", Icons.search, ASORoutes.SEARCH),
       _SidebarAction(
           "Studio Installations", Icons.palette, ASORoutes.INSTALLATIONS),
-      _SidebarAction("Performances", Icons.group, ASORoutes.ACTIVITIES),
-      _SidebarAction("Saved", Icons.bookmark, ASORoutes.ACTIVITIES),
+      _SidebarAction("Performances", Icons.face, ASORoutes.ACTIVITIES),
+      _SidebarAction("Profiles", Icons.person, ASORoutes.PROFILES),
+      _SidebarAction("Art Market", Icons.store, ASORoutes.MARKETS),
+      _SidebarAction("Workshops", Icons.calendar_today, ASORoutes.WORKSHOPS),
     ];
 
     return Container(
       height: MediaQuery.of(context).size.height,
       width: 100,
-      color: ColorConstants.PRIMARY.withOpacity(0.85),
+      color: ColorConstants.PRIMARY.withOpacity(0.65),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -30,7 +32,7 @@ class Sidebar extends StatelessWidget {
             flex: 1,
             child: CircleAvatar(
                 radius: 35.0,
-                backgroundImage: NetworkImage("/assets/common/icon.png")),
+                backgroundImage: NetworkImage("assets/assets/common/icon.png")),
           ),
           for (var action in _sideBarActions)
             Expanded(

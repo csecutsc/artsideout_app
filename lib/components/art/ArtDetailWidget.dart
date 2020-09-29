@@ -1,9 +1,13 @@
+import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -82,7 +86,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               String url = _graphQlImageService.getResizedImage(
-                  widget.data.images[index]["url"], 300);
+                  widget.data.images[index]["url"], 450);
               return Center(
                 child: Semantics(
                   label: widget.data.images[index]["altText"],
@@ -109,20 +113,6 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
           ),
         ));
 
-    Widget likeAndSaveButtons(Icon icon, int numInteractions) {
-      return RaisedButton.icon(
-        onPressed: () {},
-        padding: EdgeInsets.all(13.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        icon: icon,
-        textColor: Colors.white,
-        color: ColorConstants.PRIMARY,
-        label: SelectableText('$numInteractions'),
-      );
-    }
-
     Widget imageIndicator(int index) {
       return Container(
         width: 8.0,
@@ -143,10 +133,24 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             return MediaQuery.removePadding(
-              removeTop: true,
               context: context,
               child: ListView(
                 children: [
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Center(
+                      child: Title(
+                          color: ColorConstants.PRIMARY,
+                          child: Text(
+                            widget.data.title,
+                            maxLines: 4,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline5,
+                          ))),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   widget.data.images.isNotEmpty ? imageFeed : Container(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -155,58 +159,26 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         imageIndicator(i),
                     ],
                   ),
+                  widget.data.images.isNotEmpty
+                      ? Center(
+                          child: Title(
+                              color: ColorConstants.PRIMARY,
+                              child: Text(
+                                "Click on the images above to expand or download. Also, scroll down for more information!",
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              )))
+                      : Container(),
                   widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
                   widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
                       ? SizedBox(height: 12)
                       : Container(),
-                  Card(
-                    margin: EdgeInsets.all(16.0),
-                    color: Color(0xFFF9EBEB),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(18),
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.pink,
-                        radius: 25.0,
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SelectableText(
-                            'John Appleseed',
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          SelectableText(
-                            'Artist',
-                            style: TextStyle(
-                                fontSize: 14.5,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          likeAndSaveButtons(
-                            Icon(Icons.bookmark_border),
-                            72,
-                          ),
-                          SizedBox(
-                            width: 7.0,
-                          ),
-                          likeAndSaveButtons(
-                            Icon(Icons.favorite_border),
-                            284,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  for (Profile profile in widget.data.profiles)
+                    ProfileCard(
+                        name: profile.name,
+                        imgUrl: profile.profilePic,
+                        type: profile.type),
                   ListTile(
                     leading: SelectableText(
                       'OVERVIEW',
@@ -236,7 +208,20 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         Flexible(
                             child: Padding(
                           padding: const EdgeInsets.only(bottom: 14.0),
-                          child: SelectableText(widget.data.desc),
+                          child: MarkdownBody(
+                            selectable: true,
+                            data: widget.data.desc,
+                            onTapLink: (url) {
+                              launch(url);
+                            },
+                            styleSheet:
+                                MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                    .copyWith(
+                                        p: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(fontSize: 16.0)),
+                          ),
                         )),
                       ],
                     ),
@@ -258,14 +243,13 @@ class ImageDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     GraphQlImageService _graphQlImageService =
         serviceLocator<GraphQlImageService>();
-    String fullResUrl =
-        _graphQlImageService.getResizedImage(image["url"], 1000);
+    String fullResUrl = _graphQlImageService.getResizedImage(image["url"], 800);
     return AlertDialog(
-      backgroundColor: ColorConstants.PRIMARY,
+      backgroundColor: Colors.white70,
       content: Semantics(
         child: CachedNetworkImage(
-          height: MediaQuery.of(context).size.height / 1.2,
-          width: MediaQuery.of(context).size.width / 1.2,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           imageUrl: fullResUrl,
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
@@ -286,11 +270,11 @@ class ImageDialog extends StatelessWidget {
       actions: [
         new FlatButton(
             child: const Text(
-              "Download Full Resolution",
+              "View Full Resolution",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16),
+                  fontSize: 20),
             ),
             onPressed: () async {
               await launch(_graphQlImageService.getFullImage(image["url"]));
@@ -301,7 +285,7 @@ class ImageDialog extends StatelessWidget {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16),
+                  fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context)),
       ],

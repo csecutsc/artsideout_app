@@ -21,6 +21,9 @@ class InstallationQueries {
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }
@@ -48,6 +51,9 @@ class InstallationQueries {
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }
@@ -78,6 +84,9 @@ class InstallationQueries {
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }

@@ -6,11 +6,12 @@ import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/components/search/SearchBarFilter.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
+import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/graphql/ProjectQueries.dart';
 import 'package:artsideout_app/models/ASOCardInfo.dart';
+import 'package:artsideout_app/models/Project.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Profile.dart';
-import 'package:artsideout_app/models/Project.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
@@ -18,7 +19,6 @@ import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'dart:convert';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/graphql/InstallationQueries.dart';
@@ -29,22 +29,24 @@ import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:artsideout_app/helpers/ArtFillList.dart';
 
-class MasterArtPage extends StatefulWidget {
+class ProjectDetailPage extends StatefulWidget {
+  final String projectPageId;
+  ProjectDetailPage(this.projectPageId);
   @override
-  _MasterArtPageState createState() => _MasterArtPageState();
+  _ProjectDetailPageState createState() => _ProjectDetailPageState();
 }
 
-class _MasterArtPageState extends State<MasterArtPage> {
+class _ProjectDetailPageState extends State<ProjectDetailPage> {
   ScrollController _scrollController;
   int selectedValue = 0;
   int currentScrollPos = 0;
   bool loading = true;
 
   List<Installation> listInstallation = List<Installation>();
-  List<ASOCardInfo> listActions = List<ASOCardInfo>();
+  Map<String, String> mapPageDetails = Map<String, String>();
   GraphQLClient _client =
-      serviceLocator<GraphQLConfiguration>().clientToQuery();
-  NavigationService _navigationService = serviceLocator<NavigationService>();
+  serviceLocator<GraphQLConfiguration>().clientToQuery();
+
   FetchResults fetchResults = new FetchResults();
   bool isLoading = false;
   bool noResults = false;
@@ -57,9 +59,103 @@ class _MasterArtPageState extends State<MasterArtPage> {
     "Other": true,
   };
 
+  Future<Map<String, String>> getProjectDetails(String term) async {
+    ProjectQueries queryProject = ProjectQueries();
+    QueryResult result = await _client.query(
+      QueryOptions(
+        documentNode: gql(queryProject.getOneStudioById(term)),
+      ),
+    );
+    if (!result.hasException) {
+      return {"title": result.data["project"]["title"],
+        "desc": result.data["project"]["desc"]};
+    }
+    return {};
+  }
+
+  Future<List<Installation>> getProjectInstallations(String term) async {
+    var listInstallation = List<Installation>();
+    ProjectQueries queryProject = ProjectQueries();
+    QueryResult result = await _client.query(
+      QueryOptions(
+        documentNode: gql(queryProject.getOneStudioById(term)),
+      ),
+    );
+    if (!result.hasException) {
+      for (var i = 0; i < result.data["project"]["elements"].length; i++) {
+        List<Profile> profilesList = [];
+
+        List<Map<String, String>> images = [];
+
+        if (result.data["project"]["elements"][i]["images"].length != 0) {
+          for (int j = 0;
+          j < result.data["project"]["elements"][i]["images"].length;
+          j++) {
+            String url = result.data["project"]["elements"][i]["images"][j]["url"];
+            String altText =
+            result.data["project"]["elements"][i]["images"][j]["altText"];
+            images.add({"url": url, "altText": altText});
+          }
+        } else {
+          images
+              .add({"url": PlaceholderConstants.GENERIC_IMAGE, "altText": null});
+        }
+
+        if (result.data["project"]["elements"][i]["profile"] != null) {
+          for (var j = 0;
+          j < result.data["project"]["elements"][i]["profile"].length;
+          j++) {
+            Map<String, String> socialMap = new Map();
+            if (result.data["project"]["elements"][i]["profile"][j]["social"] != null) {
+              for (var key in result
+                  .data["project"]["elements"][i]["profile"][j]["social"].keys) {
+                socialMap[key] =
+                result.data["project"]["elements"][i]["profile"][j]["social"][key];
+              }
+            }
+            String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+            if (result.data["project"]["elements"][i]["profile"][j]["profilePic"] != null) {
+              profilePic = result.data["project"]["elements"][i]["profile"][j]["profilePic"]["url"];
+              print(profilePic);
+            }
+            profilesList.add(Profile(
+                result.data["project"]["elements"][i]["profile"][j]["name"],
+                result.data["project"]["elements"][i]["profile"][j]["desc"],
+                social: socialMap,
+                type: result.data["project"]["elements"][i]["profile"][j]["type"] ?? "",
+                profilePic: profilePic,
+                installations: [],
+                activities: []));
+          }
+        }
+        listInstallation.add(
+          Installation(
+            id: result.data["project"]["elements"][i]["id"],
+            title: result.data["project"]["elements"][i]["title"],
+            desc: result.data["project"]["elements"][i]["desc"],
+            zone: result.data["project"]["elements"][i]["zone"] ?? "",
+            images: images,
+            videoURL: result.data["project"]["elements"][i]["videoUrl"] ?? "",
+            location: {
+              'latitude': result.data["project"]["elements"][i]["location"] == null
+                  ? 0.0
+                  : result.data["project"]["elements"][i]["location"]["latitude"],
+              'longitude': result.data["project"]["elements"][i]["location"] == null
+                  ? 0.0
+                  : result.data["project"]["elements"][i]["location"]["longitude"],
+            },
+            locationRoom: result.data["project"]["elements"][i]["locationroom"] ?? "",
+            profiles: profilesList,
+          ),
+        );
+      }
+    }
+    return listInstallation;
+  }
+
   Future<void> setList() async {
-    listInstallation = await fillList().whenComplete(() => loading = false);
-    listActions = await getProjects();
+    mapPageDetails = await getProjectDetails(widget.projectPageId);
+    listInstallation = await getProjectInstallations(widget.projectPageId).whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -72,7 +168,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
   void handleTextChange(String text) async {
     if (text != ' ' && text != '') {
       listInstallation =
-          await fetchResults.getInstallationsByTypes(text, optionsMap);
+      await fetchResults.getInstallationsByTypes(text, optionsMap);
 
       setState(() {
         queryResult = text;
@@ -88,36 +184,23 @@ class _MasterArtPageState extends State<MasterArtPage> {
     });
   }
 
-  Future<List<ASOCardInfo>> getProjects() async {
-    var listActions = List<ASOCardInfo>();
-    ProjectQueries queryProject = ProjectQueries();
-    QueryResult result = await _client.query(
-      QueryOptions(
-        documentNode: gql(queryProject.getAllStudio),
-      ),
-    );
-    if (!result.hasException) {
-      for (var i = 0; i < result.data["projects"].length; i++) {
-        listActions.add(new ASOCardInfo(
-            result.data["projects"][i]["title"],
-            Color(0xFF62BAA6),
-            "assets/icons/activities.svg",
-            300,
-            ASORoutes.PROJECT,
-            itemId: result.data["projects"][i]["id"]));
-      }
-    }
-    return listActions;
-  }
-
   // Installation GraphQL Query
   void _fillList() async {
     listInstallation =
-        await fetchResults.getInstallationsByTypes("", optionsMap);
+    await fetchResults.getInstallationsByTypes("", optionsMap);
     setState(() {
       noResults = false;
     });
   }
+
+  final List<ASOCardInfo> listActions = [
+    ASOCardInfo("Featured", Color(0xFF62BAA6),
+        "assets/icons/aboutConnections.svg", 300, ASORoutes.ACTIVITIES),
+    ASOCardInfo("Activities", Color(0xFFC155A5), "assets/icons/activities.svg",
+        300, ASORoutes.ACTIVITIES),
+    ASOCardInfo("Saved", Color(0xFF9CC9F5), "assets/icons/saved.svg", 300,
+        ASORoutes.ACTIVITIES)
+  ];
 
   void initScrollController() {
     _scrollController = ScrollController()
@@ -179,31 +262,6 @@ class _MasterArtPageState extends State<MasterArtPage> {
         bottom: 0,
         child: Row(
           children: [
-            (_displaySize == DisplaySize.LARGE)
-                ? Container(
-                    width: 260,
-                    color: Colors.transparent,
-                    child: Container(
-                      child: StaggeredGridView.countBuilder(
-                        padding: EdgeInsets.zero,
-                        crossAxisCount: 1,
-                        itemCount: listActions.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: ASOCard(listActions[index], false)),
-                        staggeredTileBuilder: (int index) =>
-                            new StaggeredTile.count(
-                          1,
-                          0.57,
-                        ),
-                        mainAxisSpacing: 15.0,
-                        crossAxisSpacing: 5.0,
-                      ),
-                    ),
-                  )
-                : Container(),
             Expanded(
               child: GridView.builder(
                 controller: _scrollController,
@@ -246,13 +304,18 @@ class _MasterArtPageState extends State<MasterArtPage> {
     Widget secondPageWidget = ((listInstallation.length != 0)
         ? ArtDetailWidget(data: listInstallation[selectedValue])
         : Container());
-    return MasterPageLayout(
-      pageName: "Studio Installations",
-      pageDesc: "Blah Blah Blah",
-      mainPageWidget: mainPageWidget,
-      secondPageWidget: secondPageWidget,
-      loading: loading,
-    );
+    if (mapPageDetails.isNotEmpty) {
+      return MasterPageLayout(
+        pageName: mapPageDetails["title"],
+        pageDesc:
+        "Need to place description somewhere",
+        mainPageWidget: mainPageWidget,
+        secondPageWidget: secondPageWidget,
+        loading: loading,
+      );
+    } else {
+      return Container();
+    }
   }
 
   String getThumbnail(String videoURL) {

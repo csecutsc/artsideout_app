@@ -1,7 +1,7 @@
 class ActivityQueries {
   String getAll = """ 
     {
-      activities {
+      activities(where: {performanceType_not: Workshops}) {
         id
         title
         desc
@@ -83,4 +83,34 @@ class ActivityQueries {
   	}
     """;
   }
+
+  String getAllWorkShops = """
+    {
+      activities(where: {performanceType: Workshops}) {
+        id
+        title
+        desc
+        zone
+        images {
+          url
+          altText
+        }
+        startTime
+        endTime
+        location {
+          latitude
+          longitude
+        }
+        profile {
+          name
+          desc
+          social
+          type
+          profilePic {
+            url
+          }
+        }
+      }
+    }
+  """;
 }

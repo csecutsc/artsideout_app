@@ -71,11 +71,16 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
               socialMap[key] =
                   result.data["installation"]["profile"][j]["social"][key];
             }
+            String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+            if (result.data["activity"]["profile"][j]["profilePic"] != null) {
+              profilePic = result.data["activity"]["profile"][j]["profilePic"]["url"];
+            }
             profilesList.add(Profile(
                 result.data["installation"]["profile"][j]["name"],
                 result.data["installation"]["profile"][j]["desc"],
                 social: socialMap,
                 type: result.data["installation"]["profile"][j]["type"] ?? "",
+                profilePic: profilePic,
                 installations: [],
                 activities: []));
           }
@@ -132,17 +137,10 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
       cool = ArtDetailWidget(data: artDetails);
     }
     return Scaffold(
-        extendBodyBehindAppBar: true,
         appBar: AppBar(
+          backgroundColor: Colors.white70,
           iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: ColorConstants.PRIMARY,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
+            color: Colors.black,
           ),
           elevation: 0.0,
         ),

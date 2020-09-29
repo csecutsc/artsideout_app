@@ -6,6 +6,9 @@ class ProfileQueries {
         desc
         social
         type
+        profilePic {
+          url
+        }
       }
     }
   """;
@@ -18,6 +21,9 @@ class ProfileQueries {
           desc
           social 
           type
+          profilePic {
+            url
+          }
         }
     }
     """;
@@ -32,6 +38,9 @@ class ProfileQueries {
           desc
           social 
           type
+          profilePic {
+            url
+          }
         }
     }
     """;
@@ -46,6 +55,9 @@ class ProfileQueries {
           desc
           social 
           type
+          profilePic {
+            url
+          }
       }
     }
     """;

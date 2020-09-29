@@ -12,10 +12,11 @@ class MobileMenu extends StatefulWidget {
 
 class _MobileMenuState extends State<MobileMenu> {
   final List<_MobileMenuItem> _menuItems = [
-    _MobileMenuItem("Art Market", Icons.home, ASORoutes.HOME),
-    _MobileMenuItem("Profiles", Icons.home, ASORoutes.HOME),
     _MobileMenuItem("Installations", Icons.palette, ASORoutes.INSTALLATIONS),
     _MobileMenuItem("Performances", Icons.group, ASORoutes.ACTIVITIES),
+    _MobileMenuItem("Profiles", Icons.person, ASORoutes.PROFILES),
+    _MobileMenuItem("Art Market", Icons.store, ASORoutes.MARKETS),
+    _MobileMenuItem("Workshops", Icons.store, ASORoutes.WORKSHOPS),
   ];
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _MobileMenuState extends State<MobileMenu> {
       marginBottom: 25,
       marginRight: (width / 2) - 15,
       children: [
-        for (var item in _menuItems)
+        for (var item in _menuItems.reversed)
           SpeedDialChild(
               child: Icon(item.iconData, color: Colors.black),
               backgroundColor: Colors.white,

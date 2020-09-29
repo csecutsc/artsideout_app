@@ -41,9 +41,9 @@ class _PageHeaderState extends State<PageHeader> {
                       title: "$WEB_TITLE | ${widget.textTop.toUpperCase()}",
                       color: ColorConstants.PRIMARY,
                       child: SelectableText("${widget.textTop.toUpperCase()}",
-                          style: Theme.of(context).textTheme.headline3))),
+                          style: Theme.of(context).textTheme.headline2))),
               SelectableText(widget.subtitle,
-                  maxLines: 3, style: Theme.of(context).textTheme.headline5)
+                  maxLines: 3, style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),

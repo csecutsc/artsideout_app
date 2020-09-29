@@ -51,16 +51,21 @@ Future<List<Installation>> fillList() async {
                   result.data["installations"][i]["profile"][j]["social"][key];
             }
           }
+          String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+          if (result.data["installations"][i]["profile"][j]["profilePic"] != null) {
+            profilePic = result.data["installations"][i]["profile"][j]["profilePic"]["url"];
+            print(profilePic);
+          }
           profilesList.add(Profile(
               result.data["installations"][i]["profile"][j]["name"],
               result.data["installations"][i]["profile"][j]["desc"],
               social: socialMap,
               type: result.data["installations"][i]["profile"][j]["type"] ?? "",
+              profilePic: profilePic,
               installations: [],
               activities: []));
         }
       }
-      print(images);
       listInstallation.add(
         Installation(
           id: result.data["installations"][i]["id"],

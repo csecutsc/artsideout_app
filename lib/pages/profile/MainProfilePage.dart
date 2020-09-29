@@ -6,11 +6,10 @@ import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/components/search/SearchBarFilter.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
-import 'package:artsideout_app/graphql/ProjectQueries.dart';
+import 'package:artsideout_app/helpers/ProfileFillList.dart';
 import 'package:artsideout_app/models/ASOCardInfo.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Profile.dart';
-import 'package:artsideout_app/models/Project.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
@@ -18,7 +17,6 @@ import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'dart:convert';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/graphql/InstallationQueries.dart';
@@ -29,22 +27,21 @@ import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:artsideout_app/helpers/ArtFillList.dart';
 
-class MasterArtPage extends StatefulWidget {
+class MainProfilePage extends StatefulWidget {
   @override
-  _MasterArtPageState createState() => _MasterArtPageState();
+  _MainProfilePageState createState() => _MainProfilePageState();
 }
 
-class _MasterArtPageState extends State<MasterArtPage> {
+class _MainProfilePageState extends State<MainProfilePage> {
   ScrollController _scrollController;
   int selectedValue = 0;
   int currentScrollPos = 0;
   bool loading = true;
 
-  List<Installation> listInstallation = List<Installation>();
-  List<ASOCardInfo> listActions = List<ASOCardInfo>();
-  GraphQLClient _client =
-      serviceLocator<GraphQLConfiguration>().clientToQuery();
-  NavigationService _navigationService = serviceLocator<NavigationService>();
+  List<Profile> listInstallation = List<Profile>();
+  GraphQLConfiguration graphQLConfiguration =
+  serviceLocator<GraphQLConfiguration>();
+
   FetchResults fetchResults = new FetchResults();
   bool isLoading = false;
   bool noResults = false;
@@ -58,8 +55,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
   };
 
   Future<void> setList() async {
-    listInstallation = await fillList().whenComplete(() => loading = false);
-    listActions = await getProjects();
+    listInstallation = await fillProfileList().whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -67,12 +63,13 @@ class _MasterArtPageState extends State<MasterArtPage> {
   void initState() {
     super.initState();
     setList();
+    print(listInstallation);
   }
 
   void handleTextChange(String text) async {
     if (text != ' ' && text != '') {
       listInstallation =
-          await fetchResults.getInstallationsByTypes(text, optionsMap);
+      await fetchResults.getProfilesByTypes(text, optionsMap);
 
       setState(() {
         queryResult = text;
@@ -88,36 +85,23 @@ class _MasterArtPageState extends State<MasterArtPage> {
     });
   }
 
-  Future<List<ASOCardInfo>> getProjects() async {
-    var listActions = List<ASOCardInfo>();
-    ProjectQueries queryProject = ProjectQueries();
-    QueryResult result = await _client.query(
-      QueryOptions(
-        documentNode: gql(queryProject.getAllStudio),
-      ),
-    );
-    if (!result.hasException) {
-      for (var i = 0; i < result.data["projects"].length; i++) {
-        listActions.add(new ASOCardInfo(
-            result.data["projects"][i]["title"],
-            Color(0xFF62BAA6),
-            "assets/icons/activities.svg",
-            300,
-            ASORoutes.PROJECT,
-            itemId: result.data["projects"][i]["id"]));
-      }
-    }
-    return listActions;
-  }
-
   // Installation GraphQL Query
   void _fillList() async {
     listInstallation =
-        await fetchResults.getInstallationsByTypes("", optionsMap);
+    await fetchResults.getProfilesByTypes("", optionsMap).whenComplete(() => loading = false);
     setState(() {
       noResults = false;
     });
   }
+
+  final List<ASOCardInfo> listActions = [
+    ASOCardInfo("Featured", Color(0xFF62BAA6),
+        "assets/icons/aboutConnections.svg", 300, ASORoutes.ACTIVITIES),
+    ASOCardInfo("Activities", Color(0xFFC155A5), "assets/icons/activities.svg",
+        300, ASORoutes.ACTIVITIES),
+    ASOCardInfo("Saved", Color(0xFF9CC9F5), "assets/icons/saved.svg", 300,
+        ASORoutes.ACTIVITIES)
+  ];
 
   void initScrollController() {
     _scrollController = ScrollController()
@@ -179,31 +163,6 @@ class _MasterArtPageState extends State<MasterArtPage> {
         bottom: 0,
         child: Row(
           children: [
-            (_displaySize == DisplaySize.LARGE)
-                ? Container(
-                    width: 260,
-                    color: Colors.transparent,
-                    child: Container(
-                      child: StaggeredGridView.countBuilder(
-                        padding: EdgeInsets.zero,
-                        crossAxisCount: 1,
-                        itemCount: listActions.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: ASOCard(listActions[index], false)),
-                        staggeredTileBuilder: (int index) =>
-                            new StaggeredTile.count(
-                          1,
-                          0.57,
-                        ),
-                        mainAxisSpacing: 15.0,
-                        crossAxisSpacing: 5.0,
-                      ),
-                    ),
-                  )
-                : Container(),
             Expanded(
               child: GridView.builder(
                 controller: _scrollController,
@@ -223,14 +182,14 @@ class _MasterArtPageState extends State<MasterArtPage> {
                   final item = listInstallation[index];
 
                   return GestureDetector(
-                    child: fetchResultCard.getCard("Installation", item),
+                    child: fetchResultCard.getCard("Profile", item),
                     onTap: () {
                       if (_displaySize == DisplaySize.LARGE) {
                         selectedValue = index;
                         setState(() {});
                       } else {
-                        _navigationService.navigateToWithId(
-                            ASORoutes.INSTALLATIONS, item.id);
+                        // _navigationService.navigateToWithId(
+                        //     ASORoutes.INSTALLATIONS, item.id);
                       }
                     },
                   );
@@ -244,11 +203,12 @@ class _MasterArtPageState extends State<MasterArtPage> {
     ]);
 
     Widget secondPageWidget = ((listInstallation.length != 0)
-        ? ArtDetailWidget(data: listInstallation[selectedValue])
+        ?Container()
         : Container());
     return MasterPageLayout(
-      pageName: "Studio Installations",
-      pageDesc: "Blah Blah Blah",
+      pageName: "Profiles",
+      pageDesc:
+      "Blah Blah Blah",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,

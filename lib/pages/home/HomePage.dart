@@ -1,3 +1,4 @@
+import 'package:artsideout_app/components/home/AboutConnectionsWidget.dart';
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Widget secondScreen = Center(
       child: Container(
-        child: SelectableText("Hello Bye"),
+        child: AboutConnectionsWidget(),
       ),
     );
     return MasterPageLayout(

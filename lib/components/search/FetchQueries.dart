@@ -24,7 +24,6 @@ class FetchResults {
     listInstallations = await getInstallationsByTypes(input, options);
     listActivities = await getActivitiesByTypes(input, options);
     listProfiles = await getProfilesByTypes(input, options);
-    print([...listInstallations, ...listActivities, ...listProfiles]);
 
     return [...listInstallations, ...listActivities, ...listProfiles];
   }
@@ -61,6 +60,11 @@ class FetchResults {
               }
             }
 
+            String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+            if (installationsResult.data["installations"][i]["profile"][j]["profilePic"] != null) {
+              profilePic = installationsResult.data["installations"][i]["profile"][j]["profilePic"]["url"];
+            }
+
             profilesList.add(Profile(
                 installationsResult.data["installations"][i]["profile"][j]
                     ["name"],
@@ -70,6 +74,7 @@ class FetchResults {
                 type: installationsResult.data["installations"][i]["profile"][j]
                         ["type"] ??
                     "",
+                profilePic: profilePic,
                 installations: [],
                 activities: []));
           }
@@ -164,18 +169,22 @@ class FetchResults {
               j++) {
             Map<String, String> socialMap = new Map();
             if (result.data["activities"][i]["profile"][j]["social"] != null) {
-              print(result.data["activities"][i]["profile"][j]["social"]);
               for (var key
               in result.data["activities"][i]["profile"][j]["social"].keys) {
                 socialMap[key] =
                 result.data["activities"][i]["profile"][j]["social"][key];
               }
             }
+            String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+            if (result.data["activity"]["profile"][j]["profilePic"] != null) {
+              profilePic = result.data["activity"]["profile"][j]["profilePic"]["url"];
+            }
             profilesList.add(Profile(
                 result.data["activities"][i]["profile"][j]["name"],
                 result.data["activities"][i]["profile"][j]["desc"],
                 social: socialMap,
                 type: result.data["activities"][i]["profile"][j]["type"] ?? "",
+                profilePic: profilePic,
                 installations: [],
                 activities: []));
           }

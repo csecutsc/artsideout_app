@@ -30,7 +30,7 @@ class ArtListCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 10,
+              flex: 6,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 100,
@@ -58,7 +58,7 @@ class ArtListCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

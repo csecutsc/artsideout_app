@@ -77,11 +77,16 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                   result.data["activity"]["profile"][j]["social"][key];
             }
           }
+          String profilePic = PlaceholderConstants.PROFILE_IMAGE;
+          if (result.data["activity"]["profile"][j]["profilePic"] != null) {
+            profilePic = result.data["activity"]["profile"][j]["profilePic"]["url"];
+          }
           profilesList.add(Profile(
               result.data["activity"]["profile"][j]["name"],
               result.data["activity"]["profile"][j]["desc"],
               social: socialMap,
               type: result.data["activity"]["profile"][j]["type"] ?? "",
+              profilePic: profilePic,
               installations: [],
               activities: []));
         }

@@ -11,20 +11,20 @@ import 'package:flutter/cupertino.dart';
 
 class HomeDetailWidget extends StatelessWidget {
   final List<ASOCardInfo> listHomeActions = [
-    ASOCardInfo("About Connections", Color(0xFF62BAA6), "assets/home/profiles.png",
-        350, ASORoutes.ACTIVITIES),
+    ASOCardInfo("About Connections", Color(0xFF62BAA6), "assets/home/connection.png",
+        350, ASORoutes.ABOUT),
     ASOCardInfo("Profiles", ColorConstants.PRIMARY,
-        "assets/home/about.png", 300, ASORoutes.ACTIVITIES),
-    ASOCardInfo("Social Media", Colors.purple[200], "assets/home/news.png", 300,
-        ASORoutes.ACTIVITIES),
+        "assets/home/profile.png", 300, ASORoutes.PROFILES),
+    ASOCardInfo("Social Media", Colors.purple[200], "assets/home/social.png", 300,
+        "https://instagram.com/artsideout_/", altUrl: "https://instagram.com/artsideout_/"),
     ASOCardInfo("Studio", Colors.blue[200],
         "assets/home/studio.png", 200, ASORoutes.INSTALLATIONS),
     ASOCardInfo("Art Workshops", Colors.yellow[200], "assets/home/workshops.png", 300,
-        ASORoutes.ACTIVITIES),
+        ASORoutes.WORKSHOPS),
     ASOCardInfo("Performances", Colors.yellow[200],
         "assets/home/performances.png", 300, ASORoutes.ACTIVITIES),
     ASOCardInfo("Art Market", Colors.orange[200], "assets/home/artmarket.png", 200,
-        ASORoutes.INSTALLATIONS)
+        ASORoutes.WORKSHOPS)
   ];
 
   Widget build(BuildContext context) {
