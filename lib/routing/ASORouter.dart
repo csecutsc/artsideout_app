@@ -1,9 +1,13 @@
 import 'package:artsideout_app/components/common/Placeholder.dart';
+import 'package:artsideout_app/components/market/MarketDetailWidget.dart';
+import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 import 'package:artsideout_app/pages/activity/MainWorkshopPage.dart';
 import 'package:artsideout_app/pages/home/AboutConnectionsPage.dart';
 import 'package:artsideout_app/pages/market/MainMarketPage.dart';
+import 'package:artsideout_app/pages/market/MarketDetailPage.dart';
 import 'package:artsideout_app/pages/profile/MainProfilePage.dart';
+import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
 import 'package:artsideout_app/pages/project/ProjectDetailPage.dart';
 import 'package:artsideout_app/pages/search/MasterSearchPage.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +79,7 @@ class ASORouter {
         var pageRoute;
         if (parts.length == 2) {
           String searchDetails = parts[1].substring(3);
-          pageRoute = ActivityDetailPage(searchDetails);
+          pageRoute = MarketDetailPage(searchDetails);
         } else if (parts.length == 1) {
           pageRoute = MainMarketPage();
         }
@@ -87,7 +91,7 @@ class ASORouter {
         var pageRoute;
         if (parts.length == 2) {
           String searchDetails = parts[1].substring(3);
-          pageRoute = ActivityDetailPage(searchDetails);
+          pageRoute = ProfileDetailPage(searchDetails);
         } else if (parts.length == 1) {
           pageRoute = MainProfilePage();
         }

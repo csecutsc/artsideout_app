@@ -39,6 +39,7 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
 
   @override
   Widget build(BuildContext context) {
+    FetchResultCard fetchResultCard = new FetchResultCard();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
     Widget mainPageWidget = ListView.builder(
@@ -48,7 +49,6 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
         final item = listActivity[index];
-        FetchResultCard fetchResultCard = new FetchResultCard();
         return Material(
           color: Colors.transparent,
           child: GestureDetector(
@@ -71,6 +71,7 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
     Widget secondPageWidget = (listActivity.length != 0)
         ? ActivityDetailWidget(data: listActivity[selectedValue])
         : Container();
+
     return MasterPageLayout(
         pageName: "Workshops",
         pageDesc: "Blah Blah Blah",

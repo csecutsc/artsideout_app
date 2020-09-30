@@ -2,6 +2,7 @@ import 'Activity.dart';
 import 'Installation.dart';
 
 class Profile {
+  String id;
   String name;
   String desc;
   Map<String, String> social;
@@ -11,5 +12,5 @@ class Profile {
   List<Activity> activities;
 
   Profile(this.name, this.desc,
-      {this.social, this.type, this.installations, this.activities, this.profilePic});
+      {this.id, this.social, this.type, this.installations, this.activities, this.profilePic});
 }

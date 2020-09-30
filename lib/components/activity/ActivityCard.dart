@@ -9,6 +9,7 @@ class ActivityCard extends StatelessWidget {
   final Map<String, String> image;
   final Map<String, String> time;
   final String zone;
+  final String performanceType;
   final Widget detailPageButton;
   // final Widget pageButton;
 
@@ -19,6 +20,7 @@ class ActivityCard extends StatelessWidget {
     this.time,
     this.image,
     this.zone,
+    this.performanceType,
     this.detailPageButton,
     // this.pageButton,
   }) : super(key: key);
@@ -57,26 +59,9 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //height: 125.0,
-      height: 130,
-      width: 250,
-      margin: EdgeInsets.all(7),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, 1),
-            blurRadius: 1,
-            spreadRadius: 1,
-            color: Colors.grey[500],
-          ),
-        ],
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
+    Widget generateTime() {
+      if ((performanceType.isNotEmpty && performanceType == "Workshops")) {
+        return Expanded(
             flex: 2,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +85,7 @@ class ActivityCard extends StatelessWidget {
                   ),
                   Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+                      EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
                       child: Divider(
                         color: Color(0xFFBE4C59),
                         thickness: 1.0,
@@ -124,8 +109,31 @@ class ActivityCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ]),
+                ]));
+      } else {
+        return Container();
+      }
+    }
+    return Container(
+      //height: 125.0,
+      height: 130,
+      width: 250,
+      margin: EdgeInsets.all(7),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 1),
+            blurRadius: 1,
+            spreadRadius: 1,
+            color: Colors.grey[500],
           ),
+        ],
+      ),
+      child: Row(
+        children: <Widget>[
+          generateTime(),
           Expanded(
             flex: 8,
             child: Column(

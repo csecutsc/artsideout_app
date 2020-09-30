@@ -17,6 +17,7 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social
@@ -47,6 +48,7 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social
@@ -80,6 +82,7 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social

@@ -1,6 +1,7 @@
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/graphql/ActivityQueries.dart';
+import 'package:artsideout_app/helpers/GraphQlFactory.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
@@ -38,70 +39,8 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
       ),
     );
     if (!result.hasException) {
-      List<Map<String, String>> images = [];
-
-      if (result.data["activity"]["images"] != null) {
-        for (int j = 0;
-        j < result.data["activity"]["images"].length;
-        j++) {
-          String url = result.data["activity"]["images"]
-          [j]["url"];
-          String altText = result.data["activity"]["images"]
-          [j]["altText"];
-          images.add({"url": url, "altText": altText});
-        }
-      }
-
-      Map<String, double> location =
-          (result.data["activity"]["location"] != null)
-              ? {
-                  'latitude': result.data["activity"]["location"]["latitude"],
-                  'longitude': result.data["activity"]["location"]["longitude"]
-                }
-              : {'latitude': -1.0, 'longitude': -1.0};
-
-      Map<String, String> time = {
-        'startTime': result.data["activity"]["startTime"] ?? "",
-        'endTime': result.data["activity"]["endTime"] ?? ""
-      };
-
-      List<Profile> profilesList = [];
-
-      if (result.data["activity"]["profile"] != null) {
-        for (var j = 0; j < result.data["activity"]["profile"].length; j++) {
-          Map<String, String> socialMap = new Map();
-          if (result.data["activity"]["profile"][j]["social"] != null) {
-            for (var key
-                in result.data["activity"]["profile"][j]["social"].keys) {
-              socialMap[key] =
-                  result.data["activity"]["profile"][j]["social"][key];
-            }
-          }
-          String profilePic = PlaceholderConstants.PROFILE_IMAGE;
-          if (result.data["activity"]["profile"][j]["profilePic"] != null) {
-            profilePic = result.data["activity"]["profile"][j]["profilePic"]["url"];
-          }
-          profilesList.add(Profile(
-              result.data["activity"]["profile"][j]["name"],
-              result.data["activity"]["profile"][j]["desc"],
-              social: socialMap,
-              type: result.data["activity"]["profile"][j]["type"] ?? "",
-              profilePic: profilePic,
-              installations: [],
-              activities: []));
-        }
-      }
-
       setState(() {
-        activityDetails = Activity(
-            id: result.data["activity"]["id"],
-            title: result.data["activity"]["title"],
-            desc: result.data["activity"]["desc"],
-            zone: result.data["activity"]["zone"],
-            location: location,
-            profiles: profilesList,
-            images: images,
-            time: time);
+        activityDetails = GraphQlFactory.buildActivity(result.data["activity"]);
       });
     } else {
       print("CANNOT GET ART DETAILS");
@@ -119,11 +58,20 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
     }
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "PERFORMANCE",
+          style: TextStyle(
+            color: ColorConstants.PRIMARY,
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+          ),
+        ),
+        backgroundColor: ColorConstants.PREVIEW_SCREEN,
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
         elevation: 0.0,
-        backgroundColor: ColorConstants.SCAFFOLD,
       ),
       body: cool,
     );

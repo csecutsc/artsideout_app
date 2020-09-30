@@ -6,6 +6,7 @@ class ActivityQueries {
         title
         desc
         zone
+        performanceType
         images {
           url
           altText
@@ -17,6 +18,7 @@ class ActivityQueries {
           longitude
         }
         profile {
+          id
           name
           desc
           social
@@ -33,6 +35,7 @@ class ActivityQueries {
         title
         desc
         zone
+        performanceType
         images {
           url
           altText
@@ -43,8 +46,14 @@ class ActivityQueries {
           latitude
           longitude
         }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
         locationRoom
         profile {
+          id
           name
           desc
           social
@@ -73,7 +82,13 @@ class ActivityQueries {
           latitude
           longitude
         }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
         profile {
+          id
           name
           desc
           social
@@ -91,6 +106,7 @@ class ActivityQueries {
         title
         desc
         zone
+        performanceType
         images {
           url
           altText
@@ -101,7 +117,13 @@ class ActivityQueries {
           latitude
           longitude
         }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
         profile {
+          id
           name
           desc
           social

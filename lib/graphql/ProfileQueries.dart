@@ -2,10 +2,61 @@ class ProfileQueries {
   String getAll = """
     {
       profiles {
+        id
         name
         desc
         social
         type
+          installation {
+            id
+            title
+            desc
+            zone
+            videoUrl
+            images {
+              url
+              altText
+            }
+            location {
+              latitude
+              longitude
+            }
+            locationRoom
+            profile {
+              id
+              name
+              desc
+              social
+              type
+              profilePic {
+                url
+              }
+            }
+          }
+          activity {
+            id
+            title
+            desc
+            zone
+            performanceType
+            images {
+              url
+              altText
+            }
+            startTime
+            endTime
+            location {
+              latitude
+              longitude
+            }
+            profile {
+              id
+              name
+              desc
+              social
+              type
+            }
+          }
         profilePic {
           url
         }
@@ -15,12 +66,62 @@ class ProfileQueries {
   String getOneByID(String id) {
     return """
     {
-      profile (where: {id: $id}) {
+      profile (where: {id: "$id"}) {
           id
           name
           desc
           social 
           type
+          installation {
+            id
+            title
+            desc
+            zone
+            videoUrl
+            images {
+              url
+              altText
+            }
+            location {
+              latitude
+              longitude
+            }
+            locationRoom
+            profile {
+              id
+              name
+              desc
+              social
+              type
+              profilePic {
+                url
+              }
+            }
+          }
+          activity {
+            id
+            title
+            desc
+            zone
+            performanceType
+            images {
+              url
+              altText
+            }
+            startTime
+            endTime
+            location {
+              latitude
+              longitude
+            }
+            profile {
+              id
+              name
+              desc
+              social
+              type
+            }
+          }
           profilePic {
             url
           }
@@ -32,12 +133,62 @@ class ProfileQueries {
   String getOneByName(String id) {
     return """
     {
-      profile (where: {id: $id}) {
+      profile (where: {id: "$id"}) {
           id
           name
           desc
           social 
           type
+          installation {
+            id
+            title
+            desc
+            zone
+            videoUrl
+            images {
+              url
+              altText
+            }
+            location {
+              latitude
+              longitude
+            }
+            locationRoom
+            profile {
+              id
+              name
+              desc
+              social
+              type
+              profilePic {
+                url
+              }
+            }
+          }
+          activity {
+            id
+            title
+            desc
+            zone
+            performanceType
+            images {
+              url
+              altText
+            }
+            startTime
+            endTime
+            location {
+              latitude
+              longitude
+            }
+            profile {
+              id
+              name
+              desc
+              social
+              type
+            }
+          }
           profilePic {
             url
           }
@@ -55,6 +206,56 @@ class ProfileQueries {
           desc
           social 
           type
+          installation {
+            id
+            title
+            desc
+            zone
+            videoUrl
+            images {
+              url
+              altText
+            }
+            location {
+              latitude
+              longitude
+            }
+            locationRoom
+            profile {
+              id
+              name
+              desc
+              social
+              type
+              profilePic {
+                url
+              }
+            }
+          }
+          activity {
+            id
+            title
+            desc
+            zone
+            performanceType
+            images {
+              url
+              altText
+            }
+            startTime
+            endTime
+            location {
+              latitude
+              longitude
+            }
+            profile {
+              id
+              name
+              desc
+              social
+              type
+            }
+          }
           profilePic {
             url
           }

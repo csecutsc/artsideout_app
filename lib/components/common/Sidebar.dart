@@ -31,7 +31,7 @@ class Sidebar extends StatelessWidget {
           Expanded(
             flex: 1,
             child: CircleAvatar(
-                radius: 35.0,
+                radius: 33.0,
                 backgroundImage: NetworkImage("assets/assets/common/icon.png")),
           ),
           for (var action in _sideBarActions)

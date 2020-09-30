@@ -1,5 +1,7 @@
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
+import 'package:artsideout_app/graphql/MarketQueries.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
+import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -9,21 +11,21 @@ import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/graphql/InstallationQueries.dart';
 
 // Installation GraphQL Query
-Future<List<Installation>> fillList() async {
-  var listInstallation = List<Installation>();
+Future<List<Market>> fillListMarket() async {
+  var listInstallation = List<Market>();
   GraphQLConfiguration graphQLConfiguration =
-      serviceLocator<GraphQLConfiguration>();
-  InstallationQueries queryInstallation = InstallationQueries();
+  serviceLocator<GraphQLConfiguration>();
+  MarketQueries queryMarket = MarketQueries();
   GraphQLClient _client = graphQLConfiguration.clientToQuery();
   QueryResult result = await _client.query(
     QueryOptions(
-      documentNode: gql(queryInstallation.getAll),
+      documentNode: gql(queryMarket.getAll),
     ),
   );
   if (!result.hasException) {
-    for (var i = 0; i < result.data["installations"].length; i++) {
+    for (var i = 0; i < result.data["artMarketVendors"].length; i++) {
       listInstallation.add(
-        GraphQlFactory.buildInstallation(result.data["installations"][i])
+          GraphQlFactory.buildMarket(result.data["artMarketVendors"][i])
       );
     }
   }

@@ -1,6 +1,7 @@
 import 'package:artsideout_app/components/common/ASOCard.dart';
 import 'package:artsideout_app/components/common/NoResultBanner.dart';
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
+import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/components/search/FetchQueries.dart';
 import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/components/search/SearchBarFilter.dart';
@@ -38,9 +39,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
   int currentScrollPos = 0;
   bool loading = true;
 
-  List<Profile> listInstallation = List<Profile>();
+  List<Profile> listProfiles = List<Profile>();
   GraphQLConfiguration graphQLConfiguration =
-  serviceLocator<GraphQLConfiguration>();
+      serviceLocator<GraphQLConfiguration>();
 
   FetchResults fetchResults = new FetchResults();
   bool isLoading = false;
@@ -55,7 +56,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
   };
 
   Future<void> setList() async {
-    listInstallation = await fillProfileList().whenComplete(() => loading = false);
+    listProfiles =
+        await fillProfileList().whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -63,17 +65,16 @@ class _MainProfilePageState extends State<MainProfilePage> {
   void initState() {
     super.initState();
     setList();
-    print(listInstallation);
   }
 
   void handleTextChange(String text) async {
     if (text != ' ' && text != '') {
-      listInstallation =
-      await fetchResults.getProfilesByTypes(text, optionsMap);
+      listProfiles =
+          await fetchResults.getProfilesByTypes(text, optionsMap);
 
       setState(() {
         queryResult = text;
-        noResults = listInstallation.isEmpty ? true : false;
+        noResults = listProfiles.isEmpty ? true : false;
       });
     }
   }
@@ -87,21 +88,13 @@ class _MainProfilePageState extends State<MainProfilePage> {
 
   // Installation GraphQL Query
   void _fillList() async {
-    listInstallation =
-    await fetchResults.getProfilesByTypes("", optionsMap).whenComplete(() => loading = false);
+    listProfiles = await fetchResults
+        .getProfilesByTypes("", optionsMap)
+        .whenComplete(() => loading = false);
     setState(() {
       noResults = false;
     });
   }
-
-  final List<ASOCardInfo> listActions = [
-    ASOCardInfo("Featured", Color(0xFF62BAA6),
-        "assets/icons/aboutConnections.svg", 300, ASORoutes.ACTIVITIES),
-    ASOCardInfo("Activities", Color(0xFFC155A5), "assets/icons/activities.svg",
-        300, ASORoutes.ACTIVITIES),
-    ASOCardInfo("Saved", Color(0xFF9CC9F5), "assets/icons/saved.svg", 300,
-        ASORoutes.ACTIVITIES)
-  ];
 
   void initScrollController() {
     _scrollController = ScrollController()
@@ -175,11 +168,11 @@ class _MainProfilePageState extends State<MainProfilePage> {
                   mainAxisSpacing: 5.0,
                 ),
                 // Let the ListView know how many items it needs to build.
-                itemCount: listInstallation.length,
+                itemCount: listProfiles.length,
                 // Provide a builder function. This is where the magic happens.
                 // Convert each item into a widget based on the type of item it is.
                 itemBuilder: (context, index) {
-                  final item = listInstallation[index];
+                  final item = listProfiles[index];
 
                   return GestureDetector(
                     child: fetchResultCard.getCard("Profile", item),
@@ -188,8 +181,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                         selectedValue = index;
                         setState(() {});
                       } else {
-                        // _navigationService.navigateToWithId(
-                        //     ASORoutes.INSTALLATIONS, item.id);
+                        _navigationService.navigateToWithId(
+                            ASORoutes.PROFILES, item.id);
                       }
                     },
                   );
@@ -202,13 +195,11 @@ class _MainProfilePageState extends State<MainProfilePage> {
       NoResultBanner(queryResult, noResults),
     ]);
 
-    Widget secondPageWidget = ((listInstallation.length != 0)
-        ?Container()
-        : Container());
+    Widget secondPageWidget =
+        ((listProfiles.length != 0) ? ProfileDetailWidget(listProfiles[selectedValue]) : Container());
     return MasterPageLayout(
       pageName: "Profiles",
-      pageDesc:
-      "Blah Blah Blah",
+      pageDesc: "Blah Blah Blah",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,

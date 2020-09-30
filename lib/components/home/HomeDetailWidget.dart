@@ -24,7 +24,7 @@ class HomeDetailWidget extends StatelessWidget {
     ASOCardInfo("Performances", Colors.yellow[200],
         "assets/home/performances.png", 300, ASORoutes.ACTIVITIES),
     ASOCardInfo("Art Market", Colors.orange[200], "assets/home/artmarket.png", 200,
-        ASORoutes.WORKSHOPS)
+        ASORoutes.MARKETS)
   ];
 
   Widget build(BuildContext context) {

@@ -6,6 +6,8 @@ import 'package:artsideout_app/components/profile/ProfileCard.dart';
 import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
+import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/models/Market.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -33,6 +35,7 @@ class FetchResultCard {
           desc: item.desc,
           image: item.images[0],
           time: item.time,
+          performanceType: item.performanceType,
           zone: item.zone);
     else if (type == "Profile")
       return ProfileCard(

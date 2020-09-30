@@ -1,3 +1,4 @@
+import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -12,13 +13,7 @@ class SocialCard extends StatelessWidget {
     this.urlToSocial,
   );
 
-  Text formattedSocialName(String socialName) {
-    return Text(socialName,
-        textAlign: TextAlign.center,
-        style: TextStyle(backgroundColor: Colors.pink, fontSize: 30.0));
-  }
-
-  Icon generateIcon(String name, double iconSize) {
+  Widget generateIcon(String name, double iconSize) {
     switch (name) {
       case "facebook":
         return Icon(MdiIcons.facebook, size: iconSize);
@@ -26,6 +21,11 @@ class SocialCard extends StatelessWidget {
         return Icon(MdiIcons.instagram, size: iconSize);
       case "pinterest":
         return Icon(MdiIcons.pinterest, size: iconSize);
+      case "youtube":
+        return Icon(MdiIcons.youtube, size: iconSize);
+      case "etsy":
+        return ImageIcon(NetworkImage("assets/assets/icons/etsy.webp"),
+            size: iconSize);
       default:
         return Icon(MdiIcons.web, size: iconSize);
     }
@@ -33,24 +33,34 @@ class SocialCard extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
+        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: InkResponse(
           child: SizedBox(
-              width: 300,
-              child: Card(
-                  color: Colors.red[200],
-                  child: Stack(
-                      alignment: AlignmentDirectional.centerStart,
-                      children: <Widget>[
-                        Positioned(
-                            child: generateIcon(socialName,
-                                MediaQuery.of(context).size.height / 10)),
-                        Positioned(
-                            left: MediaQuery.of(context).size.height / 5,
-                            child: Text(socialName.toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.black)))
-                      ]))),
+            width: 100,
+            child: Card(
+              color: Color(0xFFF9EBEB),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: ListTile(
+                contentPadding: EdgeInsets.all(18),
+                leading: CircleAvatar(
+                    backgroundColor: ColorConstants.PRIMARY,
+                    radius: 25.0,
+                    child: ClipOval(
+                      child: generateIcon(this.socialName, 30.0),
+                    )),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SelectableText(this.socialName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.pink, fontSize: 18.0))
+                  ],
+                ),
+              ),
+            ),
+          ),
           onTap: () async {
             if (await canLaunch(urlToSocial)) {
               await launch(urlToSocial);

@@ -8,6 +8,7 @@ import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/graphql/ProjectQueries.dart';
+import 'package:artsideout_app/helpers/GraphQlFactory.dart';
 import 'package:artsideout_app/models/ASOCardInfo.dart';
 import 'package:artsideout_app/models/Project.dart';
 import 'package:artsideout_app/models/Installation.dart';
@@ -45,7 +46,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   List<Installation> listInstallation = List<Installation>();
   Map<String, String> mapPageDetails = Map<String, String>();
   GraphQLClient _client =
-  serviceLocator<GraphQLConfiguration>().clientToQuery();
+      serviceLocator<GraphQLConfiguration>().clientToQuery();
 
   FetchResults fetchResults = new FetchResults();
   bool isLoading = false;
@@ -67,8 +68,10 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
       ),
     );
     if (!result.hasException) {
-      return {"title": result.data["project"]["title"],
-        "desc": result.data["project"]["desc"]};
+      return {
+        "title": result.data["project"]["title"],
+        "desc": result.data["project"]["desc"]
+      };
     }
     return {};
   }
@@ -83,70 +86,9 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     );
     if (!result.hasException) {
       for (var i = 0; i < result.data["project"]["elements"].length; i++) {
-        List<Profile> profilesList = [];
-
-        List<Map<String, String>> images = [];
-
-        if (result.data["project"]["elements"][i]["images"].length != 0) {
-          for (int j = 0;
-          j < result.data["project"]["elements"][i]["images"].length;
-          j++) {
-            String url = result.data["project"]["elements"][i]["images"][j]["url"];
-            String altText =
-            result.data["project"]["elements"][i]["images"][j]["altText"];
-            images.add({"url": url, "altText": altText});
-          }
-        } else {
-          images
-              .add({"url": PlaceholderConstants.GENERIC_IMAGE, "altText": null});
-        }
-
-        if (result.data["project"]["elements"][i]["profile"] != null) {
-          for (var j = 0;
-          j < result.data["project"]["elements"][i]["profile"].length;
-          j++) {
-            Map<String, String> socialMap = new Map();
-            if (result.data["project"]["elements"][i]["profile"][j]["social"] != null) {
-              for (var key in result
-                  .data["project"]["elements"][i]["profile"][j]["social"].keys) {
-                socialMap[key] =
-                result.data["project"]["elements"][i]["profile"][j]["social"][key];
-              }
-            }
-            String profilePic = PlaceholderConstants.PROFILE_IMAGE;
-            if (result.data["project"]["elements"][i]["profile"][j]["profilePic"] != null) {
-              profilePic = result.data["project"]["elements"][i]["profile"][j]["profilePic"]["url"];
-              print(profilePic);
-            }
-            profilesList.add(Profile(
-                result.data["project"]["elements"][i]["profile"][j]["name"],
-                result.data["project"]["elements"][i]["profile"][j]["desc"],
-                social: socialMap,
-                type: result.data["project"]["elements"][i]["profile"][j]["type"] ?? "",
-                profilePic: profilePic,
-                installations: [],
-                activities: []));
-          }
-        }
         listInstallation.add(
-          Installation(
-            id: result.data["project"]["elements"][i]["id"],
-            title: result.data["project"]["elements"][i]["title"],
-            desc: result.data["project"]["elements"][i]["desc"],
-            zone: result.data["project"]["elements"][i]["zone"] ?? "",
-            images: images,
-            videoURL: result.data["project"]["elements"][i]["videoUrl"] ?? "",
-            location: {
-              'latitude': result.data["project"]["elements"][i]["location"] == null
-                  ? 0.0
-                  : result.data["project"]["elements"][i]["location"]["latitude"],
-              'longitude': result.data["project"]["elements"][i]["location"] == null
-                  ? 0.0
-                  : result.data["project"]["elements"][i]["location"]["longitude"],
-            },
-            locationRoom: result.data["project"]["elements"][i]["locationroom"] ?? "",
-            profiles: profilesList,
-          ),
+            GraphQlFactory.buildInstallation(
+                result.data["project"]["elements"][i])
         );
       }
     }
@@ -155,7 +97,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
   Future<void> setList() async {
     mapPageDetails = await getProjectDetails(widget.projectPageId);
-    listInstallation = await getProjectInstallations(widget.projectPageId).whenComplete(() => loading = false);
+    listInstallation = await getProjectInstallations(widget.projectPageId)
+        .whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -168,7 +111,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   void handleTextChange(String text) async {
     if (text != ' ' && text != '') {
       listInstallation =
-      await fetchResults.getInstallationsByTypes(text, optionsMap);
+          await fetchResults.getInstallationsByTypes(text, optionsMap);
 
       setState(() {
         queryResult = text;
@@ -187,7 +130,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   // Installation GraphQL Query
   void _fillList() async {
     listInstallation =
-    await fetchResults.getInstallationsByTypes("", optionsMap);
+        await fetchResults.getInstallationsByTypes("", optionsMap);
     setState(() {
       noResults = false;
     });
@@ -307,8 +250,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     if (mapPageDetails.isNotEmpty) {
       return MasterPageLayout(
         pageName: mapPageDetails["title"],
-        pageDesc:
-        "Need to place description somewhere",
+        pageDesc: "Need to place description somewhere",
         mainPageWidget: mainPageWidget,
         secondPageWidget: secondPageWidget,
         loading: loading,

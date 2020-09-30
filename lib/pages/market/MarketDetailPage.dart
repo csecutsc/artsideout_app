@@ -1,6 +1,9 @@
+import 'package:artsideout_app/components/market/MarketDetailWidget.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
+import 'package:artsideout_app/graphql/MarketQueries.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
+import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
@@ -12,16 +15,16 @@ import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class ArtDetailPage extends StatefulWidget {
+class MarketDetailPage extends StatefulWidget {
   final String artPageId;
-  ArtDetailPage(this.artPageId);
+  MarketDetailPage(this.artPageId);
 
   @override
-  _ArtDetailPageState createState() => _ArtDetailPageState();
+  _MarketDetailPageState createState() => _MarketDetailPageState();
 }
 
-class _ArtDetailPageState extends State<ArtDetailPage> {
-  Installation artDetails;
+class _MarketDetailPageState extends State<MarketDetailPage> {
+  Market artDetails;
 
   GraphQLConfiguration graphQLConfiguration =
       serviceLocator<GraphQLConfiguration>();
@@ -36,22 +39,22 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
 
   // Installation GraphQL Query
   _getArtPost(pageId) async {
-    InstallationQueries queryInstallation = InstallationQueries();
+    MarketQueries queryMarket = MarketQueries();
     GraphQLClient _client = graphQLConfiguration.clientToQuery();
     QueryResult result = await _client.query(
       QueryOptions(
-        documentNode: gql(queryInstallation.getOneByID(pageId)),
+        documentNode: gql(queryMarket.getOneById(pageId)),
       ),
     );
 
     if (!result.hasException) {
-        setState(() {
-          artDetails = GraphQlFactory.buildInstallation(result.data["installation"]);
-        });
-      } else {
-        print("CANNOT GET ART DETAILS");
-      }
+      setState(() {
+        artDetails = GraphQlFactory.buildMarket(result.data["artMarketVendor"]);
+      });
+    } else {
+      print("CANNOT GET ART DETAILS");
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +63,13 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
     if (artDetails == null) {
       cool = Container();
     } else {
-      cool = ArtDetailWidget(data: artDetails);
+      cool = MarketDetailWidget(data: artDetails);
     }
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "STUDIO INSTALLATION",
+            "ART MARKET",
             style: TextStyle(
               color: ColorConstants.PRIMARY,
               fontWeight: FontWeight.bold,

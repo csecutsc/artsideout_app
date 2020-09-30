@@ -1,6 +1,7 @@
 import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
@@ -12,48 +13,24 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // TODO Merge with Art Detail Widget
-class ArtDetailWidget extends StatefulWidget {
-  final Installation data;
+class MarketDetailWidget extends StatefulWidget {
+  final Market data;
 
-  ArtDetailWidget({Key key, this.data}) : super(key: key);
+  MarketDetailWidget({Key key, this.data}) : super(key: key);
 
   @override
-  _ArtDetailWidgetState createState() => _ArtDetailWidgetState();
+  _MarketDetailWidgetState createState() => _MarketDetailWidgetState();
 }
 
-class _ArtDetailWidgetState extends State<ArtDetailWidget> {
+class _MarketDetailWidgetState extends State<MarketDetailWidget> {
   GraphQlImageService _graphQlImageService =
-      serviceLocator<GraphQlImageService>();
-  YoutubePlayerController videoController;
+  serviceLocator<GraphQlImageService>();
   ScrollController _scrollController;
   int currentScrollPos = 0;
-  Widget videoPlayer = YoutubePlayerIFrame();
 
   @override
   void initState() {
     super.initState();
-    initVideoController();
-    initScrollController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    videoController?.drain();
-    videoController?.close();
-  }
-
-  void initVideoController() {
-    String url = (widget.data.videoURL.isEmpty) ? 'xd' : widget.data.videoURL;
-    videoController = YoutubePlayerController(
-      initialVideoId: YoutubePlayerController.convertUrlToId(url),
-      params: const YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-        desktopMode: false,
-        autoPlay: true,
-      ),
-    );
   }
 
   void initScrollController() {
@@ -126,9 +103,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
       );
     }
 
-    return YoutubePlayerControllerProvider(
-      controller: videoController,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -159,18 +134,14 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                   ),
                   widget.data.images.isNotEmpty
                       ? Center(
-                          child: Title(
-                              color: ColorConstants.PRIMARY,
-                              child: Text(
-                                "Click on the images above to expand or download. Also, scroll down for more information!",
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyText1,
-                              )))
-                      : Container(),
-                  widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
-                  widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
-                      ? SizedBox(height: 12)
+                      child: Title(
+                          color: ColorConstants.PRIMARY,
+                          child: Text(
+                            "Click on the images above to expand. Also, scroll down for more information!",
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )))
                       : Container(),
                   for (Profile profile in widget.data.profiles)
                     ProfileCard(
@@ -206,22 +177,22 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         ),
                         Flexible(
                             child: Padding(
-                          padding: const EdgeInsets.only(bottom: 14.0),
-                          child: MarkdownBody(
-                            selectable: true,
-                            data: widget.data.desc,
-                            onTapLink: (url) {
-                              launch(url);
-                            },
-                            styleSheet:
+                              padding: const EdgeInsets.only(bottom: 14.0),
+                              child: MarkdownBody(
+                                selectable: true,
+                                data: widget.data.desc,
+                                onTapLink: (url) {
+                                  launch(url);
+                                },
+                                styleSheet:
                                 MarkdownStyleSheet.fromTheme(Theme.of(context))
                                     .copyWith(
-                                        p: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .copyWith(fontSize: 16.0)),
-                          ),
-                        )),
+                                    p: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .copyWith(fontSize: 16.0)),
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -230,8 +201,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
             );
           },
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -241,7 +211,7 @@ class ImageDialog extends StatelessWidget {
 
   Widget build(BuildContext context) {
     GraphQlImageService _graphQlImageService =
-        serviceLocator<GraphQlImageService>();
+    serviceLocator<GraphQlImageService>();
     String fullResUrl = _graphQlImageService.getResizedImage(image["url"], 800);
     return AlertDialog(
       backgroundColor: Colors.white70,

@@ -5,12 +5,12 @@ import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class ArtListCard extends StatelessWidget {
+class MarketListCard extends StatelessWidget {
   final String title;
   final String artist;
   final Map<String, String> image;
 
-  const ArtListCard({
+  const MarketListCard({
     Key key,
     this.title,
     this.artist,
