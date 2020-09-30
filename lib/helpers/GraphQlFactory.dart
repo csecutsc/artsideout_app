@@ -31,6 +31,11 @@ class GraphQlFactory {
         listActivities.add(buildActivity(result["activity"][i]));
       }
     }
+
+    List<Market> listMarkets = [];
+    if (result["artMarketVendor"] != null) {
+      listMarkets.add(buildMarket(result["artMarketVendor"]));
+    }
     return Profile(
         result["name"],
         result["desc"] ?? "",
@@ -39,7 +44,9 @@ class GraphQlFactory {
         type: result["type"] ?? "",
         profilePic: profilePic,
         installations: listInstallations,
-        activities: listActivities);
+        activities: listActivities,
+        markets: listMarkets
+    );
   }
 
   static Installation buildInstallation(Map result) {
@@ -119,6 +126,7 @@ class GraphQlFactory {
         zone: result["zone"],
         images: images,
         time: time,
+        videoURL: result["videoUrl"] ?? "",
         zoomMeeting: zoomMeeting,
         performanceType: result["performanceType"] ?? "",
         location: {
@@ -154,7 +162,7 @@ class GraphQlFactory {
       }
     }
 
-    return Market(result["id"], result["title"],
+    return Market(result["id"], result["title"] ?? "",
         desc: result["desc"] ?? "",
         images: images,
         profiles: profilesList,

@@ -6,6 +6,7 @@ class Activity {
   String title;
   String desc;
   String zone;
+  String videoURL;
   String performanceType;
   ZoomMeeting zoomMeeting;
   List<Map<String, String>> images;
@@ -18,6 +19,7 @@ class Activity {
       this.title,
       this.desc,
       this.zone,
+      this.videoURL,
       this.zoomMeeting,
       this.images,
       this.performanceType,

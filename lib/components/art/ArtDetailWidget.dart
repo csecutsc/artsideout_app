@@ -2,6 +2,7 @@ import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
+import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
@@ -20,7 +21,8 @@ class ArtDetailWidget extends StatefulWidget {
   final Installation data;
   final bool expandedScreen;
 
-  ArtDetailWidget({Key key, this.data, this.expandedScreen = false}) : super(key: key);
+  ArtDetailWidget({Key key, this.data, this.expandedScreen = false})
+      : super(key: key);
 
   @override
   _ArtDetailWidgetState createState() => _ArtDetailWidgetState();
@@ -157,16 +159,35 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  widget.data.images.isNotEmpty ? imageFeed : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < widget.data.images.length; i++)
-                        imageIndicator(i),
-                    ],
-                  ),
+                  (widget.data.images.isNotEmpty &&
+                          !(widget.data.images[0]["url"] ==
+                              PlaceholderConstants.GENERIC_IMAGE))
+                      ? Column(children: [
+                          imageFeed,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 0;
+                                  i < widget.data.images.length;
+                                  i++)
+                                imageIndicator(i),
+                            ],
+                          ),
+                          Center(
+                              child: Title(
+                                  color: ColorConstants.PRIMARY,
+                                  child: Text(
+                                    "Click on the images above to expand or download. Also, scroll down for more information!",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  )))
+                        ])
+                      : Container(),
                   (_displaySize == DisplaySize.LARGE ||
-                          _displaySize == DisplaySize.MEDIUM) && !widget.expandedScreen
+                              _displaySize == DisplaySize.MEDIUM) &&
+                          !widget.expandedScreen
                       ? RaisedButton(
                           child: Text("VIEW PAGE",
                               style: Theme.of(context)
@@ -180,18 +201,14 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                                 ASORoutes.INSTALLATIONS, widget.data.id);
                           })
                       : Container(),
-                  widget.data.images.isNotEmpty
-                      ? Center(
-                          child: Title(
-                              color: ColorConstants.PRIMARY,
-                              child: Text(
-                                "Click on the images above to expand or download. Also, scroll down for more information!",
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyText1,
-                              )))
+                  widget.data.videoURL.isNotEmpty && widget.expandedScreen
+                      ? Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: videoPlayer)
                       : Container(),
-                  widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
+                  widget.data.videoURL.isNotEmpty && !widget.expandedScreen
+                      ? videoPlayer
+                      : Container(),
                   widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
                       ? SizedBox(height: 12)
                       : Container(),
@@ -202,12 +219,8 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         type: profile.type,
                         id: profile.id),
                   ListTile(
-                    leading: SelectableText(
-                      'overview',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                    ),
+                    leading: SelectableText('overview',
+                        style: Theme.of(context).textTheme.headline5),
                   ),
                   Divider(
                     color: Colors.black,

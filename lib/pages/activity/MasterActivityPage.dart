@@ -5,7 +5,6 @@ import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
-import 'package:artsideout_app/services/GraphQLConfiguration.dart';
 import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

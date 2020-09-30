@@ -1,3 +1,4 @@
+import 'package:artsideout_app/components/art/ArtListCard.dart';
 import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
@@ -114,10 +115,8 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                 (widget.profile.installations.length != 0)
                     ? Column(children: [
                         ListTile(
-                          leading: SelectableText(
-                            'INSTALLATIONS',
-                            style: Theme.of(context).textTheme.headline5
-                          ),
+                          leading: SelectableText('INSTALLATIONS',
+                              style: Theme.of(context).textTheme.headline5),
                         ),
                         GridView.builder(
                           shrinkWrap: true,
@@ -152,10 +151,8 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                 (widget.profile.activities.length != 0)
                     ? Column(children: [
                         ListTile(
-                          leading: SelectableText(
-                            'PERFORMANCES & WORKSHOPS',
-                            style: Theme.of(context).textTheme.headline5
-                          ),
+                          leading: SelectableText('PERFORMANCES & WORKSHOPS',
+                              style: Theme.of(context).textTheme.headline5),
                         ),
                         ListView.builder(
                           scrollDirection: Axis.vertical,
@@ -175,6 +172,42 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                               onTap: () {
                                 _navigationService.navigateToWithId(
                                     ASORoutes.ACTIVITIES, item.id);
+                              },
+                            );
+                          },
+                        )
+                      ])
+                    : Container(),
+                (widget.profile.markets.length != 0)
+                    ? Column(children: [
+                        ListTile(
+                          leading: SelectableText('ART MARKET',
+                              style: Theme.of(context).textTheme.headline5),
+                        ),
+                        ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          cacheExtent: 200,
+                          addAutomaticKeepAlives: true,
+                          // Let the ListView know how many items it needs to build.
+                          itemCount: widget.profile.markets.length,
+                          // Provide a builder function. This is where the magic happens.
+                          // Convert each item into a widget based on the type of item it is.
+                          itemBuilder: (context, index) {
+                            final item = widget.profile.markets[index];
+
+                            return GestureDetector(
+                              child: ArtListCard(
+                                  title: item.title,
+                                  artist: item.profiles
+                                      .map((profile) => profile.name ?? "")
+                                      .toList()
+                                      .join(", "),
+                                  image: item.images[0]),
+                              onTap: () {
+                                _navigationService.navigateToWithId(
+                                    ASORoutes.MARKETS, item.id);
                               },
                             );
                           },

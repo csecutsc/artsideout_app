@@ -1,22 +1,20 @@
 import 'package:artsideout_app/components/common/ProfileCard.dart';
-import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
 import 'package:artsideout_app/models/Profile.dart';
-import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // TODO Merge with Art Detail Widget
 class ActivityDetailWidget extends StatefulWidget {
@@ -35,6 +33,52 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   bool showProfile = false;
   Profile profileToDetail;
   int currentScrollPos = 0;
+
+  YoutubePlayerController videoController;
+  ScrollController _scrollController;
+  Widget videoPlayer = YoutubePlayerIFrame();
+
+  @override
+  void initState() {
+    super.initState();
+    initVideoController();
+    initScrollController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    videoController?.drain();
+    videoController?.close();
+  }
+
+  void initVideoController() {
+    String url = (widget.data.videoURL.isEmpty) ? 'xd' : widget.data.videoURL;
+    videoController = YoutubePlayerController(
+      initialVideoId: YoutubePlayerController.convertUrlToId(url),
+      params: const YoutubePlayerParams(
+        showControls: true,
+        showFullscreenButton: true,
+        desktopMode: false,
+        autoPlay: true,
+      ),
+    );
+  }
+
+  void initScrollController() {
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.hasClients)
+          setState(() {
+            for (int i = 0; i < widget.data.images.length; i++) {
+              if (_scrollController.position.pixels < 270 * (i + 1) &&
+                  _scrollController.position.pixels > 270 * i) {
+                currentScrollPos = i;
+              }
+            }
+          });
+      });
+  }
 
   String startTimeDisplay(String startTimeGiven, BuildContext context) {
     if (startTimeGiven == "") {
@@ -123,142 +167,152 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       );
     }
 
-    return Scaffold(
-        backgroundColor: ColorConstants.PREVIEW_SCREEN,
-        body: LayoutBuilder(builder: (context, constraints) {
-          return MediaQuery.removePadding(
-              context: context,
-              child: ListView(children: [
-                      Center(
-                        child: Title(
-                            title: widget.data.title,
-                            color: Colors.black,
-                            child: SelectableText(widget.data.title,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.headline5)),
-                      ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      widget.data.images.isNotEmpty ? imageFeed : Container(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+    return YoutubePlayerControllerProvider(
+        controller: videoController,
+        child: Scaffold(
+            backgroundColor: ColorConstants.PREVIEW_SCREEN,
+            body: LayoutBuilder(builder: (context, constraints) {
+              return MediaQuery.removePadding(
+                  context: context,
+                  child: ListView(children: [
+                    Center(
+                      child: Title(
+                          title: widget.data.title,
+                          color: Colors.black,
+                          child: SelectableText(widget.data.title,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headline5)),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    (widget.data.images.isNotEmpty &&
+                            !(widget.data.images[0]["url"] ==
+                                PlaceholderConstants.GENERIC_IMAGE))
+                        ? Column(children: [
+                            imageFeed,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (int i = 0;
+                                    i < widget.data.images.length;
+                                    i++)
+                                  imageIndicator(i),
+                              ],
+                            ),
+                            Center(
+                                child: Title(
+                                    color: ColorConstants.PRIMARY,
+                                    child: Text(
+                                      "Click on the images above to expand or download. Also, scroll down for more information!",
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    )))
+                          ])
+                        : Container(),
+                    widget.data.videoURL.isNotEmpty && widget.expandedScreen
+                        ? Container(
+                            height: MediaQuery.of(context).size.height / 2,
+                            child: videoPlayer)
+                        : Container(),
+                    widget.data.videoURL.isNotEmpty && !widget.expandedScreen
+                        ? videoPlayer
+                        : Container(),
+                    widget.data.videoURL.isNotEmpty &&
+                            widget.data.images.isEmpty
+                        ? SizedBox(height: 12)
+                        : Container(),
+                    (_displaySize == DisplaySize.LARGE ||
+                                _displaySize == DisplaySize.MEDIUM) &&
+                            !widget.expandedScreen
+                        ? RaisedButton(
+                            child: Text("VIEW PAGE",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(color: Colors.white)),
+                            textColor: Colors.white70,
+                            color: ColorConstants.PRIMARY,
+                            onPressed: () {
+                              _navigationService.navigateToWithId(
+                                  ASORoutes.ACTIVITIES, widget.data.id);
+                            })
+                        : Container(),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          for (int i = 0; i < widget.data.images.length; i++)
-                            imageIndicator(i),
+                          for (Profile profile in widget.data.profiles)
+                            ProfileCard(
+                                name: profile.name,
+                                imgUrl: profile.profilePic,
+                                type: profile.type,
+                                id: profile.id),
                         ],
                       ),
-                      (_displaySize == DisplaySize.LARGE ||
-                                  _displaySize == DisplaySize.MEDIUM) &&
-                              !widget.expandedScreen
-                          ? RaisedButton(
-                              child: Text("VIEW PAGE",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .copyWith(color: Colors.white)),
-                              textColor: Colors.white70,
-                              color: ColorConstants.PRIMARY,
-                              onPressed: () {
-                                _navigationService.navigateToWithId(
-                                    ASORoutes.ACTIVITIES, widget.data.id);
-                              })
-                          : Container(),
-                      widget.data.images.isNotEmpty
-                          ? Center(
-                              child: Title(
-                                  color: ColorConstants.PRIMARY,
-                                  child: Text(
-                                    "Click on the images above to expand or download. Also, scroll down for more information!",
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  )))
-                          : Container(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            for (Profile profile in widget.data.profiles)
-                              ProfileCard(
-                                  name: profile.name,
-                                  imgUrl: profile.profilePic,
-                                  type: profile.type,
-                                  id: profile.id),
-                            Divider(
-                              color: Colors.black,
-                              thickness: 1.0,
-                              height: 0.0,
-                              indent: 15.0,
-                              endIndent: 15.0,
-                            ),
-                          ],
-                        ),
-                      ),
-                      (widget.data.zoomMeeting != null)
-                          ? Column(children: [
-                              SelectableText(
-                                  "Meeting ID: ${widget.data.zoomMeeting.meetingId}",
-                                  style: Theme.of(context).textTheme.bodyText1),
-                              (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
-                                  ? new InkWell(
-                                      child: Text(
-                                          "Meeting Url: ${widget.data.zoomMeeting.meetingUrl}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1),
-                                      onTap: () => launch(
-                                          widget.data.zoomMeeting.meetingUrl))
-                                  : Container(),
-                              (widget.data.zoomMeeting.meetingPass.isNotEmpty)
-                                  ? SelectableText(
-                                      "Meeting Password: ${widget.data.zoomMeeting.meetingPass}",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1)
-                                  : Container()
-                            ])
-                          : Container(),
-                      ListTile(
-                        leading: SelectableText('OVERVIEW',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5),
-                      ),
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            Flexible(
-                                child: Padding(
-                              padding: const EdgeInsets.only(bottom: 14.0),
-                              child: MarkdownBody(
-                                selectable: true,
-                                data: widget.data.desc,
-                                onTapLink: (url) {
-                                  launch(url);
-                                },
-                                styleSheet: MarkdownStyleSheet.fromTheme(
-                                        Theme.of(context))
-                                    .copyWith(
-                                        p: Theme.of(context)
+                    ),
+                    (widget.data.zoomMeeting != null)
+                        ? Column(children: [
+                            SelectableText(
+                                "Meeting ID: ${widget.data.zoomMeeting.meetingId}",
+                                style: Theme.of(context).textTheme.bodyText1),
+                            (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
+                                ? new InkWell(
+                                    child: Text(
+                                        "Meeting Url: ${widget.data.zoomMeeting.meetingUrl}",
+                                        style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1
-                                            .copyWith(fontSize: 16.0)),
-                              ),
-                            )),
-                          ],
-                        ),
+                                            .bodyText1),
+                                    onTap: () => launch(
+                                        widget.data.zoomMeeting.meetingUrl))
+                                : Container(),
+                            (widget.data.zoomMeeting.meetingPass.isNotEmpty)
+                                ? SelectableText(
+                                    "Meeting Password: ${widget.data.zoomMeeting.meetingPass}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1)
+                                : Container()
+                          ])
+                        : Container(),
+                    ListTile(
+                      leading: SelectableText('OVERVIEW',
+                          style: Theme.of(context).textTheme.headline5),
+                    ),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Flexible(
+                              child: Padding(
+                            padding: const EdgeInsets.only(bottom: 14.0),
+                            child: MarkdownBody(
+                              selectable: true,
+                              data: widget.data.desc,
+                              onTapLink: (url) {
+                                launch(url);
+                              },
+                              styleSheet: MarkdownStyleSheet.fromTheme(
+                                      Theme.of(context))
+                                  .copyWith(
+                                      p: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(fontSize: 16.0)),
+                            ),
+                          )),
+                        ],
                       ),
-                    ]
-              ));
-        }));
+                    ),
+                  ]));
+            })));
   }
 }
 

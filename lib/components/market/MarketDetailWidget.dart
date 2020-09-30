@@ -3,7 +3,6 @@ import 'package:artsideout_app/components/profile/SocialCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
-import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
@@ -15,7 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // TODO Merge with Art Detail Widget
 class MarketDetailWidget extends StatefulWidget {
@@ -58,8 +56,6 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    GraphQlImageService _graphQlImageService =
-    serviceLocator<GraphQlImageService>();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     final NavigationService _navigationService =
     serviceLocator<NavigationService>();

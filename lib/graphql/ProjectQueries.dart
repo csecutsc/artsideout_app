@@ -1,7 +1,7 @@
 class ProjectQueries {
   final String getAllStudio = """ 
     {
-      projects(where: {projectType: Studio}) {
+      projects(orderBy: createdAt_ASC, where: {projectType: Studio}) {
         id
         title
         desc
@@ -33,7 +33,7 @@ class ProjectQueries {
   String getOneStudioById(String id) {
     return """ 
     {
-      project(where: {id: "$id"}) {
+      project(orderBy: createdAt_ASC, where: {id: "$id"}) {
         id
         title
         desc

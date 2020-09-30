@@ -1,7 +1,5 @@
 import 'package:artsideout_app/constants/ColorConstants.dart';
-import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
-import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
 import 'package:artsideout_app/graphql/InstallationQueries.dart';

@@ -1,6 +1,4 @@
-import 'package:artsideout_app/components/common/PlatformSvg.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
-import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/graphql/ProfileQueries.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
 import 'package:artsideout_app/models/Profile.dart';
@@ -8,7 +6,6 @@ import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:artsideout_app/components/profile/SocialCard.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +18,7 @@ class AboutConnectionsWidget extends StatefulWidget {
 
 class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
   List<Profile> sponsors = List<Profile>();
+  List<Profile> partners = List<Profile>();
   void _getSponsors() async {
     GraphQLConfiguration graphQLConfiguration =
         serviceLocator<GraphQLConfiguration>();
@@ -42,10 +40,32 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
     }
   }
 
+  void _getPartners() async {
+    GraphQLConfiguration graphQLConfiguration =
+    serviceLocator<GraphQLConfiguration>();
+    ProfileQueries profileQueries = ProfileQueries();
+    GraphQLClient _client = graphQLConfiguration.clientToQuery();
+    QueryResult result = await _client.query(
+      QueryOptions(
+        documentNode: gql(profileQueries.getAllPartners),
+      ),
+    );
+    if (!result.hasException) {
+      for (var i = 0; i < result.data["profiles"].length; i++) {
+        setState(() {
+          partners.add(GraphQlFactory.buildProfile(result.data["profiles"][i]));
+        });
+      }
+    } else {
+      print("CANNOT GET ART DETAILS");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _getSponsors();
+    _getPartners();
   }
 
   List<String> socials = List<String>();
@@ -67,7 +87,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
             ),
             ListTile(
               leading: SelectableText(
-                  'connections',
+                  'Connections',
                   style: Theme.of(context).textTheme.headline5
               ),
             ),
@@ -154,7 +174,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
             ),
             ListTile(
               leading: SelectableText(
-                'sponsors',
+                'Sponsors',
                 style: Theme.of(context).textTheme.headline5
               ),
             ),
@@ -163,7 +183,6 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               padding: EdgeInsets.zero,
-              cacheExtent: 200,
               addAutomaticKeepAlives: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -180,29 +199,65 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
                 return GestureDetector(
                   child: Image.network(item.profilePic),
                   onTap: () async {
-                    var url = item.social["website"].toLowerCase();
-                    if (!url.startsWith("http")) {
-                      url = "http://" + url;
+                    if (item.social.isNotEmpty) {
+                      var url = item.social.values.toList()[0].toLowerCase();
+                      if (!url.startsWith("http")) {
+                        url = "http://" + url;
+                      }
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch';
+                      }
                     }
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch';
-                    }
-                  },
+                  }
                 );
               },
             ),
             ListTile(
               leading: SelectableText(
-                  'partners',
+                  'Partners',
                   style: Theme.of(context).textTheme.headline5
               ),
             ),
-
+            GridView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              addAutomaticKeepAlives: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 1.0,
+                mainAxisSpacing: 1.0,
+              ),
+              // Let the ListView know how many items it needs to build.
+              itemCount: partners.length,
+              // Provide a builder function. This is where the magic happens.
+              // Convert each item into a widget based on the type of item it is.
+              itemBuilder: (context, index) {
+                final item = partners[index];
+                print(item.social["website"]);
+                return GestureDetector(
+                    child: Image.network(item.profilePic),
+                    onTap: () async {
+                      if (item.social.isNotEmpty) {
+                        var url = item.social.values.toList()[0].toLowerCase();
+                        if (!url.startsWith("http")) {
+                          url = "http://" + url;
+                        }
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch';
+                        }
+                      }
+                    }
+                );
+              },
+            ),
             ListTile(
               leading: SelectableText(
-                  'special thanks',
+                  'Special Thanks',
                   style: Theme.of(context).textTheme.headline5
               ),
             ),

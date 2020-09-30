@@ -1,6 +1,3 @@
-import 'package:artsideout_app/components/common/Placeholder.dart';
-import 'package:artsideout_app/components/market/MarketDetailWidget.dart';
-import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
 import 'package:artsideout_app/pages/activity/MainWorkshopPage.dart';
 import 'package:artsideout_app/pages/home/AboutConnectionsPage.dart';

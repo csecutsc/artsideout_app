@@ -1,14 +1,10 @@
-import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/graphql/MarketQueries.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
 import 'package:artsideout_app/models/Market.dart';
-import 'package:artsideout_app/models/Profile.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
-import 'package:artsideout_app/models/Installation.dart';
-import 'package:artsideout_app/graphql/InstallationQueries.dart';
 
 // Installation GraphQL Query
 Future<List<Market>> fillListMarket() async {

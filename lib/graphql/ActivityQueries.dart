@@ -6,6 +6,7 @@ class ActivityQueries {
         title
         desc
         zone
+        videoUrl
         performanceType
         images {
           url
@@ -35,6 +36,7 @@ class ActivityQueries {
         title
         desc
         zone
+        videoUrl
         performanceType
         images {
           url
@@ -71,6 +73,7 @@ class ActivityQueries {
         title
         desc
         zone
+        videoUrl
         performanceType
         images {
           url
@@ -106,6 +109,7 @@ class ActivityQueries {
         title
         desc
         zone
+        videoUrl
         performanceType
         images {
           url
