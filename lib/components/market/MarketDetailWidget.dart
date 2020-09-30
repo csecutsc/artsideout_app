@@ -1,4 +1,5 @@
 import 'package:artsideout_app/components/common/ProfileCard.dart';
+import 'package:artsideout_app/components/profile/SocialCard.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Market.dart';
@@ -24,7 +25,7 @@ class MarketDetailWidget extends StatefulWidget {
 
 class _MarketDetailWidgetState extends State<MarketDetailWidget> {
   GraphQlImageService _graphQlImageService =
-  serviceLocator<GraphQlImageService>();
+      serviceLocator<GraphQlImageService>();
   ScrollController _scrollController;
   int currentScrollPos = 0;
 
@@ -104,104 +105,136 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
     }
 
     return Scaffold(
-        backgroundColor: ColorConstants.PREVIEW_SCREEN,
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            return MediaQuery.removePadding(
-              context: context,
-              child: ListView(
-                children: [
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Center(
-                      child: Title(
-                          title: widget.data.title,
-                          color: Colors.black,
-                          child: SelectableText(widget.data.title,
+      backgroundColor: ColorConstants.PREVIEW_SCREEN,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return MediaQuery.removePadding(
+            context: context,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: 10.0,
+                ),
+                Center(
+                    child: Title(
+                        title: widget.data.title,
+                        color: Colors.black,
+                        child: SelectableText(widget.data.title,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline5))),
+                SizedBox(
+                  height: 10.0,
+                ),
+                widget.data.images.isNotEmpty ? imageFeed : Container(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (int i = 0; i < widget.data.images.length; i++)
+                      imageIndicator(i),
+                  ],
+                ),
+                widget.data.images.isNotEmpty
+                    ? Center(
+                        child: Title(
+                            color: ColorConstants.PRIMARY,
+                            child: Text(
+                              "Click on the images above to expand. Also, scroll down for more information!",
+                              maxLines: 2,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline5))),
-                  SizedBox(
-                    height: 10.0,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )))
+                    : Container(),
+                for (Profile profile in widget.data.profiles)
+                  ProfileCard(
+                      name: profile.name,
+                      imgUrl: profile.profilePic,
+                      type: profile.type,
+                      id: profile.id),
+                ListTile(
+                  leading: SelectableText(
+                    'OVERVIEW',
+                    style: TextStyle(
+                      color: ColorConstants.PRIMARY,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
                   ),
-                  widget.data.images.isNotEmpty ? imageFeed : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < widget.data.images.length; i++)
-                        imageIndicator(i),
+                ),
+                Divider(
+                  color: Colors.black,
+                  thickness: 1.0,
+                  height: 0,
+                  indent: 15,
+                  endIndent: 20,
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      Flexible(
+                          child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: MarkdownBody(
+                          selectable: true,
+                          data: widget.data.desc,
+                          onTapLink: (url) {
+                            launch(url);
+                          },
+                          styleSheet:
+                              MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                  .copyWith(
+                                      p: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(fontSize: 16.0)),
+                        ),
+                      )),
                     ],
                   ),
-                  widget.data.images.isNotEmpty
-                      ? Center(
-                      child: Title(
-                          color: ColorConstants.PRIMARY,
-                          child: Text(
-                            "Click on the images above to expand. Also, scroll down for more information!",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          )))
-                      : Container(),
-                  for (Profile profile in widget.data.profiles)
-                    ProfileCard(
-                        name: profile.name,
-                        imgUrl: profile.profilePic,
-                        type: profile.type,
-                        id: profile.id),
-                  ListTile(
-                    leading: SelectableText(
-                      'OVERVIEW',
-                      style: TextStyle(
-                        color: ColorConstants.PRIMARY,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                    thickness: 1.0,
-                    height: 0,
-                    indent: 15,
-                    endIndent: 20,
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 16.0,
+                ),
+                (widget.data.social.isNotEmpty)
+                    ? Column(children: [
+                        ListTile(
+                          leading: SelectableText(
+                            'SOCIAL',
+                            style: TextStyle(
+                              color: ColorConstants.PRIMARY,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
                         ),
-                        Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 14.0),
-                              child: MarkdownBody(
-                                selectable: true,
-                                data: widget.data.desc,
-                                onTapLink: (url) {
-                                  launch(url);
-                                },
-                                styleSheet:
-                                MarkdownStyleSheet.fromTheme(Theme.of(context))
-                                    .copyWith(
-                                    p: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 16.0)),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
+                        Divider(
+                          color: Colors.black,
+                          thickness: 1.0,
+                          height: 0,
+                          indent: 15,
+                          endIndent: 20,
+                        ),
+                        ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: widget.data.social.length,
+                            itemBuilder: (context, index) {
+                              String key =
+                                  widget.data.social.keys.elementAt(index);
+                              return Container(
+                                  child:
+                                      SocialCard(key, widget.data.social[key]));
+                            })
+                      ])
+                    : Container()
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -211,7 +244,7 @@ class ImageDialog extends StatelessWidget {
 
   Widget build(BuildContext context) {
     GraphQlImageService _graphQlImageService =
-    serviceLocator<GraphQlImageService>();
+        serviceLocator<GraphQlImageService>();
     String fullResUrl = _graphQlImageService.getResizedImage(image["url"], 800);
     return AlertDialog(
       backgroundColor: Colors.white70,
