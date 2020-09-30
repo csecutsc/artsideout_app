@@ -76,6 +76,10 @@ class AppLayout extends StatelessWidget {
               "assets/common/background.png",
               fit: BoxFit.cover,
             )),
+        Positioned(
+            left: 500,
+            bottom: 100,
+            child: Text("Copyright")),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: childPage,

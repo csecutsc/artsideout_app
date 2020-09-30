@@ -33,7 +33,10 @@ class FetchResultCard {
           image: item.images[0],
           time: item.time,
           performanceType: item.performanceType,
-          zone: item.zone);
+          zone: item.profiles
+              .map((profile) => profile.name ?? "")
+              .toList()
+              .join(", "));
     else if (type == "Profile")
       return ProfileCard(
         name: item.name,

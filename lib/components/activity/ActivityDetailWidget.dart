@@ -264,7 +264,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                         : Container(),
                     widget.data.videoURL.isNotEmpty && widget.expandedScreen
                         ? Container(
-                            height: MediaQuery.of(context).size.height / 2,
+                            height: MediaQuery.of(context).size.height / 1.5,
                             child: videoPlayer)
                         : Container(),
                     widget.data.videoURL.isNotEmpty && !widget.expandedScreen

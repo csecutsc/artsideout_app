@@ -33,7 +33,7 @@ class ProjectQueries {
   String getOneStudioById(String id) {
     return """ 
     {
-      project(orderBy: createdAt_DESC, where: {id: "$id"}) {
+      project(where: {id: "$id"}) {
         id
         title
         desc

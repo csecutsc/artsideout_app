@@ -38,6 +38,16 @@ TextTheme _buildDefaultTextTheme(TextTheme base) {
       fontWeight: FontWeight.w700,
       fontSize: 25.0,
     ),
+    subtitle1: GoogleFonts.lato(
+      textStyle: base.subtitle1,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+    ),
+    subtitle2: GoogleFonts.lato(
+      textStyle: base.subtitle2,
+      color: ColorConstants.PRIMARY.withOpacity(0.95),
+      fontWeight: FontWeight.w600,
+    ),
     caption: GoogleFonts.lato(
       textStyle: base.caption,
       color: Colors.black,

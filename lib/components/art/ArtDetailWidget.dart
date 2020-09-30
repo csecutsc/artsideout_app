@@ -185,6 +185,14 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                                   )))
                         ])
                       : Container(),
+                  widget.data.videoURL.isNotEmpty && widget.expandedScreen
+                      ? Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: videoPlayer)
+                      : Container(),
+                  widget.data.videoURL.isNotEmpty && !widget.expandedScreen
+                      ? videoPlayer
+                      : Container(),
                   (_displaySize == DisplaySize.LARGE ||
                               _displaySize == DisplaySize.MEDIUM) &&
                           !widget.expandedScreen
@@ -200,14 +208,6 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                             _navigationService.navigateToWithId(
                                 ASORoutes.INSTALLATIONS, widget.data.id);
                           })
-                      : Container(),
-                  widget.data.videoURL.isNotEmpty && widget.expandedScreen
-                      ? Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: videoPlayer)
-                      : Container(),
-                  widget.data.videoURL.isNotEmpty && !widget.expandedScreen
-                      ? videoPlayer
                       : Container(),
                   widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
                       ? SizedBox(height: 12)

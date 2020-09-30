@@ -1,3 +1,4 @@
+import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +21,11 @@ class ArtListCard extends StatelessWidget {
     GraphQlImageService _graphQlImageService = serviceLocator<GraphQlImageService>();
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Container(
         height: 300,
-        color: Color(0xFFffcccc),
+        color: ColorConstants.SECONDARY,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,22 +69,14 @@ class ArtListCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: Theme.of(context).textTheme.subtitle1
                     ),
                   ),
                   Center(
                     child: Text(
-                      '  ' + artist,
+                      artist,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Color(0xFFBE4C59),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.0,
-                      ),
+                      style: Theme.of(context).textTheme.subtitle2
                     ),
                   ),
                 ],

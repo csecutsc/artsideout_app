@@ -58,17 +58,14 @@ class ProfileCard extends StatelessWidget {
           children: [
             SelectableText(
               this.name,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
               height: 4,
             ),
             SelectableText(
               this.type,
-              style: TextStyle(
-                  fontSize: 14.5,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w600),
-            ),
+              style: Theme.of(context).textTheme.subtitle2),
           ],
         ),
         trailing: Row(

@@ -117,7 +117,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                 (widget.profile.installations.length != 0)
                     ? Column(children: [
                         ListTile(
-                          leading: SelectableText('INSTALLATIONS',
+                          leading: SelectableText('Installations',
                               style: Theme.of(context).textTheme.headline5),
                         ),
                         GridView.builder(
@@ -154,7 +154,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                 (widget.profile.activities.length != 0)
                     ? Column(children: [
                         ListTile(
-                          leading: SelectableText('PERFORMANCES & WORKSHOPS',
+                          leading: SelectableText('Performances & Workshops',
                               style: Theme.of(context).textTheme.headline5),
                         ),
                         ListView.builder(
@@ -185,7 +185,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                 (widget.profile.markets.length != 0)
                     ? Column(children: [
                         ListTile(
-                          leading: SelectableText('ART MARKET',
+                          leading: SelectableText('Art Market',
                               style: Theme.of(context).textTheme.headline5),
                         ),
                         ListView.builder(

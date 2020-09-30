@@ -58,7 +58,7 @@ class SocialCard extends StatelessWidget {
                             ? this.urlToSocial
                             : this.socialName,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.pink, fontSize: 18.0))
+                        style: Theme.of(context).textTheme.subtitle1)
                   ],
                 ),
               ),
