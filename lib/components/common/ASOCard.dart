@@ -4,6 +4,7 @@ import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:artsideout_app/components/common/PlatformSvg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ASOCard extends StatefulWidget {
   final ASOCardInfo asoCardInfo;
@@ -21,7 +22,12 @@ class _ASOCardState extends State<ASOCard> {
         serviceLocator<NavigationService>();
     return GestureDetector(
         onTap: () {
-          _navigationService.navigateTo(widget.asoCardInfo.route);
+          (widget.asoCardInfo.altUrl != null)
+              ? launch(widget.asoCardInfo.altUrl)
+              : ((widget.asoCardInfo.itemId != null)
+                  ? _navigationService.navigateToWithId(
+                      widget.asoCardInfo.route, widget.asoCardInfo.itemId)
+                  : _navigationService.navigateTo(widget.asoCardInfo.route));
         },
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
@@ -39,8 +45,9 @@ class _ASOCardState extends State<ASOCard> {
                   new Align(
                       alignment: Alignment(-0.8, 0.8),
                       child: FittedBox(
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.scaleDown,
                         child: Text(widget.asoCardInfo.title,
+                            maxLines: 3,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4

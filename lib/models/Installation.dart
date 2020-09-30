@@ -5,7 +5,7 @@ class Installation {
   String title;
   String desc;
   String zone;
-  List<String> imgURL;
+  List<Map<String, String>> images;
   String videoURL;
   Map<String, double> location;
   String locationRoom;
@@ -16,7 +16,7 @@ class Installation {
       this.title,
       this.desc,
       this.zone,
-      this.imgURL,
+      this.images,
       this.videoURL,
       this.location,
       this.locationRoom,

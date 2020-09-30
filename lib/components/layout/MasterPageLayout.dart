@@ -24,6 +24,8 @@ class MasterPageLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int secondFlexSize = 1;
+    double leftPadding = 0.0;
+    double topPadding = 10;
 
     DisplayService _displayService = serviceLocator<DisplayService>();
 
@@ -44,13 +46,19 @@ class MasterPageLayout extends StatelessWidget {
     switch (_displayService.displaySize) {
       case DisplaySize.LARGE:
         secondFlexSize = 6;
+        leftPadding = 15;
+        topPadding = 10;
         break;
       case DisplaySize.MEDIUM:
         secondFlexSize = 5;
+        leftPadding = 15;
+        topPadding = 10;
         break;
       case DisplaySize.SMALL:
         secondFlexSize = 1;
         secondScreen = Container();
+        leftPadding = 0;
+        topPadding = 20;
         break;
     }
 
@@ -68,13 +76,13 @@ class MasterPageLayout extends StatelessWidget {
                   Positioned(
                       top: 0,
                       right: 0,
-                      left: 0,
-                      bottom: MediaQuery.of(context).size.height / 3,
+                      left: leftPadding,
+                      bottom: 0,
                       child: pageHeader),
                   Positioned(
-                    top: MediaQuery.of(context).size.height / 10,
+                    top: MediaQuery.of(context).size.height / topPadding,
                     right: 0,
-                    left: 0,
+                    left: leftPadding,
                     bottom: 0,
                     child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 250),

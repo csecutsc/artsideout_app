@@ -1,4 +1,5 @@
 import 'package:artsideout_app/components/common/MobileMenu.dart';
+import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
@@ -32,10 +33,10 @@ class AppLayout extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 child: PlatformSvg.asset(
-                  "assets/icons/asobg.svg",
-                  fit: BoxFit.fitHeight,
+                  "assets/common/background.png",
+                  fit: BoxFit.cover,
                 )),
-            Row(children: <Widget>[new Sidebar(), Expanded(child: childPage)])
+            Row(children: <Widget>[Sidebar(), Expanded(child: childPage)])
           ]));
     }
 
@@ -52,10 +53,10 @@ class AppLayout extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 child: PlatformSvg.asset(
-                  "assets/icons/asobg.svg",
+                  "assets/common/background.png",
                   fit: BoxFit.fitHeight,
                 )),
-            Row(children: <Widget>[new Sidebar(), Expanded(child: childPage)])
+            Row(children: <Widget>[Sidebar(), Expanded(child: childPage)])
           ]));
     }
 
@@ -72,13 +73,13 @@ class AppLayout extends StatelessWidget {
             top: 0,
             bottom: 0,
             child: PlatformSvg.asset(
-              "assets/icons/mobile_background.svg",
+              "assets/common/background.png",
               fit: BoxFit.cover,
             )),
-        PlatformSvg.asset(
-          "assets/icons/asobg.svg",
-          fit: BoxFit.fitHeight,
-        ),
+        Positioned(
+            left: 500,
+            bottom: 100,
+            child: Text("Copyright")),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: childPage,
@@ -86,6 +87,7 @@ class AppLayout extends StatelessWidget {
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: MobileMenu(),
           bottomNavigationBar: BottomAppBar(
+            color: ColorConstants.PRIMARY.withOpacity(0.45),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

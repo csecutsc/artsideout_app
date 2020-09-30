@@ -8,6 +8,8 @@ class ASOCardInfo {
   String imgUrl;
   double imgWidth;
   String route;
+  String altUrl;
+  String itemId;
 
-  ASOCardInfo(this.title, this.color, this.imgUrl, this.imgWidth, this.route);
+  ASOCardInfo(this.title, this.color, this.imgUrl, this.imgWidth, this.route, {this.altUrl, this.itemId});
 }

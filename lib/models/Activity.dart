@@ -1,11 +1,15 @@
 import 'package:artsideout_app/models/Profile.dart';
+import 'package:artsideout_app/models/ZoomMeeting.dart';
 
 class Activity {
   String id;
   String title;
   String desc;
   String zone;
-  String imgUrl;
+  String videoURL;
+  String performanceType;
+  ZoomMeeting zoomMeeting;
+  List<Map<String, String>> images;
   Map<String, String> time;
   Map<String, double> location;
   List<Profile> profiles;
@@ -15,7 +19,10 @@ class Activity {
       this.title,
       this.desc,
       this.zone,
-      this.imgUrl,
+      this.videoURL,
+      this.zoomMeeting,
+      this.images,
+      this.performanceType,
       this.time,
       this.location,
       this.profiles});

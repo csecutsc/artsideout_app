@@ -22,14 +22,13 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
   var searchQueryController = new TextEditingController();
 
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          flex: 10,
-          child: TextField(
+        TextField(
             controller: searchQueryController,
-            autofocus: true,
             decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),
                 color: ColorConstants.PRIMARY,
@@ -37,8 +36,8 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
                     widget.handleTextChange(searchQueryController.text),
               ),
               suffix: SizedBox(
-                height: 26,
-                width: 26,
+                height: 22,
+                width: 22,
                 child: isLoading
                     ? CircularProgressIndicator(
                         valueColor:
@@ -48,7 +47,7 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
                     : GestureDetector(
                         child: Icon(
                           Icons.close,
-                          size: 26,
+                          size: 22,
                         ),
                         onTap: () {
                           if (widget.handleTextClear != null)
@@ -59,21 +58,17 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
               ),
               hintText: "Search installations, activities, artists...",
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(25),
               ),
               hintStyle: TextStyle(color: Colors.black),
             ),
-            style: TextStyle(color: Colors.black, fontSize: 22.0),
+            style: Theme.of(context).textTheme.subtitle1,
             onEditingComplete: () async => [
               isLoading = true,
               await widget.handleTextChange(searchQueryController.text),
               isLoading = false
             ],
           ),
-        ),
-        SizedBox(
-          width: 5,
-        ),
         Container(
           width: 130,
           child: FilterDropdown(

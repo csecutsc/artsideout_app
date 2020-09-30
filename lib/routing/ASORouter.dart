@@ -1,11 +1,18 @@
 import 'package:artsideout_app/pages/activity/ActivityDetailPage.dart';
+import 'package:artsideout_app/pages/activity/MainWorkshopPage.dart';
+import 'package:artsideout_app/pages/home/AboutConnectionsPage.dart';
+import 'package:artsideout_app/pages/market/MainMarketPage.dart';
+import 'package:artsideout_app/pages/market/MarketDetailPage.dart';
+import 'package:artsideout_app/pages/profile/MainProfilePage.dart';
+import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
+import 'package:artsideout_app/pages/project/ProjectDetailPage.dart';
+import 'package:artsideout_app/pages/search/MasterSearchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 // Main pages
 import "package:artsideout_app/pages/home/HomePage.dart";
 import 'package:artsideout_app/pages/art/MasterArtPage.dart';
 import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
-import 'package:artsideout_app/pages/search/MasterSearchPage.dart';
 import 'package:artsideout_app/pages/undefined_routes/UndefinedRoute.dart';
 
 // Detailed pages
@@ -23,6 +30,11 @@ class ASORouter {
         pageBuilder = ((BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             HomePage());
+        break;
+      case ASORoutes.ABOUT:
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+            AboutConnectionsPage());
         break;
       case ASORoutes.INSTALLATIONS:
         var pageRoute;
@@ -55,6 +67,54 @@ class ASORouter {
           pageRoute = ActivityDetailPage(searchDetails);
         } else if (parts.length == 1) {
           pageRoute = MasterSearchPage();
+        }
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        pageRoute);
+        break;
+      case ASORoutes.MARKETS:
+        var pageRoute;
+        if (parts.length == 2) {
+          String searchDetails = parts[1].substring(3);
+          pageRoute = MarketDetailPage(searchDetails);
+        } else if (parts.length == 1) {
+          pageRoute = MainMarketPage();
+        }
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        pageRoute);
+        break;
+      case ASORoutes.PROFILES:
+        var pageRoute;
+        if (parts.length == 2) {
+          String searchDetails = parts[1].substring(3);
+          pageRoute = ProfileDetailPage(searchDetails);
+        } else if (parts.length == 1) {
+          pageRoute = MainProfilePage();
+        }
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        pageRoute);
+        break;
+      case ASORoutes.PROJECT:
+        var pageRoute;
+        if (parts.length == 2) {
+          String searchDetails = parts[1].substring(3);
+          pageRoute = ProjectDetailPage(searchDetails);
+        } else if (parts.length == 1) {
+          pageRoute = UndefinedRoute();
+        }
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        pageRoute);
+        break;
+      case ASORoutes.WORKSHOPS:
+        var pageRoute;
+        if (parts.length == 2) {
+          String searchDetails = parts[1].substring(3);
+          pageRoute = ActivityDetailPage(searchDetails);
+        } else if (parts.length == 1) {
+          pageRoute = MainWorkshopPage();
         }
         pageBuilder = ((BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>

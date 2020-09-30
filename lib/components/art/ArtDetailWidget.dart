@@ -1,23 +1,39 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:ui' as ui;
-
+import 'package:artsideout_app/components/common/ProfileCard.dart';
+import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
+import 'package:artsideout_app/constants/DisplayConstants.dart';
+import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/models/Profile.dart';
+import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/DisplayService.dart';
+import 'package:artsideout_app/services/GraphQLImageService.dart';
+import 'package:artsideout_app/services/NavigationService.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // TODO Merge with Art Detail Widget
 class ArtDetailWidget extends StatefulWidget {
   final Installation data;
+  final bool expandedScreen;
 
-  ArtDetailWidget({Key key, this.data}) : super(key: key);
+  ArtDetailWidget({Key key, this.data, this.expandedScreen = false})
+      : super(key: key);
 
   @override
   _ArtDetailWidgetState createState() => _ArtDetailWidgetState();
 }
 
 class _ArtDetailWidgetState extends State<ArtDetailWidget> {
+  GraphQlImageService _graphQlImageService =
+      serviceLocator<GraphQlImageService>();
+  DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
+  final NavigationService _navigationService =
+      serviceLocator<NavigationService>();
   YoutubePlayerController videoController;
   ScrollController _scrollController;
   int currentScrollPos = 0;
@@ -55,7 +71,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
       ..addListener(() {
         if (_scrollController.hasClients)
           setState(() {
-            for (int i = 0; i < widget.data.imgURL.length; i++) {
+            for (int i = 0; i < widget.data.images.length; i++) {
               if (_scrollController.position.pixels < 270 * (i + 1) &&
                   _scrollController.position.pixels > 270 * i) {
                 currentScrollPos = i;
@@ -70,30 +86,33 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
     double width = MediaQuery.of(context).size.width;
 
     Widget imageFeed = SizedBox(
-        height: 250,
+        height: 400,
         width: width,
         child: Center(
           child: ListView.builder(
             controller: _scrollController,
-            itemCount: widget.data.imgURL.length,
+            itemCount: widget.data.images.length,
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              String url = widget.data.imgURL[index];
+              String url = _graphQlImageService.getResizedImage(
+                  widget.data.images[index]["url"], 450);
               return Center(
                 child: Semantics(
-                  label: 'Art Piece',
+                  label: widget.data.images[index]["altText"],
                   child: GestureDetector(
                     onTap: () async {
                       await showDialog(
-                          context: context, builder: (_) => ImageDialog(url));
+                          context: context,
+                          builder: (_) =>
+                              ImageDialog(widget.data.images[index]));
                     },
                     child: Container(
-                        width: 370,
+                        width: 400,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.scaleDown,
                             image: NetworkImage(url),
                           ),
                         )),
@@ -103,20 +122,6 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
             },
           ),
         ));
-
-    Widget likeAndSaveButtons(Icon icon, int numInteractions) {
-      return RaisedButton.icon(
-        onPressed: () {},
-        padding: EdgeInsets.all(13.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        icon: icon,
-        textColor: Colors.white,
-        color: ColorConstants.PRIMARY,
-        label: SelectableText('$numInteractions'),
-      );
-    }
 
     Widget imageIndicator(int index) {
       return Container(
@@ -138,89 +143,84 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             return MediaQuery.removePadding(
-              removeTop: true,
               context: context,
               child: ListView(
                 children: [
-                  widget.data.imgURL.isNotEmpty ? imageFeed : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < widget.data.imgURL.length; i++)
-                        imageIndicator(i),
-                    ],
-                  ),
-                  widget.data.videoURL.isNotEmpty ? videoPlayer : Container(),
-                  widget.data.videoURL.isNotEmpty && widget.data.imgURL.isEmpty
-                      ? SizedBox(height: 12)
-                      : Container(),
-                  Card(
-                    margin: EdgeInsets.all(16.0),
-                    color: Color(0xFFF9EBEB),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(18),
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.pink,
-                        radius: 25.0,
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SelectableText(
-                            'John Appleseed',
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          SelectableText(
-                            'Artist',
-                            style: TextStyle(
-                                fontSize: 14.5,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          likeAndSaveButtons(
-                            Icon(Icons.bookmark_border),
-                            72,
-                          ),
-                          SizedBox(
-                            width: 7.0,
-                          ),
-                          likeAndSaveButtons(
-                            Icon(Icons.favorite_border),
-                            284,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: SelectableText(
-                      'OVERVIEW',
-                      style: TextStyle(
-                        color: ColorConstants.PRIMARY,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                    thickness: 1.0,
-                    height: 0,
-                    indent: 15,
-                    endIndent: 20,
-                  ),
                   SizedBox(
                     height: 15.0,
+                  ),
+                  Center(
+                      child: Title(
+                          title: widget.data.title,
+                          color: Colors.black,
+                          child: SelectableText(widget.data.title,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headline4))),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  (widget.data.images.isNotEmpty &&
+                          !(widget.data.images[0]["url"] ==
+                              PlaceholderConstants.GENERIC_IMAGE))
+                      ? Column(children: [
+                          imageFeed,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 0;
+                                  i < widget.data.images.length;
+                                  i++)
+                                imageIndicator(i),
+                            ],
+                          ),
+                          Center(
+                              child: Title(
+                                  color: ColorConstants.PRIMARY,
+                                  child: Text(
+                                    "Click on the images above to expand or download. Also, scroll down for more information!",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  )))
+                        ])
+                      : Container(),
+                  widget.data.videoURL.isNotEmpty && widget.expandedScreen
+                      ? Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: videoPlayer)
+                      : Container(),
+                  widget.data.videoURL.isNotEmpty && !widget.expandedScreen
+                      ? videoPlayer
+                      : Container(),
+                  (_displaySize == DisplaySize.LARGE ||
+                              _displaySize == DisplaySize.MEDIUM) &&
+                          !widget.expandedScreen
+                      ? RaisedButton(
+                          child: Text("VIEW PAGE",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(color: Colors.white)),
+                          textColor: Colors.white70,
+                          color: ColorConstants.PRIMARY,
+                          onPressed: () {
+                            _navigationService.navigateToWithId(
+                                ASORoutes.INSTALLATIONS, widget.data.id);
+                          })
+                      : Container(),
+                  widget.data.videoURL.isNotEmpty && widget.data.images.isEmpty
+                      ? SizedBox(height: 12)
+                      : Container(),
+                  for (Profile profile in widget.data.profiles)
+                    ProfileCard(
+                        name: profile.name,
+                        imgUrl: profile.profilePic,
+                        type: profile.type,
+                        id: profile.id),
+                  ListTile(
+                    leading: SelectableText('Overview',
+                        style: Theme.of(context).textTheme.headline5),
                   ),
                   Container(
                     child: Row(
@@ -231,7 +231,20 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         Flexible(
                             child: Padding(
                           padding: const EdgeInsets.only(bottom: 14.0),
-                          child: SelectableText(widget.data.desc),
+                          child: MarkdownBody(
+                            selectable: true,
+                            data: widget.data.desc,
+                            onTapLink: (url) {
+                              launch(url);
+                            },
+                            styleSheet:
+                                MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                    .copyWith(
+                                        p: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(fontSize: 16.0)),
+                          ),
                         )),
                       ],
                     ),
@@ -247,16 +260,57 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
 }
 
 class ImageDialog extends StatelessWidget {
-  final String imgURL;
-  ImageDialog(this.imgURL);
+  final Map<String, String> image;
+  ImageDialog(this.image);
 
   Widget build(BuildContext context) {
+    GraphQlImageService _graphQlImageService =
+        serviceLocator<GraphQlImageService>();
+    String fullResUrl = _graphQlImageService.getResizedImage(image["url"], 800);
     return AlertDialog(
-      backgroundColor: ColorConstants.PRIMARY,
-      content: Image.network(imgURL, fit: BoxFit.cover),
+      backgroundColor: Colors.white70,
+      content: Semantics(
+        child: CachedNetworkImage(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          imageUrl: fullResUrl,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(
+            Icons.error,
+            size: 50,
+          ),
+        ),
+        label: image["altText"],
+      ),
       actions: [
         new FlatButton(
-            child: const Text("Close"), onPressed: () => Navigator.pop(context)),
+            child: const Text(
+              "View Full Resolution",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            onPressed: () async {
+              await launch(_graphQlImageService.getFullImage(image["url"]));
+            }),
+        new FlatButton(
+            child: const Text(
+              "Close",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context)),
       ],
     );
   }

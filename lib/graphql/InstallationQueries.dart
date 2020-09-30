@@ -9,6 +9,7 @@ class InstallationQueries {
         videoUrl
         images {
           url
+          altText
         }
         location {
           latitude
@@ -16,10 +17,14 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }
@@ -35,6 +40,7 @@ class InstallationQueries {
         videoUrl
         images {
           url
+          altText
         }
         location {
           latitude
@@ -42,10 +48,14 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }
@@ -64,6 +74,7 @@ class InstallationQueries {
         videoUrl
         images {
           url
+          altText
         }
         location {
           latitude
@@ -71,10 +82,14 @@ class InstallationQueries {
         }
         locationRoom
         profile {
+          id
           name
           desc
           social
           type
+          profilePic {
+            url
+          }
         }
       }
     }

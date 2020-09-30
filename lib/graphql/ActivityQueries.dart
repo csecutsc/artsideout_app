@@ -1,13 +1,16 @@
 class ActivityQueries {
   String getAll = """ 
     {
-      activities {
+      activities(where: {performanceType_not: Workshops}) {
         id
         title
         desc
         zone
-        image {
+        videoUrl
+        performanceType
+        images {
           url
+          altText
         }
         startTime
         endTime
@@ -16,6 +19,7 @@ class ActivityQueries {
           longitude
         }
         profile {
+          id
           name
           desc
           social
@@ -32,8 +36,11 @@ class ActivityQueries {
         title
         desc
         zone
-        image {
+        videoUrl
+        performanceType
+        images {
           url
+          altText
         }
         startTime
         endTime
@@ -41,8 +48,14 @@ class ActivityQueries {
           latitude
           longitude
         }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
         locationRoom
         profile {
+          id
           name
           desc
           social
@@ -60,9 +73,11 @@ class ActivityQueries {
         title
         desc
         zone
+        videoUrl
         performanceType
-        image {
+        images {
           url
+          altText
         }
         startTime
         endTime
@@ -70,7 +85,13 @@ class ActivityQueries {
           latitude
           longitude
         }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
         profile {
+          id
           name
           desc
           social
@@ -80,4 +101,42 @@ class ActivityQueries {
   	}
     """;
   }
+
+  String getAllWorkShops = """
+    {
+      activities(where: {performanceType: Workshops}) {
+        id
+        title
+        desc
+        zone
+        videoUrl
+        performanceType
+        images {
+          url
+          altText
+        }
+        startTime
+        endTime
+        location {
+          latitude
+          longitude
+        }
+        zoomMeeting {
+          meetingId
+          meetingUrl
+          meetingPass
+        }
+        profile {
+          id
+          name
+          desc
+          social
+          type
+          profilePic {
+            url
+          }
+        }
+      }
+    }
+  """;
 }

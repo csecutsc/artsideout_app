@@ -5,7 +5,6 @@ import 'package:artsideout_app/components/art/ArtListCard.dart';
 import 'package:artsideout_app/components/profile/ProfileCard.dart';
 import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
-import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -24,24 +23,27 @@ class FetchResultCard {
             .toList()
             .join(", "),
         image: item.videoURL.isEmpty
-            ? item.imgURL.length == 0
-                ? PlaceholderConstants.GENERIC_IMAGE
-                : item.imgURL[0]
-            : getThumbnail(item.videoURL),
+            ? item.images[0]
+            : {"url": getThumbnail(item.videoURL), "altText": null},
       );
     else if (type == "Activity")
       return ActivityCard(
           title: item.title,
           desc: item.desc,
-          image: item.imgUrl,
+          image: item.images[0],
           time: item.time,
-          zone: item.zone);
+          performanceType: item.performanceType,
+          zone: item.profiles
+              .map((profile) => profile.name ?? "")
+              .toList()
+              .join(", "));
     else if (type == "Profile")
       return ProfileCard(
         name: item.name,
         desc: item.desc,
         profileType: item.type,
         socials: item.social,
+        profilePic: item.profilePic,
       );
     else
       return Container();

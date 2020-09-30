@@ -16,23 +16,37 @@ ThemeData buildTheme() {
 
 TextTheme _buildDefaultTextTheme(TextTheme base) {
   return GoogleFonts.latoTextTheme(base).copyWith(
+    headline2: GoogleFonts.lato(
+        textStyle: base.headline2,
+        fontWeight: FontWeight.w900,
+        color: ColorConstants.PRIMARY),
     headline3: GoogleFonts.lato(
         textStyle: base.headline3,
         fontWeight: FontWeight.w900,
         color: ColorConstants.PRIMARY),
     headline4: GoogleFonts.lato(
         textStyle: base.headline4,
-        fontWeight: FontWeight.w900,
-        color: ColorConstants.PRIMARY),
+        fontWeight: FontWeight.w700,
+        color: Colors.black87),
     headline5: GoogleFonts.lato(
-      textStyle: base.headline5,
-      fontWeight: FontWeight.w700,
-    ),
+        textStyle: base.headline5,
+        fontWeight: FontWeight.w700,
+        color: ColorConstants.PRIMARY),
     headline6: GoogleFonts.lato(
       textStyle: base.headline6,
       color: Colors.white,
       fontWeight: FontWeight.w700,
       fontSize: 25.0,
+    ),
+    subtitle1: GoogleFonts.lato(
+      textStyle: base.subtitle1,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+    ),
+    subtitle2: GoogleFonts.lato(
+      textStyle: base.subtitle2,
+      color: ColorConstants.PRIMARY.withOpacity(0.95),
+      fontWeight: FontWeight.w600,
     ),
     caption: GoogleFonts.lato(
       textStyle: base.caption,
