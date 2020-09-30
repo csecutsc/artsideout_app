@@ -11,6 +11,9 @@
   <meta name="apple-mobile-web-app-title" content="artsideout_app">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <!-- Google Authentication (for Saved feature)-->
+  <meta name="google-signin-client_id" content="1003643566616-k09fhk4ke2je4fs2ju7uibcbkdv3febn.apps.googleusercontent.com"> 
+
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
 
@@ -29,5 +32,33 @@
     }
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
+
+  <!-- Firebase -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+  
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDA2n2KfYSW1fc0kxLsKtR_oTID3MF2r44",
+      authDomain: "artsideout-app-saved-page.firebaseapp.com",
+      databaseURL: "https://artsideout-app-saved-page.firebaseio.com",
+      projectId: "artsideout-app-saved-page",
+      storageBucket: "artsideout-app-saved-page.appspot.com",
+      messagingSenderId: "1003643566616",
+      appId: "1:1003643566616:web:79542ceb6f728ecc80e16d",
+      measurementId: "G-LQM8FDM67K"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+
 </body>
 </html>

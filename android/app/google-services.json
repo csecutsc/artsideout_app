@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1003643566616",
+    "firebase_url": "https://artsideout-app-saved-page.firebaseio.com",
+    "project_id": "artsideout-app-saved-page",
+    "storage_bucket": "artsideout-app-saved-page.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003643566616:android:766c8e4b02971b7780e16d",
+        "android_client_info": {
+          "package_name": "com.example.artsideout_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003643566616-k09fhk4ke2je4fs2ju7uibcbkdv3febn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHpn-LBcX8-ZOaNowsPGcbPI0PzgbJm-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003643566616-k09fhk4ke2je4fs2ju7uibcbkdv3febn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

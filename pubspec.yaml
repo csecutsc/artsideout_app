@@ -40,6 +40,13 @@ dependencies:
   youtube_player_iframe: ^1.1.0
   http: ^0.12.2
   get_it: ^5.0.0
+  cloud_firestore: ^0.14.0+2
+  provider: ^4.3.2+1
+  firebase_core: ^0.5.0
+  firebase_auth: ^0.18.0+1
+  google_sign_in: ^4.5.3
+  flutter_screenutil: ^2.3.1
+  tuple: ^1.0.3
 
 dev_dependencies:
   flutter_test:

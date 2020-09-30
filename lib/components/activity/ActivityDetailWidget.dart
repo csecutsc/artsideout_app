@@ -6,6 +6,9 @@ import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:artsideout_app/components/saved/SavedItems.dart';
+
 
 // TODO Merge with Art Detail Widget
 class ActivityDetailWidget extends StatefulWidget {
@@ -54,6 +57,48 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference user = FirebaseFirestore.instance.collection('saved-$uidglobal');
+
+    Future<void> addActivity() {
+      return user.add({
+        'id': widget.data.id,
+        'title': widget.data.title,
+        'desc': widget.data.desc,
+        'zone': widget.data.zone,
+        'time': {
+          'startTime': widget.data.time['startTime'],
+          'endTime': widget.data.time['endTime']
+        }
+      })
+      .then((value) => print('Activity added'))
+      .catchError((error) => print("Failed to add activity: $error"));
+    }     
+
+    Future<void> removeActivity() {
+      return user
+        .where('id', isEqualTo: widget.data.id)
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.first.reference.delete(),
+          print('Activity removed')
+        })
+        .catchError((error) => print("Failed to remove activity: $error"));
+    }
+
+    void activityExists() {
+      user
+        .where('id', isEqualTo: widget.data.id)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.size < 1) {
+            addActivity()
+          } else {
+            removeActivity()
+          }
+        })
+        .catchError((error) => print("Failed to find activity: $error"));
+    }
+
     return AnimatedSwitcher(
         duration: Duration(milliseconds: 250),
         transitionBuilder: (child, animation) {
@@ -135,9 +180,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                           icon: Icon(Icons.bookmark,
                               semanticLabel: "Saved Button"),
                           color: ColorConstants.PRIMARY,
-                          onPressed: () {
-                            print('Save button pressed! uwu');
-                          },
+                          onPressed: activityExists
                         ),
                       ),
                       ListTile(

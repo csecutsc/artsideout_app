@@ -4,6 +4,7 @@ class ASORoutes {
   static const String INSTALLATIONS = "/installations";
   static const String ACTIVITIES = "/performances";
   static const String SEARCH = "/search";
+  static const String SAVED = "/saved";
 
   // detailed routes
   static const String INSTALLATION_DETAIL = '/installation';

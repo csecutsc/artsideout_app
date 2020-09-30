@@ -7,6 +7,7 @@ import "package:artsideout_app/pages/home/HomePage.dart";
 import 'package:artsideout_app/pages/art/MasterArtPage.dart';
 import 'package:artsideout_app/pages/activity/MasterActivityPage.dart';
 import 'package:artsideout_app/pages/undefined_routes/UndefinedRoute.dart';
+import 'package:artsideout_app/pages/saved/SavedPage.dart';
 
 // Detailed pages
 import 'package:artsideout_app/pages/art/ArtDetailPage.dart';
@@ -53,6 +54,11 @@ class ASORouter {
                 Animation<double> secondaryAnimation) =>
             PlaceholderWidget(Colors.amber));
         break;
+      case ASORoutes.SAVED:
+        pageBuilder = ((BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            SavedPage());
+        break;        
       case ASORoutes.UNDEFINED_ROUTE:
       default:
         pageBuilder = ((BuildContext context, Animation<double> animation,

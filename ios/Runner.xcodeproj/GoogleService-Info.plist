@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1003643566616-ko98cmr7o0ic3fna6jce8qjs8gfobpqs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1003643566616-ko98cmr7o0ic3fna6jce8qjs8gfobpqs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBkQf0J7nIH7PWW_qKYdvqhOZqRtcAZThw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1003643566616</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.artsideoutApp</string>
+	<key>PROJECT_ID</key>
+	<string>artsideout-app-saved-page</string>
+	<key>STORAGE_BUCKET</key>
+	<string>artsideout-app-saved-page.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1003643566616:ios:8f33f4767cc7ae8780e16d</string>
+	<key>DATABASE_URL</key>
+	<string>https://artsideout-app-saved-page.firebaseio.com</string>
+</dict>
+</plist>
