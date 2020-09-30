@@ -174,7 +174,6 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
               leading: SelectableText('Sponsors',
                   style: Theme.of(context).textTheme.headline5),
             ),
-            Text("This section is just testing atm"),
             GridView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,

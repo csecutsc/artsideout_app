@@ -25,7 +25,9 @@ TextTheme _buildDefaultTextTheme(TextTheme base) {
         fontWeight: FontWeight.w900,
         color: ColorConstants.PRIMARY),
     headline4: GoogleFonts.lato(
-        textStyle: base.headline4, fontWeight: FontWeight.w700),
+        textStyle: base.headline4,
+        fontWeight: FontWeight.w700,
+        color: Colors.black87),
     headline5: GoogleFonts.lato(
         textStyle: base.headline5,
         fontWeight: FontWeight.w700,

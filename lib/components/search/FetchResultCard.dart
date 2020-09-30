@@ -40,6 +40,7 @@ class FetchResultCard {
         desc: item.desc,
         profileType: item.type,
         socials: item.social,
+        profilePic: item.profilePic,
       );
     else
       return Container();

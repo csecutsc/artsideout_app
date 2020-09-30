@@ -9,10 +9,11 @@ class ProfileCard extends StatelessWidget {
   final String name;
   final String profileType;
   final String desc;
+  final String profilePic;
   final Map<String, String> socials;
 
   const ProfileCard(
-      {Key key, this.name, this.profileType, this.desc, this.socials})
+      {Key key, this.name, this.profileType, this.desc, this.socials, this.profilePic})
       : super(key: key);
 
   Widget getIcon(String socialName) {
@@ -56,7 +57,7 @@ class ProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-      color: Color(0xFFffcccc), //Color(0xFFF9EBEB),
+      color: ColorConstants.SECONDARY,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,26 +68,25 @@ class ProfileCard extends StatelessWidget {
                 clipper: MyClipper(),
                 child: Container(
                   width: double.infinity,
-                  height: double.infinity,
+                  height: 200,
                   decoration: BoxDecoration(
                     color: ColorConstants.PRIMARY,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 15.0),
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Container(
-                        width: 60,
-                        height: 60,
+                        width: 80,
+                        height: 80,
                         padding: const EdgeInsets.all(2.0), // borde width
                         decoration: new BoxDecoration(
-                          color: const Color(0xFFFFFFFF), // border color
+                          color: Colors.white, // border color
                           shape: BoxShape.circle,
                         ),
                         child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          backgroundImage: NetworkImage(
-                              'http://lorempixel.com/400/200/animals'),
+                          backgroundColor: ColorConstants.PRIMARY,
+                          backgroundImage: NetworkImage(this.profilePic),
                         ),
                       ),
                     ),
@@ -96,30 +96,30 @@ class ProfileCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 4,
+            flex: 3,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Text(
+                  Text(
                       name,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xFFBE4C59),
-                        fontSize: 15.5,
+                        color: ColorConstants.PRIMARY,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
                   Expanded(
                     child: Text(
                       profileType,
                       style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.bold,
-                        fontSize: 11.0,
+                        fontSize: 14.0,
                       ),
                     ),
                   ),

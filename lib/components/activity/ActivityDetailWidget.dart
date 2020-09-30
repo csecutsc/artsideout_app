@@ -175,17 +175,67 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
               return MediaQuery.removePadding(
                   context: context,
                   child: ListView(children: [
+                    SizedBox(
+                      height: 15.0,
+                    ),
                     Center(
                       child: Title(
                           title: widget.data.title,
                           color: Colors.black,
                           child: SelectableText(widget.data.title,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline5)),
+                              style: Theme.of(context).textTheme.headline4)),
                     ),
                     SizedBox(
                       height: 15.0,
                     ),
+                    (widget.data.zoomMeeting != null)
+                        ? Column(children: [
+                            Text("Meeting ID",
+                                style: Theme.of(context).textTheme.subtitle1),
+                            SelectableText(widget.data.zoomMeeting.meetingId,
+                                style: Theme.of(context).textTheme.headline5),
+                            (widget.data.zoomMeeting.meetingPass.isNotEmpty)
+                                ? Column(
+                                    children: [
+                                      Text("Password",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1),
+                                      SelectableText(
+                                          widget.data.zoomMeeting.meetingPass,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5)
+                                    ],
+                                  )
+                                : Container(),
+                            (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
+                                ? Column(children: [
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    new InkWell(
+                                        child: Text(
+                                            widget.data.zoomMeeting.meetingUrl,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .copyWith(
+                                              color: Colors.blue,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18.0,
+                                                    decoration: TextDecoration
+                                                        .underline)),
+                                        onTap: () => launch(
+                                            widget.data.zoomMeeting.meetingUrl))
+                                  ])
+                                : Container(),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                          ])
+                        : Container(),
                     (widget.data.images.isNotEmpty &&
                             !(widget.data.images[0]["url"] ==
                                 PlaceholderConstants.GENERIC_IMAGE))
@@ -257,31 +307,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                         ],
                       ),
                     ),
-                    (widget.data.zoomMeeting != null)
-                        ? Column(children: [
-                            SelectableText(
-                                "Meeting ID: ${widget.data.zoomMeeting.meetingId}",
-                                style: Theme.of(context).textTheme.bodyText1),
-                            (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
-                                ? new InkWell(
-                                    child: Text(
-                                        "Meeting Url: ${widget.data.zoomMeeting.meetingUrl}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                    onTap: () => launch(
-                                        widget.data.zoomMeeting.meetingUrl))
-                                : Container(),
-                            (widget.data.zoomMeeting.meetingPass.isNotEmpty)
-                                ? SelectableText(
-                                    "Meeting Password: ${widget.data.zoomMeeting.meetingPass}",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1)
-                                : Container()
-                          ])
-                        : Container(),
                     ListTile(
-                      leading: SelectableText('OVERVIEW',
+                      leading: SelectableText('Overview',
                           style: Theme.of(context).textTheme.headline5),
                     ),
                     Container(

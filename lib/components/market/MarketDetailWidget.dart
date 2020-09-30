@@ -3,6 +3,7 @@ import 'package:artsideout_app/components/profile/SocialCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
+import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
@@ -127,18 +128,36 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                         color: Colors.black,
                         child: SelectableText(widget.data.title,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headline5))),
+                            style: Theme.of(context).textTheme.headline4))),
                 SizedBox(
                   height: 10.0,
                 ),
-                widget.data.images.isNotEmpty ? imageFeed : Container(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < widget.data.images.length; i++)
-                      imageIndicator(i),
-                  ],
-                ),
+                (widget.data.images.isNotEmpty &&
+                    !(widget.data.images[0]["url"] ==
+                        PlaceholderConstants.GENERIC_IMAGE))
+                    ? Column(children: [
+                  imageFeed,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0;
+                      i < widget.data.images.length;
+                      i++)
+                        imageIndicator(i),
+                    ],
+                  ),
+                  Center(
+                      child: Title(
+                          color: ColorConstants.PRIMARY,
+                          child: Text(
+                            "Click on the images above to expand or download. Also, scroll down for more information!",
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style:
+                            Theme.of(context).textTheme.bodyText1,
+                          )))
+                ])
+                    : Container(),
                 (_displaySize == DisplaySize.LARGE ||
                     _displaySize == DisplaySize.MEDIUM) && !widget.expandedScreen
                     ? RaisedButton(
@@ -154,17 +173,6 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                           ASORoutes.MARKETS, widget.data.id);
                     })
                     : Container(),
-                widget.data.images.isNotEmpty
-                    ? Center(
-                        child: Title(
-                            color: ColorConstants.PRIMARY,
-                            child: Text(
-                              "Click on the images above to expand. Also, scroll down for more information!",
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )))
-                    : Container(),
                 for (Profile profile in widget.data.profiles)
                   ProfileCard(
                       name: profile.name,
@@ -173,19 +181,9 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                       id: profile.id),
                 ListTile(
                   leading: SelectableText(
-                    'OVERVIEW',
+                    'Overview',
                     style: Theme.of(context).textTheme.headline5
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                  thickness: 1.0,
-                  height: 0,
-                  indent: 15,
-                  endIndent: 20,
-                ),
-                SizedBox(
-                  height: 15.0,
                 ),
                 Container(
                   child: Row(
@@ -218,16 +216,9 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                     ? Column(children: [
                         ListTile(
                           leading: SelectableText(
-                            'SOCIAL',
+                            'Social',
                             style: Theme.of(context).textTheme.headline5
                           ),
-                        ),
-                        Divider(
-                          color: Colors.black,
-                          thickness: 1.0,
-                          height: 0,
-                          indent: 15,
-                          endIndent: 20,
                         ),
                         ListView.builder(
                             scrollDirection: Axis.vertical,

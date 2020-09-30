@@ -36,10 +36,10 @@ class _MainProfilePageState extends State<MainProfilePage> {
   bool noResults = false;
   String queryResult = "";
   Map<String, bool> optionsMap = {
-    "Sculpture": true,
-    "DigitalMedia": true,
-    "MixMedia": true,
-    "DrawingsAndPaintings": true,
+    "Artist": true,
+    "Organizer": true,
+    "Partner": true,
+    "ASO": true,
     "Other": true,
   };
 
@@ -152,8 +152,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 addAutomaticKeepAlives: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: numCards,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
                 ),
                 // Let the ListView know how many items it needs to build.
                 itemCount: listProfiles.length,

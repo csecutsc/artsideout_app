@@ -49,16 +49,14 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                       color: Colors.black,
                       child: SelectableText(widget.profile.name,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5)),
+                          style: Theme.of(context).textTheme.headline4)),
                 ),
                 Container(
                     alignment: Alignment.center,
-                    width: 200.0,
-                    height: 200.0,
+                    height: 300.0,
                     child: Image.network(
-                      PlaceholderConstants.PROFILE_IMAGE,
-                      width: 200,
-                      height: 200,
+                      widget.profile.profilePic,
+                      height: 400,
                     )),
                 (_displaySize == DisplaySize.LARGE ||
                             _displaySize == DisplaySize.MEDIUM) &&
@@ -76,15 +74,9 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                               ASORoutes.PROFILES, widget.profile.id);
                         })
                     : Container(),
-                ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: widget.profile.social.length,
-                    itemBuilder: (context, index) {
-                      String key = widget.profile.social.keys.elementAt(index);
-                      return Container(
-                          child: SocialCard(key, widget.profile.social[key]));
-                    }),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   child: Row(
                     children: <Widget>[
@@ -112,6 +104,16 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                     ],
                   ),
                 ),
+                ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: widget.profile.social.length,
+                    physics: new NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      String key = widget.profile.social.keys.elementAt(index);
+                      return Container(
+                          child: SocialCard(key, widget.profile.social[key]));
+                    }),
                 (widget.profile.installations.length != 0)
                     ? Column(children: [
                         ListTile(

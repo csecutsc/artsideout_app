@@ -155,7 +155,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                           color: Colors.black,
                           child: SelectableText(widget.data.title,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline5))),
+                              style: Theme.of(context).textTheme.headline4))),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -219,18 +219,8 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         type: profile.type,
                         id: profile.id),
                   ListTile(
-                    leading: SelectableText('overview',
+                    leading: SelectableText('Overview',
                         style: Theme.of(context).textTheme.headline5),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                    thickness: 1.0,
-                    height: 0,
-                    indent: 15,
-                    endIndent: 20,
-                  ),
-                  SizedBox(
-                    height: 15.0,
                   ),
                   Container(
                     child: Row(
