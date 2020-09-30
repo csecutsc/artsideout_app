@@ -122,6 +122,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           cacheExtent: 200,
+                          physics: new NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount:
@@ -160,6 +161,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                           padding: EdgeInsets.zero,
                           cacheExtent: 200,
                           addAutomaticKeepAlives: true,
+                          physics: new NeverScrollableScrollPhysics(),
                           // Let the ListView know how many items it needs to build.
                           itemCount: widget.profile.activities.length,
                           // Provide a builder function. This is where the magic happens.
@@ -190,6 +192,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                           padding: EdgeInsets.zero,
                           cacheExtent: 200,
                           addAutomaticKeepAlives: true,
+                          physics: new NeverScrollableScrollPhysics(),
                           // Let the ListView know how many items it needs to build.
                           itemCount: widget.profile.markets.length,
                           // Provide a builder function. This is where the magic happens.

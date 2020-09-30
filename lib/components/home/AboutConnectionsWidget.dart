@@ -42,7 +42,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
 
   void _getPartners() async {
     GraphQLConfiguration graphQLConfiguration =
-    serviceLocator<GraphQLConfiguration>();
+        serviceLocator<GraphQLConfiguration>();
     ProfileQueries profileQueries = ProfileQueries();
     GraphQLClient _client = graphQLConfiguration.clientToQuery();
     QueryResult result = await _client.query(
@@ -86,10 +86,8 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
               height: 15.0,
             ),
             ListTile(
-              leading: SelectableText(
-                  'Connections',
-                  style: Theme.of(context).textTheme.headline5
-              ),
+              leading: SelectableText('Connections',
+                  style: Theme.of(context).textTheme.headline5),
             ),
             Container(
               child: Row(
@@ -173,17 +171,15 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
               ),
             ),
             ListTile(
-              leading: SelectableText(
-                'Sponsors',
-                style: Theme.of(context).textTheme.headline5
-              ),
+              leading: SelectableText('Sponsors',
+                  style: Theme.of(context).textTheme.headline5),
             ),
             Text("This section is just testing atm"),
             GridView.builder(
-              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               addAutomaticKeepAlives: true,
+              physics: new NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 5.0,
@@ -197,34 +193,30 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
                 final item = sponsors[index];
                 print(item.social["website"]);
                 return GestureDetector(
-                  child: Image.network(item.profilePic),
-                  onTap: () async {
-                    if (item.social.isNotEmpty) {
-                      var url = item.social.values.toList()[0].toLowerCase();
-                      if (!url.startsWith("http")) {
-                        url = "http://" + url;
+                    child: Image.network(item.profilePic),
+                    onTap: () async {
+                      if (item.social.isNotEmpty) {
+                        var url = item.social.values.toList()[0].toLowerCase();
+                        if (!url.startsWith("http")) {
+                          url = "http://" + url;
+                        }
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch';
+                        }
                       }
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        throw 'Could not launch';
-                      }
-                    }
-                  }
-                );
+                    });
               },
             ),
             ListTile(
-              leading: SelectableText(
-                  'Partners',
-                  style: Theme.of(context).textTheme.headline5
-              ),
+              leading: SelectableText('Partners',
+                  style: Theme.of(context).textTheme.headline5),
             ),
             GridView.builder(
-              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               padding: EdgeInsets.zero,
-              addAutomaticKeepAlives: true,
+              physics: new NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 1.0,
@@ -251,15 +243,12 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
                           throw 'Could not launch';
                         }
                       }
-                    }
-                );
+                    });
               },
             ),
             ListTile(
-              leading: SelectableText(
-                  'Special Thanks',
-                  style: Theme.of(context).textTheme.headline5
-              ),
+              leading: SelectableText('Special Thanks',
+                  style: Theme.of(context).textTheme.headline5),
             ),
           ]),
         ])));
