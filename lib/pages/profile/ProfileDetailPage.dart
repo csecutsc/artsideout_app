@@ -47,7 +47,7 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
   Widget build(BuildContext context) {
    Widget second = (profileDetails == null) ?
       Container()
-      : ProfileDetailWidget(profileDetails);
+      : ProfileDetailWidget(profileDetails, expandedScreen: true);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

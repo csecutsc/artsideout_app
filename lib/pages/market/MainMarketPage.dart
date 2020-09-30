@@ -45,7 +45,7 @@ class _MainMarketPageState extends State<MainMarketPage> {
 
   List<Market> listMarket = List<Market>();
   GraphQLClient _client =
-  serviceLocator<GraphQLConfiguration>().clientToQuery();
+      serviceLocator<GraphQLConfiguration>().clientToQuery();
   NavigationService _navigationService = serviceLocator<NavigationService>();
   FetchResults fetchResults = new FetchResults();
   bool isLoading = false;
@@ -120,8 +120,10 @@ class _MainMarketPageState extends State<MainMarketPage> {
     NavigationService _navigationService = serviceLocator<NavigationService>();
     FetchResultCard fetchResultCard = FetchResultCard();
     if (_displaySize == DisplaySize.LARGE) {
+      numCards = 4;
+    } else if (_displaySize == DisplaySize.MEDIUM) {
       numCards = 3;
-    } else {
+    } else if (_displaySize == DisplaySize.SMALL) {
       numCards = 2;
     }
     Widget mainPageWidget = Stack(children: [
@@ -178,13 +180,12 @@ class _MainMarketPageState extends State<MainMarketPage> {
 
                   return GestureDetector(
                     child: ArtListCard(
-                      title: item.title,
-                      artist: item.profiles
-                          .map((profile) => profile.name ?? "")
-                          .toList()
-                          .join(", "),
-                      image: item.images[0]
-                    ),
+                        title: item.title,
+                        artist: item.profiles
+                            .map((profile) => profile.name ?? "")
+                            .toList()
+                            .join(", "),
+                        image: item.images[0]),
                     onTap: () {
                       if (_displaySize == DisplaySize.LARGE) {
                         selectedValue = index;

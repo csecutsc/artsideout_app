@@ -56,8 +56,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
   };
 
   Future<void> setList() async {
-    listProfiles =
-        await fillProfileList().whenComplete(() => loading = false);
+    listProfiles = await fillProfileList().whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -69,8 +68,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
 
   void handleTextChange(String text) async {
     if (text != ' ' && text != '') {
-      listProfiles =
-          await fetchResults.getProfilesByTypes(text, optionsMap);
+      listProfiles = await fetchResults.getProfilesByTypes(text, optionsMap);
 
       setState(() {
         queryResult = text;
@@ -118,8 +116,10 @@ class _MainProfilePageState extends State<MainProfilePage> {
     NavigationService _navigationService = serviceLocator<NavigationService>();
     FetchResultCard fetchResultCard = FetchResultCard();
     if (_displaySize == DisplaySize.LARGE) {
+      numCards = 4;
+    } else if (_displaySize == DisplaySize.MEDIUM) {
       numCards = 3;
-    } else {
+    } else if (_displaySize == DisplaySize.SMALL) {
       numCards = 2;
     }
     Widget mainPageWidget = Stack(children: [
@@ -195,8 +195,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
       NoResultBanner(queryResult, noResults),
     ]);
 
-    Widget secondPageWidget =
-        ((listProfiles.length != 0) ? ProfileDetailWidget(listProfiles[selectedValue]) : Container());
+    Widget secondPageWidget = ((listProfiles.length != 0)
+        ? ProfileDetailWidget(listProfiles[selectedValue])
+        : Container());
     return MasterPageLayout(
       pageName: "Profiles",
       pageDesc: "Blah Blah Blah",

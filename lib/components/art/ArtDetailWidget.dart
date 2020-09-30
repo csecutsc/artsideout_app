@@ -1,9 +1,13 @@
 import 'package:artsideout_app/components/common/ProfileCard.dart';
+import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
+import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
+import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +18,9 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // TODO Merge with Art Detail Widget
 class ArtDetailWidget extends StatefulWidget {
   final Installation data;
+  final bool expandedScreen;
 
-  ArtDetailWidget({Key key, this.data}) : super(key: key);
+  ArtDetailWidget({Key key, this.data, this.expandedScreen = false}) : super(key: key);
 
   @override
   _ArtDetailWidgetState createState() => _ArtDetailWidgetState();
@@ -24,6 +29,9 @@ class ArtDetailWidget extends StatefulWidget {
 class _ArtDetailWidgetState extends State<ArtDetailWidget> {
   GraphQlImageService _graphQlImageService =
       serviceLocator<GraphQlImageService>();
+  DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
+  final NavigationService _navigationService =
+      serviceLocator<NavigationService>();
   YoutubePlayerController videoController;
   ScrollController _scrollController;
   int currentScrollPos = 0;
@@ -137,7 +145,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
               child: ListView(
                 children: [
                   SizedBox(
-                    height: 10.0,
+                    height: 15.0,
                   ),
                   Center(
                       child: Title(
@@ -157,6 +165,21 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         imageIndicator(i),
                     ],
                   ),
+                  (_displaySize == DisplaySize.LARGE ||
+                          _displaySize == DisplaySize.MEDIUM) && !widget.expandedScreen
+                      ? RaisedButton(
+                          child: Text("VIEW PAGE",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(color: Colors.white)),
+                          textColor: Colors.white70,
+                          color: ColorConstants.PRIMARY,
+                          onPressed: () {
+                            _navigationService.navigateToWithId(
+                                ASORoutes.INSTALLATIONS, widget.data.id);
+                          })
+                      : Container(),
                   widget.data.images.isNotEmpty
                       ? Center(
                           child: Title(
@@ -180,12 +203,10 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                         id: profile.id),
                   ListTile(
                     leading: SelectableText(
-                      'OVERVIEW',
-                      style: TextStyle(
-                        color: ColorConstants.PRIMARY,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
+                      'overview',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
                     ),
                   ),
                   Divider(

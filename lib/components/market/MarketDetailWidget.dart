@@ -1,11 +1,15 @@
 import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/components/profile/SocialCard.dart';
+import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
+import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/models/Installation.dart';
 import 'package:artsideout_app/models/Market.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
+import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +20,9 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // TODO Merge with Art Detail Widget
 class MarketDetailWidget extends StatefulWidget {
   final Market data;
+  final bool expandedScreen;
 
-  MarketDetailWidget({Key key, this.data}) : super(key: key);
+  MarketDetailWidget({Key key, this.data, this.expandedScreen = false}) : super(key: key);
 
   @override
   _MarketDetailWidgetState createState() => _MarketDetailWidgetState();
@@ -32,6 +37,7 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
   @override
   void initState() {
     super.initState();
+    initScrollController();
   }
 
   void initScrollController() {
@@ -52,7 +58,11 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
+    GraphQlImageService _graphQlImageService =
+    serviceLocator<GraphQlImageService>();
+    DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
+    final NavigationService _navigationService =
+    serviceLocator<NavigationService>();
     Widget imageFeed = SizedBox(
         height: 400,
         width: width,
@@ -133,6 +143,21 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                       imageIndicator(i),
                   ],
                 ),
+                (_displaySize == DisplaySize.LARGE ||
+                    _displaySize == DisplaySize.MEDIUM) && !widget.expandedScreen
+                    ? RaisedButton(
+                    child: Text("VIEW PAGE",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .copyWith(color: Colors.white)),
+                    textColor: Colors.white70,
+                    color: ColorConstants.PRIMARY,
+                    onPressed: () {
+                      _navigationService.navigateToWithId(
+                          ASORoutes.MARKETS, widget.data.id);
+                    })
+                    : Container(),
                 widget.data.images.isNotEmpty
                     ? Center(
                         child: Title(
@@ -153,11 +178,7 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                 ListTile(
                   leading: SelectableText(
                     'OVERVIEW',
-                    style: TextStyle(
-                      color: ColorConstants.PRIMARY,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
+                    style: Theme.of(context).textTheme.headline5
                   ),
                 ),
                 Divider(
@@ -202,11 +223,7 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                         ListTile(
                           leading: SelectableText(
                             'SOCIAL',
-                            style: TextStyle(
-                              color: ColorConstants.PRIMARY,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                            ),
+                            style: Theme.of(context).textTheme.headline5
                           ),
                         ),
                         Divider(

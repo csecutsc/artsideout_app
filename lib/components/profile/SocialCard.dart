@@ -14,7 +14,7 @@ class SocialCard extends StatelessWidget {
   );
 
   Widget generateIcon(String name, double iconSize) {
-    switch (name) {
+    switch (name.toLowerCase()) {
       case "facebook":
         return Icon(MdiIcons.facebook, size: iconSize);
       case "instagram":
@@ -34,7 +34,7 @@ class SocialCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: InkResponse(
+        child: GestureDetector(
           child: SizedBox(
             width: 100,
             child: Card(
@@ -53,7 +53,10 @@ class SocialCard extends StatelessWidget {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SelectableText(this.socialName,
+                    SelectableText(
+                        (this.socialName.toLowerCase() == "email")
+                            ? this.urlToSocial
+                            : this.socialName,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.pink, fontSize: 18.0))
                   ],
@@ -62,8 +65,15 @@ class SocialCard extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            if (await canLaunch(urlToSocial)) {
-              await launch(urlToSocial);
+            print(urlToSocial);
+            var url = urlToSocial.toLowerCase();
+            if (this.socialName.toLowerCase() == "email") {
+              url = "mailto:" + url;
+            } else if (!url.startsWith("http")) {
+              url = "http://" + url;
+            }
+            if (await canLaunch(url)) {
+              await launch(url);
             } else {
               throw 'Could not launch';
             }

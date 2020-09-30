@@ -48,6 +48,8 @@ class ProfileCard extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.all(18),
         leading: CircleAvatar(
+          foregroundColor: ColorConstants.PRIMARY,
+          backgroundColor: ColorConstants.PRIMARY,
           backgroundImage: NetworkImage(compressedImgUrl),
           radius: 25.0,
         ),
@@ -64,8 +66,8 @@ class ProfileCard extends StatelessWidget {
               this.type,
               style: TextStyle(
                   fontSize: 14.5,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold),
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w600),
             ),
           ],
         ),

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:flutter/material.dart';

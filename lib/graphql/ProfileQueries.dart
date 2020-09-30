@@ -1,7 +1,7 @@
 class ProfileQueries {
   String getAll = """
     {
-      profiles {
+      profiles(where: {type_not: Sponsor}) {
         id
         name
         desc
@@ -263,4 +263,68 @@ class ProfileQueries {
     }
     """;
   }
+  String getAllSponsors = """
+    {
+      profiles(where: {type: Sponsor}) {
+        id
+        name
+        desc
+        social
+        type
+          installation {
+            id
+            title
+            desc
+            zone
+            videoUrl
+            images {
+              url
+              altText
+            }
+            location {
+              latitude
+              longitude
+            }
+            locationRoom
+            profile {
+              id
+              name
+              desc
+              social
+              type
+              profilePic {
+                url
+              }
+            }
+          }
+          activity {
+            id
+            title
+            desc
+            zone
+            performanceType
+            images {
+              url
+              altText
+            }
+            startTime
+            endTime
+            location {
+              latitude
+              longitude
+            }
+            profile {
+              id
+              name
+              desc
+              social
+              type
+            }
+          }
+        profilePic {
+          url
+        }
+      }
+    }
+  """;
 }

@@ -2,11 +2,13 @@ import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/components/profile/ProfileDetailWidget.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
+import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/constants/PlaceholderConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
 import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/pages/profile/ProfileDetailPage.dart';
 import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,7 +21,9 @@ import 'package:url_launcher/url_launcher.dart';
 // TODO Merge with Art Detail Widget
 class ActivityDetailWidget extends StatefulWidget {
   final Activity data;
-  ActivityDetailWidget({Key key, this.data}) : super(key: key);
+  final bool expandedScreen;
+  ActivityDetailWidget({Key key, this.data, this.expandedScreen = false})
+      : super(key: key);
 
   @override
   _ActivityDetailWidgetState createState() => _ActivityDetailWidgetState();
@@ -68,7 +72,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   Widget build(BuildContext context) {
     final NavigationService _navigationService =
         serviceLocator<NavigationService>();
-
+    DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     Widget imageFeed = SizedBox(
         height: 400,
         width: MediaQuery.of(context).size.width,
@@ -121,122 +125,140 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
 
     return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
-        body: ListView(children: [
-          Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                Center(
-                  child: Title(
-                      title: widget.data.title,
-                      color: Colors.black,
-                      child: SelectableText(widget.data.title,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5)),
-                ),
-                SizedBox(
-                  height: 15.0,
-                ),
-                widget.data.images.isNotEmpty ? imageFeed : Container(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < widget.data.images.length; i++)
-                      imageIndicator(i),
-                  ],
-                ),
-                widget.data.images.isNotEmpty
-                    ? Center(
+        body: LayoutBuilder(builder: (context, constraints) {
+          return MediaQuery.removePadding(
+              context: context,
+              child: ListView(children: [
+                      Center(
                         child: Title(
-                            color: ColorConstants.PRIMARY,
-                            child: Text(
-                              "Click on the images above to expand or download. Also, scroll down for more information!",
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )))
-                    : Container(),
-                SizedBox(
-                  height: 15.0,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (Profile profile in widget.data.profiles)
-                        ProfileCard(
-                            name: profile.name,
-                            imgUrl: profile.profilePic,
-                            type: profile.type,
-                            id: profile.id),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 1.0,
-                        height: 0.0,
-                        indent: 15.0,
-                        endIndent: 15.0,
+                            title: widget.data.title,
+                            color: Colors.black,
+                            child: SelectableText(widget.data.title,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline5)),
                       ),
-                    ],
-                  ),
-                ),
-                (widget.data.zoomMeeting != null)
-                    ? Column(children: [
-                        SelectableText(
-                            "Meeting ID: ${widget.data.zoomMeeting.meetingId}",
-                            style: Theme.of(context).textTheme.bodyText1),
-                        (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
-                            ? new InkWell(
-                                child: Text(
-                                    "Meeting Url: ${widget.data.zoomMeeting.meetingUrl}",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1),
-                                onTap: () =>
-                                    launch(widget.data.zoomMeeting.meetingUrl))
-                            : Container(),
-                        (widget.data.zoomMeeting.meetingPass.isNotEmpty)
-                            ? SelectableText(
-                                "Meeting Password: ${widget.data.zoomMeeting.meetingPass}",
-                                style: Theme.of(context).textTheme.bodyText1)
-                            : Container()
-                      ])
-                    : Container(),
-                ListTile(
-                  leading: SelectableText('OVERVIEW',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: ColorConstants.PRIMARY)),
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
                       SizedBox(
-                        width: 16.0,
+                        height: 15.0,
                       ),
-                      Flexible(
-                          child: Padding(
-                        padding: const EdgeInsets.only(bottom: 14.0),
-                        child: MarkdownBody(
-                          selectable: true,
-                          data: widget.data.desc,
-                          onTapLink: (url) {
-                            launch(url);
-                          },
-                          styleSheet:
-                              MarkdownStyleSheet.fromTheme(Theme.of(context))
-                                  .copyWith(
-                                      p: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .copyWith(fontSize: 16.0)),
+                      widget.data.images.isNotEmpty ? imageFeed : Container(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (int i = 0; i < widget.data.images.length; i++)
+                            imageIndicator(i),
+                        ],
+                      ),
+                      (_displaySize == DisplaySize.LARGE ||
+                                  _displaySize == DisplaySize.MEDIUM) &&
+                              !widget.expandedScreen
+                          ? RaisedButton(
+                              child: Text("VIEW PAGE",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .copyWith(color: Colors.white)),
+                              textColor: Colors.white70,
+                              color: ColorConstants.PRIMARY,
+                              onPressed: () {
+                                _navigationService.navigateToWithId(
+                                    ASORoutes.ACTIVITIES, widget.data.id);
+                              })
+                          : Container(),
+                      widget.data.images.isNotEmpty
+                          ? Center(
+                              child: Title(
+                                  color: ColorConstants.PRIMARY,
+                                  child: Text(
+                                    "Click on the images above to expand or download. Also, scroll down for more information!",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  )))
+                          : Container(),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (Profile profile in widget.data.profiles)
+                              ProfileCard(
+                                  name: profile.name,
+                                  imgUrl: profile.profilePic,
+                                  type: profile.type,
+                                  id: profile.id),
+                            Divider(
+                              color: Colors.black,
+                              thickness: 1.0,
+                              height: 0.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                            ),
+                          ],
                         ),
-                      )),
-                    ],
-                  ),
-                ),
-              ]))
-        ]));
+                      ),
+                      (widget.data.zoomMeeting != null)
+                          ? Column(children: [
+                              SelectableText(
+                                  "Meeting ID: ${widget.data.zoomMeeting.meetingId}",
+                                  style: Theme.of(context).textTheme.bodyText1),
+                              (widget.data.zoomMeeting.meetingUrl.isNotEmpty)
+                                  ? new InkWell(
+                                      child: Text(
+                                          "Meeting Url: ${widget.data.zoomMeeting.meetingUrl}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1),
+                                      onTap: () => launch(
+                                          widget.data.zoomMeeting.meetingUrl))
+                                  : Container(),
+                              (widget.data.zoomMeeting.meetingPass.isNotEmpty)
+                                  ? SelectableText(
+                                      "Meeting Password: ${widget.data.zoomMeeting.meetingPass}",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1)
+                                  : Container()
+                            ])
+                          : Container(),
+                      ListTile(
+                        leading: SelectableText('OVERVIEW',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5),
+                      ),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Flexible(
+                                child: Padding(
+                              padding: const EdgeInsets.only(bottom: 14.0),
+                              child: MarkdownBody(
+                                selectable: true,
+                                data: widget.data.desc,
+                                onTapLink: (url) {
+                                  launch(url);
+                                },
+                                styleSheet: MarkdownStyleSheet.fromTheme(
+                                        Theme.of(context))
+                                    .copyWith(
+                                        p: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(fontSize: 16.0)),
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+                    ]
+              ));
+        }));
   }
 }
 

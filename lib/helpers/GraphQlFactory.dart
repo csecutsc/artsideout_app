@@ -31,7 +31,9 @@ class GraphQlFactory {
         listActivities.add(buildActivity(result["activity"][i]));
       }
     }
-    return Profile(result["name"], result["desc"],
+    return Profile(
+        result["name"],
+        result["desc"] ?? "",
         id: result["id"],
         social: socialMap,
         type: result["type"] ?? "",
@@ -62,8 +64,8 @@ class GraphQlFactory {
     }
     return Installation(
       id: result["id"],
-      title: result["title"],
-      desc: result["desc"],
+      title: result["title"] ?? "",
+      desc: result["desc"] ?? "",
       zone: result["zone"] ?? "",
       images: images,
       videoURL: result["videoUrl"] ?? "",
@@ -112,8 +114,8 @@ class GraphQlFactory {
 
     return Activity(
         id: result["id"],
-        title: result["title"],
-        desc: result["desc"],
+        title: result["title"] ?? "",
+        desc: result["desc"] ?? "",
         zone: result["zone"],
         images: images,
         time: time,
@@ -153,7 +155,7 @@ class GraphQlFactory {
     }
 
     return Market(result["id"], result["title"],
-        desc: result["desc"],
+        desc: result["desc"] ?? "",
         images: images,
         profiles: profilesList,
         social: socialMap);

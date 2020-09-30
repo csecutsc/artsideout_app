@@ -63,7 +63,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     if (artDetails == null) {
       cool = Container();
     } else {
-      cool = MarketDetailWidget(data: artDetails);
+      cool = MarketDetailWidget(data: artDetails, expandedScreen: true);
     }
     return Scaffold(
         appBar: AppBar(

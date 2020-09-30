@@ -60,7 +60,7 @@ class _ArtDetailPageState extends State<ArtDetailPage> {
     if (artDetails == null) {
       cool = Container();
     } else {
-      cool = ArtDetailWidget(data: artDetails);
+      cool = ArtDetailWidget(data: artDetails, expandedScreen: true);
     }
     return Scaffold(
         appBar: AppBar(

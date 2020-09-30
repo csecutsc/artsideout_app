@@ -54,7 +54,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
     if (activityDetails == null) {
       cool = Container();
     } else {
-      cool = ActivityDetailWidget(data: activityDetails);
+      cool = ActivityDetailWidget(data: activityDetails, expandedScreen: true);
     }
     return Scaffold(
       appBar: AppBar(
