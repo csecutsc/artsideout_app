@@ -10,6 +10,7 @@ class InstallationQueries {
         images {
           url
           altText
+          mimeType
         }
         location {
           latitude
@@ -41,6 +42,7 @@ class InstallationQueries {
         images {
           url
           altText
+          mimeType
         }
         location {
           latitude

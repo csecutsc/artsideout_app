@@ -1,3 +1,4 @@
+import 'package:artsideout_app/components/common/FileCard.dart';
 import 'package:artsideout_app/components/common/ProfileCard.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
@@ -173,11 +174,17 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                                 imageIndicator(i),
                             ],
                           ),
+                          for (Map<String, String> files in widget.data.files)
+                            FileCard(
+                              name: files["altText"],
+                              imgUrl: files["url"],
+                              type: files["type"],
+                            ),
                           Center(
                               child: Title(
                                   color: ColorConstants.PRIMARY,
-                                  child: Text(
-                                    "Click on the images above to expand or download. Also, scroll down for more information!",
+                                  child: SelectableText(
+                                    "Click on the images or files above to expand. Copyrights are reserved to the artists. Also, scroll down for more information!",
                                     maxLines: 2,
                                     textAlign: TextAlign.center,
                                     style:
@@ -187,8 +194,8 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                       : Container(),
                   widget.data.videoURL.isNotEmpty && widget.expandedScreen
                       ? Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: videoPlayer)
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: videoPlayer)
                       : Container(),
                   widget.data.videoURL.isNotEmpty && !widget.expandedScreen
                       ? videoPlayer

@@ -9,6 +9,7 @@ class Installation {
   String videoURL;
   Map<String, double> location;
   String locationRoom;
+  List<Map<String, String>> files;
   List<Profile> profiles;
 
   Installation(
@@ -20,5 +21,6 @@ class Installation {
       this.videoURL,
       this.location,
       this.locationRoom,
+      this.files,
       this.profiles});
 }

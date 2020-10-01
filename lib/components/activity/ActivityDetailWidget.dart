@@ -280,8 +280,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                             Center(
                                 child: Title(
                                     color: ColorConstants.PRIMARY,
-                                    child: Text(
-                                      "Click on the images above to expand or download. Also, scroll down for more information!",
+                                    child: SelectableText(
+                                      "Click on the images above to expand. Copyrights are reserved to the artists. Also, scroll down for more information!",
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style:
