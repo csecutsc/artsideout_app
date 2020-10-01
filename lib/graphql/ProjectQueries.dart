@@ -17,6 +17,7 @@ class ProjectQueries {
               altText
             }
             profile {
+              id
               name
               desc
               social
@@ -49,6 +50,7 @@ class ProjectQueries {
               altText
             }
             profile {
+              id
               name
               desc
               social
@@ -57,6 +59,16 @@ class ProjectQueries {
                 url
               }
             }
+          }
+        }
+        profiles {
+          id
+          name
+          desc
+          social
+          type
+          profilePic {
+            url
           }
         }
       }

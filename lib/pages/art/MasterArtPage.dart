@@ -221,10 +221,33 @@ class _MasterArtPageState extends State<MasterArtPage> {
                                                               .copyWith(
                                                                   color: Colors
                                                                       .white))),
-                                                ])
+                                                ]),
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  FittedBox(
+                                                      fit: BoxFit.cover,
+                                                      child: Text(
+                                                          "Scroll Down!",
+                                                          maxLines: 3,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .subtitle1
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)))
+                                                ]),
                                           ])
                                     ])))),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Expanded(
                           child: Container(
                             child: StaggeredGridView.countBuilder(

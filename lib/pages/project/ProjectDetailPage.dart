@@ -9,6 +9,7 @@ import 'package:artsideout_app/graphql/ProjectQueries.dart';
 import 'package:artsideout_app/helpers/GraphQlFactory.dart';
 import 'package:artsideout_app/models/ASOCardInfo.dart';
 import 'package:artsideout_app/models/Installation.dart';
+import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
@@ -36,6 +37,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
   List<Installation> listInstallation = List<Installation>();
   Map<String, String> mapPageDetails = Map<String, String>();
+  List<Profile> profileDetails = List<Profile>();
   GraphQLClient _client =
       serviceLocator<GraphQLConfiguration>().clientToQuery();
 
@@ -59,6 +61,12 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
       ),
     );
     if (!result.hasException) {
+      setState(() {
+        for (var i = 0; i < result.data["project"]["profiles"].length; i++) {
+          profileDetails.add(GraphQlFactory.buildProfile(
+              result.data["project"]["profiles"][i]));
+        }
+      });
       return {
         "title": result.data["project"]["title"],
         "desc": result.data["project"]["desc"]
@@ -77,10 +85,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     );
     if (!result.hasException) {
       for (var i = 0; i < result.data["project"]["elements"].length; i++) {
-        listInstallation.add(
-            GraphQlFactory.buildInstallation(
-                result.data["project"]["elements"][i])
-        );
+        listInstallation.add(GraphQlFactory.buildInstallation(
+            result.data["project"]["elements"][i]));
       }
     }
     return listInstallation;
@@ -241,7 +247,10 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     if (mapPageDetails.isNotEmpty) {
       return MasterPageLayout(
         pageName: mapPageDetails["title"],
-        pageDesc: "Need to place description somewhere",
+        pageDesc: profileDetails
+            .map((profile) => profile.name ?? "")
+            .toList()
+            .join(", "),
         mainPageWidget: mainPageWidget,
         secondPageWidget: secondPageWidget,
         loading: loading,
