@@ -60,7 +60,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
         showControls: true,
         showFullscreenButton: true,
         desktopMode: false,
-        autoPlay: true,
+        autoPlay: false,
       ),
     );
   }
@@ -317,11 +317,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   ASORoutes.ACTIVITIES, widget.data.id);
                             })
                         : Container(),
-                    SizedBox(
-                      height: 15.0,
-                    ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

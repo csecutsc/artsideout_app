@@ -16,7 +16,7 @@ class Sidebar extends StatelessWidget {
       _SidebarAction(
           "Studio Installations", Icons.palette, ASORoutes.INSTALLATIONS),
       _SidebarAction("Performances", Icons.face, ASORoutes.ACTIVITIES),
-      _SidebarAction("Profiles", Icons.person, ASORoutes.PROFILES),
+      _SidebarAction("Profiles", Icons.group, ASORoutes.PROFILES),
       _SidebarAction("Art Market", Icons.store, ASORoutes.MARKETS),
       _SidebarAction("Workshops", Icons.calendar_today, ASORoutes.WORKSHOPS),
     ];

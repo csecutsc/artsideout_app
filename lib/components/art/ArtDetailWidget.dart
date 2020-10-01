@@ -61,7 +61,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
         showControls: true,
         showFullscreenButton: true,
         desktopMode: false,
-        autoPlay: true,
+        autoPlay: false,
       ),
     );
   }
