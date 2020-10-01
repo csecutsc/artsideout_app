@@ -143,7 +143,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: (_displaySize == DisplaySize.SMALL) ? 70: 60,
+        top: (_displaySize == DisplaySize.SMALL) ? 70 : 60,
         left: 0,
         right: 0,
         bottom: 0,
@@ -176,10 +176,56 @@ class _MasterArtPageState extends State<MasterArtPage> {
               bottom: 0,
               child: Row(
                 children: [
-                  (_displaySize == DisplaySize.LARGE)
-                      ? Container(
-                          width: 260,
-                          color: Colors.transparent,
+                  Container(
+                      width: 300,
+                      color: Colors.transparent,
+                      child: Column(children: [
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                    height: 100,
+                                    color: ColorConstants.PRIMARY,
+                                    child: Stack(children: <Widget>[
+                                      PlatformSvg.asset(
+                                        "assets/icons/asoBg.svg",
+                                        height: 200,
+                                        width: double.infinity,
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  FittedBox(
+                                                      fit: BoxFit.cover,
+                                                      child: Text(
+                                                          "Special Projects",
+                                                          maxLines: 3,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .headline4
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white))),
+                                                ])
+                                          ])
+                                    ])))),
+                        SizedBox(height: 10.0,),
+                        Expanded(
                           child: Container(
                             child: StaggeredGridView.countBuilder(
                               padding: EdgeInsets.zero,
@@ -201,7 +247,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                             ),
                           ),
                         )
-                      : Container(),
+                      ])),
                   Expanded(
                     child: GridView.builder(
                       controller: _scrollController,
@@ -238,7 +284,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                 ],
               ),
             )
-      // TODO FIX THIS DUPE CODE, IT JUST USES A LISTVIEW INSTEAD
+          // TODO FIX THIS DUPE CODE, IT JUST USES A LISTVIEW INSTEAD
           : Positioned(
               top: 125,
               left: 0,
@@ -262,7 +308,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
                                     color: ColorConstants.PRIMARY,
                                     child: Stack(children: <Widget>[
                                       PlatformSvg.asset(
-                                        "assets/icons/installation.svg",
+                                        "assets/icons/asoBg.svg",
                                         height: 100,
                                         width: double.infinity,
                                         fit: BoxFit.fitWidth,
@@ -374,7 +420,8 @@ class _MasterArtPageState extends State<MasterArtPage> {
         : Container());
     return MasterPageLayout(
       pageName: "Studio Installations",
-      pageDesc: "In thinking of “Connection,” artists create a diverse body of works: Mixed Media, Digital Media, Drawing, Painting and Sculpture. ",
+      pageDesc:
+          "In thinking of “Connection,” artists create a diverse body of works: Mixed Media, Digital Media, Drawing, Painting and Sculpture. ",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,
