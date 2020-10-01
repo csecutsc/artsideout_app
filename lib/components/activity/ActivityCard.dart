@@ -43,12 +43,11 @@ class ActivityCard extends StatelessWidget {
           String endTime = startTimeDisplay(this.time["endTime"], context);
           timeText = "$timeText - $endTime ${DateTime.now().timeZoneName}";
         }
-        return Center(
-            child: SelectableText(timeText.toUpperCase(),
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2
-                    .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
+        return FittedBox(fit:BoxFit.fitWidth, child:SelectableText(timeText.toUpperCase(),
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2
+                .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
       } else {
         return Container();
       }
@@ -56,8 +55,8 @@ class ActivityCard extends StatelessWidget {
 
     return Container(
       //height: 125.0,
-      height: 160,
-      width: 250,
+      height: 120,
+      width: 200,
       margin: EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: ColorConstants.SECONDARY,
@@ -65,46 +64,60 @@ class ActivityCard extends StatelessWidget {
       ),
       child: Container(
         alignment: Alignment.topLeft,
-        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-        child: Column(children: <Widget>[
-          Text(
-            title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style:
-                Theme.of(context).textTheme.headline5.copyWith(fontSize: 18.0),
-          ),
-          Text(
-            this.performanceType,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style:
-                Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 18.0),
-          ),
-          Text(
-            desc,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Color(0xFFBE4C59),
-            ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            softWrap: true,
-            textAlign: TextAlign.left,
-          ),
-          (this.performanceType == "Workshops") ? timeWidget() : Container(),
-          Text(
-            zone,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: ColorConstants.PRIMARY,
-            ),
-            overflow: TextOverflow.clip,
-            maxLines: 3,
-            softWrap: true,
-            textAlign: TextAlign.left,
-          )
-        ]),
+        padding:
+            EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(fontSize: 18.0),
+              ),
+              Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    Text(
+                      desc,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                    ),
+                    (this.performanceType != "Workshops")
+                        ? Text(
+                            this.performanceType,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2
+                                .copyWith(
+                                    fontSize: 16,
+                                    color: ColorConstants.PRIMARY),
+                          )
+                        : Container(),
+                    (this.performanceType == "Workshops")
+                        ? timeWidget()
+                        : Container(),
+                    Text(
+                      zone,
+                      style: Theme.of(context).textTheme.subtitle1,
+                      overflow: TextOverflow.clip,
+                      maxLines: 3,
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                    )
+                  ]))
+            ]),
       ),
     );
   }

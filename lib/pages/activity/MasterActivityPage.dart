@@ -78,6 +78,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   Widget build(BuildContext context) {
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
+    int width = MediaQuery.of(context).size.width.toInt();
     Widget mainPageWidget = Stack(children: [
       Positioned(
         top: (_displaySize == DisplaySize.SMALL) ? 85 : 60,
@@ -110,20 +111,13 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: GridView.builder(
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
             // Let the ListView know how many items it needs to build.
             itemCount: listActivity.length,
             // Provide a builder function. This is where the magic happens.
             // Convert each item into a widget based on the type of item it is.
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: (_displaySize == DisplaySize.LARGE ||
-                      _displaySize == DisplaySize.MEDIUM)
-                  ? 2
-                  : 1,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
-              childAspectRatio: 2,
-            ),
             itemBuilder: (context, index) {
               final item = listActivity[index];
               FetchResultCard fetchResultCard = new FetchResultCard();
@@ -143,7 +137,6 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
                     }),
               );
             },
-            physics: BouncingScrollPhysics(),
           ))
     ]);
 

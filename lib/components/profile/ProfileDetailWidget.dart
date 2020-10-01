@@ -34,7 +34,6 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
     NavigationService _navigationService = serviceLocator<NavigationService>();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     int width = MediaQuery.of(context).size.width.toInt();
-    print(width);
     return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: LayoutBuilder(builder: (context, constraints) {

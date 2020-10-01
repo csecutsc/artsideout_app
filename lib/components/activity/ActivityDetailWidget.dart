@@ -214,7 +214,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                     (widget.data.zoomMeeting != null ||
                             widget.data.performanceType == "Workshops")
                         ? Column(children: [
-                            timeWidget(),
+                            FittedBox(
+                                fit: BoxFit.fitWidth, child: timeWidget()),
                             SizedBox(
                               height: 10.0,
                             ),
@@ -352,9 +353,9 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   url = "http://" + url;
                                 }
                                 if (await canLaunch(url)) {
-                                await launch(url);
+                                  await launch(url);
                                 } else {
-                                throw 'Could not launch';
+                                  throw 'Could not launch';
                                 }
                               },
                               styleSheet: MarkdownStyleSheet.fromTheme(
