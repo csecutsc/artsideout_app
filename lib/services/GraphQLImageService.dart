@@ -5,7 +5,7 @@ class GraphQlImageService {
     if (!imgUrl.contains(_baseUrl)){
       return imgUrl;
     }
-    String baseCompressed = "${_baseUrl}resize=width:$width/quality=value:$quality/compress/";
+    String baseCompressed = "${_baseUrl}resize=width:$width/quality=value:$quality/";
     final a = Uri.parse(imgUrl);
     return baseCompressed + a.pathSegments.last;
   }

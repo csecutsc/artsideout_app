@@ -188,7 +188,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
         : Container());
     return MasterPageLayout(
       pageName: "Profiles",
-      pageDesc: "Blah Blah Blah",
+      pageDesc: "All the people and organizations who contributed to ARTSIDEOUT 2020",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,
