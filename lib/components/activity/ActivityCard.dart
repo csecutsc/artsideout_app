@@ -29,32 +29,9 @@ class ActivityCard extends StatelessWidget {
     if (startTimeGiven == "") {
       return "ALL DAY";
     } else {
-      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven))
+      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven).toLocal())
           .format(context);
     }
-  }
-
-  String endTimeDisplay(String endTimeGiven, BuildContext context) {
-    if (endTimeGiven == "") {
-      return "";
-    } else {
-      return TimeOfDay.fromDateTime(DateTime.parse(endTimeGiven))
-          .format(context);
-    }
-  }
-
-  String displayDesc(String desc) {
-    if (desc == "") {
-      return "No Description available.";
-    }
-    return desc;
-  }
-
-  String displayZone(String zone) {
-    if (zone == null) {
-      return "Unknown Zone";
-    }
-    return zone;
   }
 
   @override
@@ -64,14 +41,14 @@ class ActivityCard extends StatelessWidget {
         String timeText = startTimeDisplay(this.time["startTime"], context);
         if (!(timeText == "ALL DAY") || (this.time["endTime"].isNotEmpty)) {
           String endTime = startTimeDisplay(this.time["endTime"], context);
-          timeText = "$timeText - $endTime";
+          timeText = "$timeText - $endTime ${DateTime.now().timeZoneName}";
         }
         return Center(
             child: SelectableText(timeText.toUpperCase(),
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
-                    .copyWith(color: ColorConstants.PRIMARY)));
+                    .subtitle2
+                    .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
       } else {
         return Container();
       }
@@ -111,7 +88,7 @@ class ActivityCard extends StatelessWidget {
                 padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  displayDesc(desc),
+                  desc,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: Color(0xFFBE4C59),
@@ -131,7 +108,7 @@ class ActivityCard extends StatelessWidget {
                     padding: EdgeInsets.only(left: 5.0, right: 20.0, top: 3.0),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      displayZone(zone),
+                      zone,
                       style: TextStyle(
                         fontSize: 14.0,
                         color: ColorConstants.PRIMARY,

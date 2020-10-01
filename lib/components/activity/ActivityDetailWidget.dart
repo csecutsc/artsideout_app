@@ -80,15 +80,6 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       });
   }
 
-  String startTimeDisplay(String startTimeGiven, BuildContext context) {
-    if (startTimeGiven == "") {
-      return "ALL DAY";
-    } else {
-      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven))
-          .format(context);
-    }
-  }
-
   String endTimeDisplay(String endTimeGiven, BuildContext context) {
     if (endTimeGiven == "") {
       return "";
@@ -171,7 +162,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       if (startTimeGiven == "") {
         return "ALL DAY";
       } else {
-        return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven))
+        return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven).toLocal())
             .format(context);
       }
     }
@@ -185,14 +176,14 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             (widget.data.time["endTime"].isNotEmpty)) {
           String endTime =
               startTimeDisplay(widget.data.time["endTime"], context);
-          timeText = "$timeText - $endTime";
+          timeText = "$timeText - $endTime ${DateTime.now().timeZoneName}";
         }
         return Center(
             child: SelectableText(timeText.toUpperCase(),
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
-                    .copyWith(color: ColorConstants.PRIMARY)));
+                    .subtitle2
+                    .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
       } else {
         return Container();
       }
@@ -220,7 +211,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    (widget.data.zoomMeeting != null || widget.data.performanceType == "Workshops")
+                    (widget.data.zoomMeeting != null ||
+                            widget.data.performanceType == "Workshops")
                         ? Column(children: [
                             timeWidget(),
                             SizedBox(
