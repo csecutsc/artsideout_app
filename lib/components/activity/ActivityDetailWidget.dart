@@ -167,6 +167,37 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       );
     }
 
+    String startTimeDisplay(String startTimeGiven, BuildContext context) {
+      if (startTimeGiven == "") {
+        return "ALL DAY";
+      } else {
+        return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven))
+            .format(context);
+      }
+    }
+
+    Widget timeWidget() {
+      if (widget.data.time.isNotEmpty ||
+          widget.data.time["startTime"].isNotEmpty) {
+        String timeText =
+            startTimeDisplay(widget.data.time["startTime"], context);
+        if (!(timeText == "ALL DAY") ||
+            (widget.data.time["endTime"].isNotEmpty)) {
+          String endTime =
+              startTimeDisplay(widget.data.time["endTime"], context);
+          timeText = "$timeText - $endTime";
+        }
+        return Center(
+            child: SelectableText(timeText.toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .copyWith(color: ColorConstants.PRIMARY)));
+      } else {
+        return Container();
+      }
+    }
+
     return YoutubePlayerControllerProvider(
         controller: videoController,
         child: Scaffold(
@@ -189,8 +220,12 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    (widget.data.zoomMeeting != null)
+                    (widget.data.zoomMeeting != null || widget.data.performanceType == "Workshops")
                         ? Column(children: [
+                            timeWidget(),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Text("Meeting ID",
                                 style: Theme.of(context).textTheme.subtitle1),
                             SelectableText(widget.data.zoomMeeting.meetingId,
@@ -222,7 +257,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                                 .textTheme
                                                 .bodyText1
                                                 .copyWith(
-                                              color: Colors.blue,
+                                                    color: Colors.blue,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18.0,
                                                     decoration: TextDecoration
