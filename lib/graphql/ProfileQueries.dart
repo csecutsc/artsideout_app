@@ -367,6 +367,130 @@ class ProfileQueries {
       }
     }
   """;
+  String getSponsors = """
+    {
+      UTSC: profiles(where: {type: Sponsor, AND: {name_contains: "UTSC"}}) {
+        id
+        name
+        desc
+        social
+        type
+        installation {
+          id
+          title
+          desc
+          zone
+          videoUrl
+          images {
+            url
+            altText
+          }
+          location {
+            latitude
+            longitude
+          }
+          locationRoom
+          profile {
+            id
+            name
+            desc
+            social
+            type
+            profilePic {
+              url
+            }
+          }
+        }
+        activity {
+          id
+          title
+          desc
+          zone
+          performanceType
+          images {
+            url
+            altText
+          }
+          startTime
+          endTime
+          location {
+            latitude
+            longitude
+          }
+          profile {
+            id
+            name
+            desc
+            social
+            type
+          }
+        }
+        profilePic {
+          url
+        }
+      }
+      regular: profiles(where: {type: Sponsor, AND: {name_not_contains: "UTSC"}}) {
+        id
+        name
+        desc
+        social
+        type
+        installation {
+          id
+          title
+          desc
+          zone
+          videoUrl
+          images {
+            url
+            altText
+          }
+          location {
+            latitude
+            longitude
+          }
+          locationRoom
+          profile {
+            id
+            name
+            desc
+            social
+            type
+            profilePic {
+              url
+            }
+          }
+        }
+        activity {
+          id
+          title
+          desc
+          zone
+          performanceType
+          images {
+            url
+            altText
+          }
+          startTime
+          endTime
+          location {
+            latitude
+            longitude
+          }
+          profile {
+            id
+            name
+            desc
+            social
+            type
+          }
+        }
+        profilePic {
+          url
+        }
+      }
+    }
+  """;
   String getAllPartners = """
     {
       profiles(where: {type: Partner}) {

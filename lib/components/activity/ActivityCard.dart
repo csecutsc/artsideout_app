@@ -59,57 +59,19 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget generateTime() {
-      if ((performanceType.isNotEmpty && performanceType == "Workshops")) {
-        return Expanded(
-            flex: 2,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: SizedBox(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20.0, top: 9.0),
-                        child: Text(
-                          startTimeDisplay(time["startTime"], context),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16.0,
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.PRIMARY,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
-                      child: Divider(
-                        color: Color(0xFFBE4C59),
-                        thickness: 1.0,
-                        indent: 45.0,
-                        endIndent: 30.0,
-                      )),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: SizedBox(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20.0, bottom: 9.0),
-                        child: Text(
-                          endTimeDisplay(time["endTime"], context),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16.0,
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.PRIMARY,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]));
+    Widget timeWidget() {
+      if (this.time.isNotEmpty || this.time["startTime"].isNotEmpty) {
+        String timeText = startTimeDisplay(this.time["startTime"], context);
+        if (!(timeText == "ALL DAY") || (this.time["endTime"].isNotEmpty)) {
+          String endTime = startTimeDisplay(this.time["endTime"], context);
+          timeText = "$timeText - $endTime";
+        }
+        return Center(
+            child: SelectableText(timeText.toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .copyWith(color: ColorConstants.PRIMARY)));
       } else {
         return Container();
       }
@@ -128,61 +90,60 @@ class ActivityCard extends StatelessWidget {
         children: <Widget>[
           Expanded(
             flex: 2,
-          child: Container(
-            alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-            child: Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(fontSize: 18.0),
-            ),
-          ),
-          ),
-      Expanded(
-        flex: 1,
-        child:Container(
-            // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
-            padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-            alignment: Alignment.topLeft,
-            child: Text(
-              displayDesc(desc),
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Color(0xFFBE4C59),
+            child: Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+              child: Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(fontSize: 18.0),
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              softWrap: true,
-              textAlign: TextAlign.left,
             ),
-          )),
-      Expanded(
-        flex: 2,
-        child:
-          Row(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(
-                    left: 5.0, right: 20.0, top: 3.0),
+          ),
+          Expanded(
+              flex: 1,
+              child: Container(
+                // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
+                padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  displayZone(zone),
+                  displayDesc(desc),
                   style: TextStyle(
                     fontSize: 14.0,
-                    color: ColorConstants.PRIMARY,
+                    color: Color(0xFFBE4C59),
                   ),
-                  overflow: TextOverflow.clip,
-                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   softWrap: true,
                   textAlign: TextAlign.left,
                 ),
-              ),
-            ],
-          )),
+              )),
+          (this.performanceType == "Workshops") ? timeWidget() : Container(),
+          Expanded(
+              flex: 2,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(left: 5.0, right: 20.0, top: 3.0),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      displayZone(zone),
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: ColorConstants.PRIMARY,
+                      ),
+                      overflow: TextOverflow.clip,
+                      maxLines: 3,
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ],
+              )),
         ],
       ),
     );
