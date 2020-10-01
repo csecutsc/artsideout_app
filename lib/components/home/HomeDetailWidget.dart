@@ -11,19 +11,19 @@ import 'package:flutter/cupertino.dart';
 
 class HomeDetailWidget extends StatelessWidget {
   final List<ASOCardInfo> listHomeActions = [
-    ASOCardInfo("About Connections", Color(0xFF62BAA6), "assets/home/connection.png",
+    ASOCardInfo("About Connections", Color(0xFF62BAA6), "https://media.graphcms.com/dRhKrsaRByrU1cCzixUc",
         350, ASORoutes.ABOUT),
     ASOCardInfo("Profiles", ColorConstants.PRIMARY,
-        "assets/home/profile.png", 300, ASORoutes.PROFILES),
-    ASOCardInfo("Social Media", Colors.purple[200], "assets/home/social.png", 300,
+        "https://media.graphcms.com/UE6HBthrSj2v873dKvs5", 300, ASORoutes.PROFILES),
+    ASOCardInfo("Social Media", Colors.purple[200], "https://media.graphcms.com/CdX3IQSCbgMZ3Cd7LQvr", 300,
         "https://instagram.com/artsideout_/", altUrl: "https://instagram.com/artsideout_/"),
     ASOCardInfo("Studio", Colors.blue[200],
-        "assets/home/studio.png", 200, ASORoutes.INSTALLATIONS),
-    ASOCardInfo("Art Workshops", Colors.yellow[200], "assets/home/workshops.png", 300,
+        "https://media.graphcms.com/G9vumHBVT8u2A213Hj9t", 200, ASORoutes.INSTALLATIONS),
+    ASOCardInfo("Art Workshops", Colors.yellow[200], "https://media.graphcms.com/bvsjCMF2SNS3ESE814mb", 300,
         ASORoutes.WORKSHOPS),
     ASOCardInfo("Performances", Colors.yellow[200],
-        "assets/home/performances.png", 300, ASORoutes.ACTIVITIES),
-    ASOCardInfo("Art Market", Colors.orange[200], "assets/home/artmarket.png", 200,
+        "https://media.graphcms.com/ZICdYL9sQHuMukBOJ44W", 300, ASORoutes.ACTIVITIES),
+    ASOCardInfo("Art Market", Colors.orange[200], "https://media.graphcms.com/zOwZHigsTyypQ65fnm8v", 200,
         ASORoutes.MARKETS)
   ];
 

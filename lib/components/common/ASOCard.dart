@@ -1,5 +1,6 @@
 import 'package:artsideout_app/models/ASOCardInfo.dart';
 import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/GraphQLImageService.dart';
 import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,25 @@ class _ASOCardState extends State<ASOCard> {
   Widget build(BuildContext context) {
     final NavigationService _navigationService =
         serviceLocator<NavigationService>();
+    final GraphQlImageService _imageService =
+    serviceLocator<GraphQlImageService>();
+    Widget photo;
+    if (widget.asoCardInfo.imgUrl.contains("media.graphcms.com")) {
+      photo = Image.network(
+        _imageService.getResizedImage(widget.asoCardInfo.imgUrl, 600),
+        height: widget.height,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        alignment: Alignment.topCenter,);
+    } else {
+      photo = PlatformSvg.asset(
+        widget.asoCardInfo.imgUrl,
+        height: widget.height,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        alignment: Alignment.topCenter,
+      );
+    }
     return GestureDetector(
         onTap: () {
           (widget.asoCardInfo.altUrl != null)
@@ -36,13 +56,7 @@ class _ASOCardState extends State<ASOCard> {
               color: widget.asoCardInfo.color,
               child: Stack(
                 children: <Widget>[
-                  PlatformSvg.asset(
-                    widget.asoCardInfo.imgUrl,
-                    height: widget.height,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                  ),
+                  photo,
                   new Align(
                       alignment: Alignment(-0.8, 0.8),
                       child: FittedBox(
