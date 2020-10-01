@@ -71,21 +71,57 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
       ..addListener(() {
         if (_scrollController.hasClients)
           setState(() {
-            for (int i = 0; i < widget.data.images.length; i++) {
-              if (_scrollController.position.pixels < 270 * (i + 1) &&
-                  _scrollController.position.pixels > 270 * i) {
-                currentScrollPos = i;
-              }
-            }
+            currentScrollPos =
+                (_scrollController.position.pixels / 420).round();
           });
       });
+  }
+
+  void swipe(double newPosition) {
+    _scrollController.animateTo(newPosition,
+        duration: Duration(milliseconds: 200), curve: Curves.ease);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    Widget imageFeed = SizedBox(
+    Widget imageSwipeButtons = Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: Icon(Icons.arrow_left),
+            iconSize: 55,
+            color: ColorConstants.PRIMARY,
+            onPressed: () => swipe(_scrollController.position.pixels - 400),
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_right),
+            iconSize: 55,
+            color: ColorConstants.PRIMARY,
+            onPressed: () => swipe(_scrollController.position.pixels + 400),
+          ),
+        ],
+      ),
+    );
+
+    Widget imageIndicator(int index) {
+      return Container(
+        width: 8.0,
+        height: 8.0,
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: index == currentScrollPos
+                ? Color.fromRGBO(0, 0, 0, 0.9)
+                : Colors.grey),
+      );
+    }
+
+    Widget imageFeed = Stack(children: [
+      Container(
         height: 400,
         width: width,
         child: Center(
@@ -121,20 +157,10 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
               );
             },
           ),
-        ));
-
-    Widget imageIndicator(int index) {
-      return Container(
-        width: 8.0,
-        height: 8.0,
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: index == currentScrollPos
-                ? Color.fromRGBO(0, 0, 0, 0.9)
-                : Colors.grey),
-      );
-    }
+        ),
+      ),
+      imageSwipeButtons,
+    ]);
 
     return YoutubePlayerControllerProvider(
       controller: videoController,
@@ -187,8 +213,8 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                       : Container(),
                   widget.data.videoURL.isNotEmpty && widget.expandedScreen
                       ? Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: videoPlayer)
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: videoPlayer)
                       : Container(),
                   widget.data.videoURL.isNotEmpty && !widget.expandedScreen
                       ? videoPlayer
