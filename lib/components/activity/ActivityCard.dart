@@ -43,82 +43,91 @@ class ActivityCard extends StatelessWidget {
           String endTime = startTimeDisplay(this.time["endTime"], context);
           timeText = "$timeText - $endTime ${DateTime.now().timeZoneName}";
         }
-        return FittedBox(fit:BoxFit.fitWidth, child:SelectableText(timeText.toUpperCase(),
-            style: Theme.of(context)
-                .textTheme
-                .subtitle2
-                .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
+        return FittedBox(
+            fit: BoxFit.fitWidth,
+            child: SelectableText(timeText.toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
       } else {
         return Container();
       }
     }
 
-    return Container(
-      //height: 125.0,
-      height: 120,
-      width: 200,
-      margin: EdgeInsets.all(7),
-      decoration: BoxDecoration(
-        color: ColorConstants.SECONDARY,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Container(
-        alignment: Alignment.topLeft,
-        padding:
-            EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(fontSize: 18.0),
+    return SizedBox(
+        width: 100,
+        child: Card(
+            color: Color(0xFFF9EBEB),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Container(
+              //height: 125.0,
+              height: 120,
+              width: 200,
+              margin: EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                color: ColorConstants.SECONDARY,
+                borderRadius: BorderRadius.circular(25),
               ),
-              Expanded(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    Text(
-                      desc,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                    ),
-                    (this.performanceType != "Workshops")
-                        ? Text(
-                            this.performanceType,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2
-                                .copyWith(
-                                    fontSize: 16,
-                                    color: ColorConstants.PRIMARY),
-                          )
-                        : Container(),
-                    (this.performanceType == "Workshops")
-                        ? timeWidget()
-                        : Container(),
-                    Text(
-                      zone,
-                      style: Theme.of(context).textTheme.subtitle1,
-                      overflow: TextOverflow.clip,
-                      maxLines: 3,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                    )
-                  ]))
-            ]),
-      ),
-    );
+              child: Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.only(
+                    left: 20.0, top: 10.0, right: 20.0, bottom: 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            .copyWith(fontSize: 18.0),
+                      ),
+                      Expanded(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                            Text(
+                              desc,
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                            ),
+                            (this.performanceType != "Workshops")
+                                ? Text(
+                                    this.performanceType,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        .copyWith(
+                                            fontSize: 16,
+                                            color: ColorConstants.PRIMARY),
+                                  )
+                                : Container(),
+                            (this.performanceType == "Workshops")
+                                ? timeWidget()
+                                : Container(),
+                            Text(
+                              zone,
+                              style: Theme.of(context).textTheme.subtitle1,
+                              overflow: TextOverflow.clip,
+                              maxLines: 3,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                            )
+                          ]))
+                    ]),
+              ),
+            )));
   }
 }

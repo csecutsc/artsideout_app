@@ -127,6 +127,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   @override
   Widget build(BuildContext context) {
     int numCards = 2;
+    double topPadding = MediaQuery.of(context).size.height / 8;
+    double topPaddingVeryLarge = MediaQuery.of(context).size.height / 25;
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
     FetchResultCard fetchResultCard = FetchResultCard();
@@ -137,7 +139,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: (_displaySize == DisplaySize.SMALL) ? 45 : 30,
+        top: (topPadding > 120) ? topPaddingVeryLarge : topPadding,
         left: 0,
         right: 0,
         bottom: 0,

@@ -134,6 +134,8 @@ class _MasterArtPageState extends State<MasterArtPage> {
   @override
   Widget build(BuildContext context) {
     int numCards = 2;
+    double topPadding = MediaQuery.of(context).size.height / 8;
+    double topPaddingVeryLarge = MediaQuery.of(context).size.height / 25;
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     FetchResultCard fetchResultCard = FetchResultCard();
     if (_displaySize == DisplaySize.LARGE) {
@@ -143,7 +145,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: (_displaySize == DisplaySize.SMALL) ? 70 : 60,
+        top: (topPadding > 120) ? topPaddingVeryLarge : topPadding,
         left: 0,
         right: 0,
         bottom: 0,
@@ -170,14 +172,14 @@ class _MasterArtPageState extends State<MasterArtPage> {
       ),
       (_displaySize == DisplaySize.LARGE)
           ? Positioned(
-              top: 125,
+              top: (topPadding > 120) ? MediaQuery.of(context).size.height / 12 : MediaQuery.of(context).size.height / 5,
               left: 0,
               right: 0,
               bottom: 0,
               child: Row(
                 children: [
                   Container(
-                      width: 300,
+                      width: 270,
                       color: Colors.transparent,
                       child: Column(children: [
                         Padding(
@@ -309,7 +311,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
             )
           // TODO FIX THIS DUPE CODE, IT JUST USES A LISTVIEW INSTEAD
           : Positioned(
-              top: 125,
+              top: MediaQuery.of(context).size.height / 5,
               left: 0,
               right: 0,
               bottom: 0,

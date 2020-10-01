@@ -23,6 +23,7 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
   double containerHeight = 0.0;
   bool loading = true;
 
+
   List<Activity> listActivity = List<Activity>();
 
   Future<void> setList() async {
@@ -39,12 +40,14 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
 
   @override
   Widget build(BuildContext context) {
+    double topPadding = MediaQuery.of(context).size.height / 8;
+    double topPaddingVeryLarge = MediaQuery.of(context).size.height / 20;
     FetchResultCard fetchResultCard = new FetchResultCard();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
     Widget mainPageWidget = Stack(children: [
       Positioned(
-          top: 80,
+          top: (topPadding > 120) ? topPaddingVeryLarge : topPadding,
           left: 0,
           right: 0,
           bottom: 0,

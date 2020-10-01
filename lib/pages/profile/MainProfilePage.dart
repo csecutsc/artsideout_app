@@ -100,6 +100,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
   @override
   Widget build(BuildContext context) {
     int numCards = 2;
+    double topPadding = MediaQuery.of(context).size.height / 8;
+    double topPaddingVeryLarge = MediaQuery.of(context).size.height / 25;
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
     FetchResultCard fetchResultCard = FetchResultCard();
@@ -112,7 +114,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: (_displaySize == DisplaySize.SMALL) ? 60 : 40,
+        top: (topPadding > 120) ? topPaddingVeryLarge : topPadding,
         left: 0,
         right: 0,
         bottom: 0,
@@ -138,7 +140,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
         ),
       ),
       Positioned(
-        top: 125,
+        top: (topPadding > 120)
+            ? MediaQuery.of(context).size.height / 12
+            : MediaQuery.of(context).size.height / 5,
         left: 0,
         right: 0,
         bottom: 0,
@@ -188,7 +192,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
         : Container());
     return MasterPageLayout(
       pageName: "Profiles",
-      pageDesc: "All the people and organizations who contributed to ARTSIDEOUT 2020",
+      pageDesc:
+          "All the people and organizations who contributed to ARTSIDEOUT 2020",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,
