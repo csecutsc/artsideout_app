@@ -145,7 +145,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
         right: 0,
         bottom: 0,
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           child: Container(
             height: 85,
             child: Column(

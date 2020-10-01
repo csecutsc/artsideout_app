@@ -188,7 +188,7 @@ class _MainMarketPageState extends State<MainMarketPage> {
         : Container());
     return MasterPageLayout(
       pageName: "Art Market",
-      pageDesc: "Blah Blah Blah",
+      pageDesc: "The art market hosts amazing vendors with the beautiful art pieces as a feast to your eyes.",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,

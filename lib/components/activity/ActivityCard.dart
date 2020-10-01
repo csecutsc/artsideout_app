@@ -56,72 +56,55 @@ class ActivityCard extends StatelessWidget {
 
     return Container(
       //height: 125.0,
-      height: 140,
+      height: 160,
       width: 250,
       margin: EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: ColorConstants.SECONDARY,
         borderRadius: BorderRadius.circular(25),
       ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Container(
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-              child: Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(fontSize: 18.0),
-              ),
-            ),
+      child: Container(
+        alignment: Alignment.topLeft,
+        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
+        child: Column(children: <Widget>[
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style:
+                Theme.of(context).textTheme.headline5.copyWith(fontSize: 18.0),
           ),
-          Expanded(
-              flex: 1,
-              child: Container(
-                // TODO: ELLIPSIS BELOW NOT WORKING PROPERLY, possibly Flutter bug?
-                padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  desc,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color(0xFFBE4C59),
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  softWrap: true,
-                  textAlign: TextAlign.left,
-                ),
-              )),
+          Text(
+            this.performanceType,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style:
+                Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 18.0),
+          ),
+          Text(
+            desc,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Color(0xFFBE4C59),
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            softWrap: true,
+            textAlign: TextAlign.left,
+          ),
           (this.performanceType == "Workshops") ? timeWidget() : Container(),
-          Expanded(
-              flex: 2,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 5.0, right: 20.0, top: 3.0),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      zone,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: ColorConstants.PRIMARY,
-                      ),
-                      overflow: TextOverflow.clip,
-                      maxLines: 3,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              )),
-        ],
+          Text(
+            zone,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: ColorConstants.PRIMARY,
+            ),
+            overflow: TextOverflow.clip,
+            maxLines: 3,
+            softWrap: true,
+            textAlign: TextAlign.left,
+          )
+        ]),
       ),
     );
   }

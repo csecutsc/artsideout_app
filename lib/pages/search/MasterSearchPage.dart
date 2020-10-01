@@ -43,6 +43,9 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
     "Artist": true,
     "Organizer": true,
     "Sponsor": true,
+    "Workshops": true,
+    "ASO": true,
+    "Partner": true,
     "Other": true,
   };
 
@@ -82,7 +85,7 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
 
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 45,
+        top: 80,
         left: 0,
         right: 0,
         bottom: 0,

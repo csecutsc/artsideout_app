@@ -1,5 +1,7 @@
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
+import 'package:artsideout_app/components/search/FetchQueries.dart';
 import 'package:artsideout_app/components/search/FetchResultCard.dart';
+import 'package:artsideout_app/components/search/SearchBarFilter.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/models/Activity.dart';
@@ -22,9 +24,19 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
   int selectedValue = 0;
   double containerHeight = 0.0;
   bool loading = true;
+  bool noResults = false;
+  String queryResult = "";
+
+  Map<String, bool> optionsMap = {
+    "Music": true,
+    "Spoken Word": true,
+    "Theatre": true,
+    "Sculpture": true,
+    "Other": true,
+  };
 
   List<Activity> listActivity = List<Activity>();
-
+  FetchResults fetchResults = new FetchResults();
   Future<void> setList() async {
     listActivity = await fillList().whenComplete(() => loading = false);
     setState(() {});
@@ -36,36 +48,104 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     setList();
   }
 
+  void handleTextChange(String text) async {
+    if (text != ' ' && text != '') {
+      listActivity = await fetchResults.getActivitiesByTypes(text, optionsMap);
+
+      setState(() {
+        queryResult = text;
+        noResults = listActivity.isEmpty ? true : false;
+      });
+    }
+  }
+
+  void handleFilterChange(String value) {
+    setState(() {
+      optionsMap[value] = !optionsMap[value];
+      _fillList();
+    });
+  }
+
+  // Installation GraphQL Query
+  void _fillList() async {
+    listActivity = await fetchResults.getActivitiesByTypes("", optionsMap);
+    setState(() {
+      noResults = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
-    Widget mainPageWidget = ListView.builder(
-      // Let the ListView know how many items it needs to build.
-      itemCount: listActivity.length,
-      // Provide a builder function. This is where the magic happens.
-      // Convert each item into a widget based on the type of item it is.
-      itemBuilder: (context, index) {
-        final item = listActivity[index];
-        FetchResultCard fetchResultCard = new FetchResultCard();
-        return Material(
-          color: Colors.transparent,
-          child: GestureDetector(
-              child: fetchResultCard.getCard("Activity", item),
-              onTap: () {
-                if (_displaySize == DisplaySize.LARGE ||
-                    _displaySize == DisplaySize.MEDIUM) {
-                  selectedValue = index;
-                  setState(() {});
-                } else {
-                  _navigationService.navigateToWithId(
-                      ASORoutes.ACTIVITIES, item.id);
-                }
-              }),
-        );
-      },
-      physics: BouncingScrollPhysics(),
-    );
+    Widget mainPageWidget = Stack(children: [
+      Positioned(
+        top: 55,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Container(
+            height: 85,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchBarFilter(
+                  handleTextChange: handleTextChange,
+                  handleTextClear: _fillList,
+                  handleFilterChange: handleFilterChange,
+                  optionsMap: optionsMap,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+          top: 125,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: GridView.builder(
+            // Let the ListView know how many items it needs to build.
+            itemCount: listActivity.length,
+            // Provide a builder function. This is where the magic happens.
+            // Convert each item into a widget based on the type of item it is.
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: (_displaySize == DisplaySize.LARGE ||
+                      _displaySize == DisplaySize.MEDIUM)
+                  ? 2
+                  : 1,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 5.0,
+              childAspectRatio: 2,
+            ),
+            itemBuilder: (context, index) {
+              final item = listActivity[index];
+              FetchResultCard fetchResultCard = new FetchResultCard();
+              return Material(
+                color: Colors.transparent,
+                child: GestureDetector(
+                    child: fetchResultCard.getCard("Activity", item),
+                    onTap: () {
+                      if (_displaySize == DisplaySize.LARGE ||
+                          _displaySize == DisplaySize.MEDIUM) {
+                        selectedValue = index;
+                        setState(() {});
+                      } else {
+                        _navigationService.navigateToWithId(
+                            ASORoutes.ACTIVITIES, item.id);
+                      }
+                    }),
+              );
+            },
+            physics: BouncingScrollPhysics(),
+          ))
+    ]);
 
     Widget secondPageWidget = (listActivity.length != 0)
         ? ActivityDetailWidget(data: listActivity[selectedValue])

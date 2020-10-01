@@ -26,7 +26,8 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
   List<Activity> listActivity = List<Activity>();
 
   Future<void> setList() async {
-    listActivity = await fillListWorkShops().whenComplete(() => loading = false);
+    listActivity =
+        await fillListWorkShops().whenComplete(() => loading = false);
     setState(() {});
   }
 
@@ -41,31 +42,38 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
     FetchResultCard fetchResultCard = new FetchResultCard();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     NavigationService _navigationService = serviceLocator<NavigationService>();
-    Widget mainPageWidget = ListView.builder(
-      // Let the ListView know how many items it needs to build.
-      itemCount: listActivity.length,
-      // Provide a builder function. This is where the magic happens.
-      // Convert each item into a widget based on the type of item it is.
-      itemBuilder: (context, index) {
-        final item = listActivity[index];
-        return Material(
-          color: Colors.transparent,
-          child: GestureDetector(
-              child: fetchResultCard.getCard("Activity", item),
-              onTap: () {
-                if (_displaySize == DisplaySize.LARGE ||
-                    _displaySize == DisplaySize.MEDIUM) {
-                  selectedValue = index;
-                  setState(() {});
-                } else {
-                  _navigationService.navigateToWithId(
-                      ASORoutes.ACTIVITIES, item.id);
-                }
-              }),
-        );
-      },
-      physics: BouncingScrollPhysics(),
-    );
+    Widget mainPageWidget = Stack(children: [
+      Positioned(
+          top: 80,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: ListView.builder(
+            // Let the ListView know how many items it needs to build.
+            itemCount: listActivity.length,
+            // Provide a builder function. This is where the magic happens.
+            // Convert each item into a widget based on the type of item it is.
+            itemBuilder: (context, index) {
+              final item = listActivity[index];
+              return Material(
+                color: Colors.transparent,
+                child: GestureDetector(
+                    child: fetchResultCard.getCard("Activity", item),
+                    onTap: () {
+                      if (_displaySize == DisplaySize.LARGE ||
+                          _displaySize == DisplaySize.MEDIUM) {
+                        selectedValue = index;
+                        setState(() {});
+                      } else {
+                        _navigationService.navigateToWithId(
+                            ASORoutes.ACTIVITIES, item.id);
+                      }
+                    }),
+              );
+            },
+            physics: BouncingScrollPhysics(),
+          ))
+    ]);
 
     Widget secondPageWidget = (listActivity.length != 0)
         ? ActivityDetailWidget(data: listActivity[selectedValue])
