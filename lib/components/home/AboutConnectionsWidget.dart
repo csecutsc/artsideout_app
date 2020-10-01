@@ -98,7 +98,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
     String desc2 =
         "With the changes that are happening around the world, our lives have shifted in a multitude of ways, from environmental, to economic, and existential changes. It brings about our awareness and appreciation of the connections we have as human beings. As we are “physically distanced,” we have in many ways come closer together through creative and technological means.";
     String desc3 =
-        "In thinking about Connections, we invite artists to challenge their adaptability, resiliency, and creativity, to think outside their boundaries in producing multidisciplinary artworks, and to explore what Connections mean in this extraordinary time. Check out our [introduction video](https://www.youtube.com/watch?v=NIzOkTSUwtU)!";
+        "In thinking about Connections, we invite artists to challenge their adaptability, resiliency, and creativity, to think outside their boundaries in producing multidisciplinary artworks, and to explore what Connections mean in this extraordinary time. Check out our [introduction video](https://www.youtube.com/watch?v=NIzOkTSUwtU) and [opening ceremony](https://www.youtube.com/watch?v=89iBXwnsW24&feature=youtu.be)!";
     return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: Center(
