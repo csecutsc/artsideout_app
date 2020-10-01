@@ -81,7 +81,7 @@ class _MainWorkshopPageState extends State<MainWorkshopPage> {
 
     return MasterPageLayout(
         pageName: "Workshops",
-        pageDesc: "Blah Blah Blah",
+        pageDesc: "Due to the COVID-19 pandemic, ARTSIDEOUT is introducing a new interactive aspect to the festival -- Art Workshop! There is a wide variety of workshops throughout the day that you can access and participate in.",
         mainPageWidget: mainPageWidget,
         secondPageWidget: secondPageWidget,
         loading: loading);

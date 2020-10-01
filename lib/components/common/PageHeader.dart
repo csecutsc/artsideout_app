@@ -1,4 +1,7 @@
 import 'package:artsideout_app/constants/ColorConstants.dart';
+import 'package:artsideout_app/constants/DisplayConstants.dart';
+import 'package:artsideout_app/serviceLocator.dart';
+import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:flutter/material.dart';
 
 class PageHeader extends StatefulWidget {
@@ -12,6 +15,7 @@ class PageHeader extends StatefulWidget {
 
 class _PageHeaderState extends State<PageHeader> {
   static const WEB_TITLE = "ASO2020";
+  DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +35,16 @@ class _PageHeaderState extends State<PageHeader> {
                       title: "$WEB_TITLE | ${widget.textTop.toUpperCase()}",
                       color: ColorConstants.PRIMARY,
                       child: SelectableText("${widget.textTop.toUpperCase()}",
-                          style: Theme.of(context).textTheme.headline2))),
+                          style: (_displaySize == DisplaySize.SMALL)
+                              ? Theme.of(context).textTheme.headline3
+                              : Theme.of(context).textTheme.headline2))),
               SelectableText(widget.subtitle,
                   maxLines: 3,
-                  style: Theme.of(context)
+                  style:  (_displaySize == DisplaySize.SMALL)?
+                  Theme.of(context)
+                      .textTheme
+                      .bodyText1.copyWith(fontWeight: FontWeight.bold)
+                  : Theme.of(context)
                       .textTheme
                       .headline5
                       .copyWith(color: Colors.black87))

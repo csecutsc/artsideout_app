@@ -305,7 +305,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 _displaySize == DisplaySize.MEDIUM) &&
                             !widget.expandedScreen
                         ? RaisedButton(
-                            child: Text("VIEW PAGE",
+                            child: Text("CLICK TO VIEW FULL PAGE",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1

@@ -143,7 +143,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 45,
+        top: (_displaySize == DisplaySize.SMALL) ? 70: 60,
         left: 0,
         right: 0,
         bottom: 0,
@@ -168,7 +168,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
           ),
         ),
       ),
-      (_displaySize == DisplaySize.LARGE || _displaySize == DisplaySize.MEDIUM)
+      (_displaySize == DisplaySize.LARGE)
           ? Positioned(
               top: 125,
               left: 0,
@@ -374,7 +374,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
         : Container());
     return MasterPageLayout(
       pageName: "Studio Installations",
-      pageDesc: "Blah Blah Blah",
+      pageDesc: "In thinking of “Connection,” artists create a diverse body of works: Mixed Media, Digital Media, Drawing, Painting and Sculpture. ",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,

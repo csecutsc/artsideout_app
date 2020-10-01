@@ -63,7 +63,7 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
               ),
               hintText: widget.searchText,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20),
               ),
               hintStyle: TextStyle(color: Colors.black),
             ),

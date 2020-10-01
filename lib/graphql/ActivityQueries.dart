@@ -104,7 +104,7 @@ class ActivityQueries {
 
   String getAllWorkShops = """
     {
-      activities(where: {performanceType: Workshops}) {
+      activities(where: {performanceType: Workshops}, orderBy: startTime_ASC) {
         id
         title
         desc

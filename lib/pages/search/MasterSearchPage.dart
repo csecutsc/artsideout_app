@@ -46,6 +46,7 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
     "Workshops": true,
     "ASO": true,
     "Partner": true,
+    "Developer": true,
     "Other": true,
   };
 
@@ -85,12 +86,12 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
 
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 80,
+        top: (_displaySize == DisplaySize.SMALL) ? 65 : 45,
         left: 0,
         right: 0,
         bottom: 0,
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           child: Container(
             height: 85,
             child: Column(
@@ -162,7 +163,7 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
 
     return MasterPageLayout(
       pageName: "Search",
-      pageDesc: "The all seeing eye",
+      pageDesc: "The all seeing eye. Search installations, performances, workshops, profiles!",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
     );

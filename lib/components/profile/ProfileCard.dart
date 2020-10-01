@@ -68,7 +68,7 @@ class ProfileCard extends StatelessWidget {
                 clipper: MyClipper(),
                 child: Container(
                   width: double.infinity,
-                  height: 200,
+                  height: 400,
                   decoration: BoxDecoration(
                     color: ColorConstants.PRIMARY,
                   ),

@@ -80,7 +80,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
     NavigationService _navigationService = serviceLocator<NavigationService>();
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 55,
+        top: (_displaySize == DisplaySize.SMALL) ? 85 : 60,
         left: 0,
         right: 0,
         bottom: 0,
@@ -106,7 +106,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         ),
       ),
       Positioned(
-          top: 125,
+          top: 140,
           left: 0,
           right: 0,
           bottom: 0,
@@ -152,7 +152,7 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
         : Container();
     return MasterPageLayout(
         pageName: "PERFORMANCES",
-        pageDesc: "Blah Blah Blah",
+        pageDesc: "This year, ARTSIDEOUT's performances range from spoken word, theatre, improv, music, and dance.",
         mainPageWidget: mainPageWidget,
         secondPageWidget: secondPageWidget,
         loading: loading);
