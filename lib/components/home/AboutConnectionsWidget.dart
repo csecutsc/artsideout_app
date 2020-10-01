@@ -1,3 +1,5 @@
+import 'package:artsideout_app/components/search/FetchResultCard.dart';
+import 'package:artsideout_app/constants/ASORouteConstants.dart';
 import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/graphql/ProfileQueries.dart';
@@ -6,6 +8,7 @@ import 'package:artsideout_app/models/Profile.dart';
 import 'package:artsideout_app/serviceLocator.dart';
 import 'package:artsideout_app/services/DisplayService.dart';
 import 'package:artsideout_app/services/GraphQLConfiguration.dart';
+import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -24,6 +27,7 @@ class AboutConnectionsWidget extends StatefulWidget {
 class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
   List<Profile> sponsors = List<Profile>();
   List<Profile> partners = List<Profile>();
+  List<Profile> developers = List<Profile>();
   void _getSponsors() async {
     GraphQLConfiguration graphQLConfiguration =
         serviceLocator<GraphQLConfiguration>();
@@ -31,7 +35,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
     GraphQLClient _client = graphQLConfiguration.clientToQuery();
     QueryResult result = await _client.query(
       QueryOptions(
-        documentNode: gql(profileQueries.getSponsors),
+        documentNode: gql(profileQueries.getSponsorsAndDevelopers),
       ),
     );
     if (!result.hasException) {
@@ -43,6 +47,11 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
       for (var i = 0; i < result.data["regular"].length; i++) {
         setState(() {
           sponsors.add(GraphQlFactory.buildProfile(result.data["regular"][i]));
+        });
+      }
+      for (var i = 0; i < result.data["developer"].length; i++) {
+        setState(() {
+          developers.add(GraphQlFactory.buildProfile(result.data["developer"][i]));
         });
       }
     } else {
@@ -82,6 +91,8 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
 //move title to widget
   @override
   Widget build(BuildContext context) {
+    FetchResultCard fetchResultCard = new FetchResultCard();
+    NavigationService _navigationService = serviceLocator<NavigationService>();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     String desc = "2020 is the start of a new decade.";
     String desc2 =
@@ -273,6 +284,64 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
             ListTile(
               leading: SelectableText('Special Thanks',
                   style: Theme.of(context).textTheme.headline5),
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: MarkdownBody(
+                          selectable: true,
+                          data: "Thank you to the following participating developers of the ASO Project and the [Computer Science Enrichment Club (CSEC)](https://csec.club) team for creating this application in record time."
+                              " Despite the transition to an online ARTSIDEOUT, the team had converted the experience to a web application. [Link to the open source code](https://github.com/csecutsc/artsideout_app)",
+                          onTapLink: (url) {
+                            launch(url);
+                          },
+                          styleSheet:
+                          MarkdownStyleSheet.fromTheme(Theme.of(context))
+                              .copyWith(
+                              p: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(fontSize: 16.0)),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: new NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: (widget.expandedScreen &&
+                    (_displaySize == DisplaySize.LARGE ||
+                        _displaySize == DisplaySize.MEDIUM))
+                    ? MediaQuery.of(context).size.width.toInt() ~/ 200
+                    : 2,
+                crossAxisSpacing: 1.0,
+                mainAxisSpacing: 1.0,
+              ),
+              // Let the ListView know how many items it needs to build.
+              itemCount: developers.length,
+              // Provide a builder function. This is where the magic happens.
+              // Convert each item into a widget based on the type of item it is.
+              itemBuilder: (context, index) {
+                final item = developers[index];
+                return Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: GestureDetector(
+                child: fetchResultCard.getCard("Profile", item),
+                onTap: () {
+                _navigationService.navigateToWithId(
+                ASORoutes.PROFILES, item.id);
+                }
+                ));
+              },
             ),
           ]),
         ])));
