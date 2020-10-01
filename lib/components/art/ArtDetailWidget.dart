@@ -146,6 +146,7 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
             return MediaQuery.removePadding(
               context: context,
               child: ListView(
+                shrinkWrap: true,
                 children: [
                   SizedBox(
                     height: 15.0,
@@ -241,8 +242,15 @@ class _ArtDetailWidgetState extends State<ArtDetailWidget> {
                           child: MarkdownBody(
                             selectable: true,
                             data: widget.data.desc,
-                            onTapLink: (url) {
-                              launch(url);
+                            onTapLink: (url) async {
+                              if (!url.startsWith("http")) {
+                                url = "http://" + url;
+                              }
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                throw 'Could not launch';
+                              }
                             },
                             styleSheet:
                                 MarkdownStyleSheet.fromTheme(Theme.of(context))

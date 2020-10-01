@@ -98,7 +98,7 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
     String desc2 =
         "With the changes that are happening around the world, our lives have shifted in a multitude of ways, from environmental, to economic, and existential changes. It brings about our awareness and appreciation of the connections we have as human beings. As we are “physically distanced,” we have in many ways come closer together through creative and technological means.";
     String desc3 =
-        "In thinking about Connections, we invite artists to challenge their adaptability, resiliency, and creativity, to think outside their boundaries in producing multidisciplinary artworks, and to explore what Connections mean in this extraordinary time.";
+        "In thinking about Connections, we invite artists to challenge their adaptability, resiliency, and creativity, to think outside their boundaries in producing multidisciplinary artworks, and to explore what Connections mean in this extraordinary time. Check out our [introduction video](https://www.youtube.com/watch?v=NIzOkTSUwtU)!";
     return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: Center(
@@ -123,8 +123,15 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
                     child: MarkdownBody(
                       selectable: true,
                       data: desc,
-                      onTapLink: (url) {
-                        launch(url);
+                      onTapLink: (url) async{
+                        if (!url.startsWith("http")) {
+                          url = "http://" + url;
+                        }
+                        if (await canLaunch(url)) {
+                        await launch(url);
+                        } else {
+                        throw 'Could not launch';
+                        }
                       },
                       styleSheet:
                           MarkdownStyleSheet.fromTheme(Theme.of(context))
@@ -298,8 +305,15 @@ class _AboutConnectionsWidgetState extends State<AboutConnectionsWidget> {
                           selectable: true,
                           data: "Thank you to the following participating developers of the ASO Project and the [Computer Science Enrichment Club (CSEC)](https://csec.club) team for creating this application in record time."
                               " Despite the transition to an online ARTSIDEOUT, the team had converted the experience to a web application. [Link to the open source code](https://github.com/csecutsc/artsideout_app)",
-                          onTapLink: (url) {
-                            launch(url);
+                          onTapLink: (url) async {
+                            if (!url.startsWith("http")) {
+                              url = "http://" + url;
+                            }
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch';
+                            }
                           },
                           styleSheet:
                           MarkdownStyleSheet.fromTheme(Theme.of(context))

@@ -65,7 +65,6 @@ class SocialCard extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            print(urlToSocial);
             var url = urlToSocial.toLowerCase();
             if (this.socialName.toLowerCase() == "email") {
               url = "mailto:" + url;

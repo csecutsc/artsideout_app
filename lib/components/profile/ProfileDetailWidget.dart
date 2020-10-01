@@ -89,8 +89,15 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                         child: MarkdownBody(
                           selectable: true,
                           data: widget.profile.desc,
-                          onTapLink: (url) {
-                            launch(url);
+                          onTapLink: (url) async{
+                            if (!url.startsWith("http")) {
+                              url = "http://" + url;
+                            }
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch';
+                            }
                           },
                           styleSheet:
                               MarkdownStyleSheet.fromTheme(Theme.of(context))

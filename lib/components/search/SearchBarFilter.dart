@@ -33,7 +33,7 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
             controller: searchQueryController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
+              fillColor: ColorConstants.PREVIEW_SCREEN,
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),
                 color: ColorConstants.PRIMARY,

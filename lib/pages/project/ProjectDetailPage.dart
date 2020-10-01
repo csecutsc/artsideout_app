@@ -16,10 +16,12 @@ import 'package:artsideout_app/services/GraphQLConfiguration.dart';
 import 'package:artsideout_app/services/NavigationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 // GraphQL
 import 'package:graphql_flutter/graphql_flutter.dart';
 // Art
 import 'package:artsideout_app/components/art/ArtDetailWidget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class ProjectDetailPage extends StatefulWidget {
@@ -45,13 +47,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   bool isLoading = false;
   bool noResults = false;
   String queryResult = "";
-  Map<String, bool> optionsMap = {
-    "Sculpture": true,
-    "DigitalMedia": true,
-    "MixMedia": true,
-    "DrawingsAndPaintings": true,
-    "Other": true,
-  };
 
   Future<Map<String, String>> getProjectDetails(String term) async {
     ProjectQueries queryProject = ProjectQueries();
@@ -105,34 +100,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     setList();
   }
 
-  void handleTextChange(String text) async {
-    if (text != ' ' && text != '') {
-      listInstallation =
-          await fetchResults.getInstallationsByTypes(text, optionsMap);
-
-      setState(() {
-        queryResult = text;
-        noResults = listInstallation.isEmpty ? true : false;
-      });
-    }
-  }
-
-  void handleFilterChange(String value) {
-    setState(() {
-      optionsMap[value] = !optionsMap[value];
-      _fillList();
-    });
-  }
-
-  // Installation GraphQL Query
-  void _fillList() async {
-    listInstallation =
-        await fetchResults.getInstallationsByTypes("", optionsMap);
-    setState(() {
-      noResults = false;
-    });
-  }
-
   final List<ASOCardInfo> listActions = [
     ASOCardInfo("Featured", Color(0xFF62BAA6),
         "assets/icons/aboutConnections.svg", 300, ASORoutes.ACTIVITIES),
@@ -170,44 +137,56 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 45,
+        top: (_displaySize == DisplaySize.SMALL) ? 45 : 30,
         left: 0,
         right: 0,
         bottom: 0,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Container(
-            height: 85,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchBarFilter(
-                  handleTextChange: handleTextChange,
-                  handleTextClear: _fillList,
-                  handleFilterChange: handleFilterChange,
-                  optionsMap: optionsMap,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Positioned(
-        top: 125,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: Row(
+        child: ListView(
+          shrinkWrap: true,
           children: [
-            Expanded(
-              child: GridView.builder(
+            Container(
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: MarkdownBody(
+                          selectable: true,
+                          data: (mapPageDetails["desc"] != null)
+                              ? mapPageDetails["desc"]
+                              : "",
+                          onTapLink: (url) async {
+                            if (!url.startsWith("http")) {
+                              url = "http://" + url;
+                            }
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch';
+                            }
+                          },
+                          styleSheet:
+                          MarkdownStyleSheet.fromTheme(Theme.of(context))
+                              .copyWith(
+                              p: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(fontSize: 16.0)),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            GridView.builder(
+                shrinkWrap: true,
                 controller: _scrollController,
                 padding: EdgeInsets.zero,
                 cacheExtent: 200,
                 addAutomaticKeepAlives: true,
+                physics: new NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: numCards,
                   crossAxisSpacing: 5.0,
@@ -219,7 +198,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                 // Convert each item into a widget based on the type of item it is.
                 itemBuilder: (context, index) {
                   final item = listInstallation[index];
-
                   return GestureDetector(
                     child: fetchResultCard.getCard("Installation", item),
                     onTap: () {
@@ -234,7 +212,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                   );
                 },
               ),
-            ),
           ],
         ),
       ),
