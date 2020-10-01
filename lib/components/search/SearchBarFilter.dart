@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:artsideout_app/components/search/FilterDropdown.dart';
 
 class SearchBarFilter extends StatefulWidget {
+  final String searchText;
   final void Function(String text) handleTextChange;
   final void Function() handleTextClear;
   final void Function(String value) handleFilterChange;
   final Map<String, bool> optionsMap;
 
   SearchBarFilter(
-      {this.handleTextChange,
+      {this.searchText = "Search!",
+      this.handleTextChange,
       this.handleTextClear,
       this.handleFilterChange,
       this.optionsMap});
@@ -22,13 +24,16 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
   var searchQueryController = new TextEditingController();
 
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        TextField(
+        Expanded(
+          flex: 8,
+          child: TextField(
+            maxLines: null,
             controller: searchQueryController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
+              fillColor: ColorConstants.PREVIEW_SCREEN,
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),
                 color: ColorConstants.PRIMARY,
@@ -56,9 +61,9 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
                         },
                       ),
               ),
-              hintText: "Search installations, activities, artists...",
+              hintText: widget.searchText,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20),
               ),
               hintStyle: TextStyle(color: Colors.black),
             ),
@@ -69,17 +74,22 @@ class _SearchBarFilterState extends State<SearchBarFilter> {
               isLoading = false
             ],
           ),
-        Container(
-          width: 130,
-          child: FilterDropdown(
-            onFilterChange: (String value) {
-              setState(() {
-                widget.handleFilterChange(value);
-              });
-            },
-            optionsMap: widget.optionsMap,
+        ),
+        Expanded(
+          flex: 4,
+          child: Container(
+            height: 50,
+            width: 100,
+            child: FilterDropdown(
+              onFilterChange: (String value) {
+                setState(() {
+                  widget.handleFilterChange(value);
+                });
+              },
+              optionsMap: widget.optionsMap,
+            ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -1,10 +1,12 @@
 import 'package:artsideout_app/components/common/ASOCard.dart';
 import 'package:artsideout_app/components/common/NoResultBanner.dart';
+import 'package:artsideout_app/components/common/PlatformSvg.dart';
 import 'package:artsideout_app/components/layout/MasterPageLayout.dart';
 import 'package:artsideout_app/components/search/FetchQueries.dart';
 import 'package:artsideout_app/components/search/FetchResultCard.dart';
 import 'package:artsideout_app/components/search/SearchBarFilter.dart';
 import 'package:artsideout_app/constants/ASORouteConstants.dart';
+import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:artsideout_app/constants/DisplayConstants.dart';
 import 'package:artsideout_app/graphql/ProjectQueries.dart';
 import 'package:artsideout_app/models/ASOCardInfo.dart';
@@ -29,6 +31,7 @@ class MasterArtPage extends StatefulWidget {
 }
 
 class _MasterArtPageState extends State<MasterArtPage> {
+  bool expandedCollection = false;
   ScrollController _scrollController;
   int selectedValue = 0;
   int currentScrollPos = 0;
@@ -140,12 +143,12 @@ class _MasterArtPageState extends State<MasterArtPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 45,
+        top: (_displaySize == DisplaySize.SMALL) ? 70 : 60,
         left: 0,
         right: 0,
         bottom: 0,
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           child: Container(
             height: 85,
             child: Column(
@@ -165,74 +168,273 @@ class _MasterArtPageState extends State<MasterArtPage> {
           ),
         ),
       ),
-      Positioned(
-        top: 125,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: Row(
-          children: [
-            (_displaySize == DisplaySize.LARGE)
-                ? Container(
-                    width: 260,
-                    color: Colors.transparent,
-                    child: Container(
-                      child: StaggeredGridView.countBuilder(
-                        padding: EdgeInsets.zero,
-                        crossAxisCount: 1,
-                        itemCount: listActions.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: ASOCard(listActions[index], false)),
-                        staggeredTileBuilder: (int index) =>
-                            new StaggeredTile.count(
-                          1,
-                          0.57,
+      (_displaySize == DisplaySize.LARGE)
+          ? Positioned(
+              top: 125,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Row(
+                children: [
+                  Container(
+                      width: 300,
+                      color: Colors.transparent,
+                      child: Column(children: [
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                    height: 100,
+                                    color: ColorConstants.PRIMARY,
+                                    child: Stack(children: <Widget>[
+                                      PlatformSvg.asset(
+                                        "assets/icons/asoBg.svg",
+                                        height: 200,
+                                        width: double.infinity,
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  FittedBox(
+                                                      fit: BoxFit.cover,
+                                                      child: Text(
+                                                          "Special Projects",
+                                                          maxLines: 3,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .headline4
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white))),
+                                                ]),
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  FittedBox(
+                                                      fit: BoxFit.cover,
+                                                      child: Text(
+                                                          "Scroll Down!",
+                                                          maxLines: 3,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .subtitle1
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)))
+                                                ]),
+                                          ])
+                                    ])))),
+                        SizedBox(
+                          height: 10.0,
                         ),
-                        mainAxisSpacing: 15.0,
+                        Expanded(
+                          child: Container(
+                            child: StaggeredGridView.countBuilder(
+                              padding: EdgeInsets.zero,
+                              crossAxisCount: 1,
+                              itemCount: listActions.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 0, 10, 0),
+                                      child:
+                                          ASOCard(listActions[index], false)),
+                              staggeredTileBuilder: (int index) =>
+                                  new StaggeredTile.count(
+                                1,
+                                0.57,
+                              ),
+                              mainAxisSpacing: 15.0,
+                              crossAxisSpacing: 5.0,
+                            ),
+                          ),
+                        )
+                      ])),
+                  Expanded(
+                    child: GridView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.zero,
+                      cacheExtent: 200,
+                      addAutomaticKeepAlives: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: numCards,
                         crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0,
                       ),
-                    ),
-                  )
-                : Container(),
-            Expanded(
-              child: GridView.builder(
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                cacheExtent: 200,
-                addAutomaticKeepAlives: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: numCards,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0,
-                ),
-                // Let the ListView know how many items it needs to build.
-                itemCount: listInstallation.length,
-                // Provide a builder function. This is where the magic happens.
-                // Convert each item into a widget based on the type of item it is.
-                itemBuilder: (context, index) {
-                  final item = listInstallation[index];
+                      // Let the ListView know how many items it needs to build.
+                      itemCount: listInstallation.length,
+                      // Provide a builder function. This is where the magic happens.
+                      // Convert each item into a widget based on the type of item it is.
+                      itemBuilder: (context, index) {
+                        final item = listInstallation[index];
 
-                  return GestureDetector(
-                    child: fetchResultCard.getCard("Installation", item),
-                    onTap: () {
-                      if (_displaySize == DisplaySize.LARGE) {
-                        selectedValue = index;
-                        setState(() {});
-                      } else {
-                        _navigationService.navigateToWithId(
-                            ASORoutes.INSTALLATIONS, item.id);
-                      }
-                    },
-                  );
-                },
+                        return GestureDetector(
+                          child: fetchResultCard.getCard("Installation", item),
+                          onTap: () {
+                            if (_displaySize == DisplaySize.LARGE) {
+                              selectedValue = index;
+                              setState(() {});
+                            } else {
+                              _navigationService.navigateToWithId(
+                                  ASORoutes.INSTALLATIONS, item.id);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          // TODO FIX THIS DUPE CODE, IT JUST USES A LISTVIEW INSTEAD
+          : Positioned(
+              top: 125,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: GestureDetector(
+                            onTap: () => setState(() {
+                                  expandedCollection = !expandedCollection;
+                                }),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                    height: 100,
+                                    color: ColorConstants.PRIMARY,
+                                    child: Stack(children: <Widget>[
+                                      PlatformSvg.asset(
+                                        "assets/icons/asoBg.svg",
+                                        height: 100,
+                                        width: double.infinity,
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      new Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  FittedBox(
+                                                      fit: BoxFit.cover,
+                                                      child: Text(
+                                                          "Special Projects",
+                                                          maxLines: 3,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .headline4
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white))),
+                                                  SizedBox(width: 15.0),
+                                                  Icon(
+                                                    expandedCollection
+                                                        ? Icons.arrow_upward
+                                                        : Icons.arrow_downward,
+                                                    size: 35,
+                                                    color: Colors.white,
+                                                  )
+                                                ])
+                                          ])
+                                    ])))),
+                      ),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height:
+                            expandedCollection ? (100 * listActions.length) : 0,
+                        color: Colors.transparent,
+                        child: Container(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: new NeverScrollableScrollPhysics(),
+                            itemCount: listActions.length,
+                            itemBuilder: (context, index) => Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: ASOCard(
+                                  listActions[index],
+                                  false,
+                                  height: 100,
+                                )),
+                          ),
+                        ),
+                      ),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: new NeverScrollableScrollPhysics(),
+                        cacheExtent: 200,
+                        addAutomaticKeepAlives: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: numCards,
+                          crossAxisSpacing: 5.0,
+                          mainAxisSpacing: 5.0,
+                        ),
+                        // Let the ListView know how many items it needs to build.
+                        itemCount: listInstallation.length,
+                        // Provide a builder function. This is where the magic happens.
+                        // Convert each item into a widget based on the type of item it is.
+                        itemBuilder: (context, index) {
+                          final item = listInstallation[index];
+
+                          return GestureDetector(
+                            child:
+                                fetchResultCard.getCard("Installation", item),
+                            onTap: () {
+                              if (_displaySize == DisplaySize.LARGE) {
+                                selectedValue = index;
+                                setState(() {});
+                              } else {
+                                _navigationService.navigateToWithId(
+                                    ASORoutes.INSTALLATIONS, item.id);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-          ],
-        ),
-      ),
       NoResultBanner(queryResult, noResults),
     ]);
 
@@ -241,7 +443,8 @@ class _MasterArtPageState extends State<MasterArtPage> {
         : Container());
     return MasterPageLayout(
       pageName: "Studio Installations",
-      pageDesc: "Blah Blah Blah",
+      pageDesc:
+          "In thinking of “Connection,” artists create a diverse body of works: Mixed Media, Digital Media, Drawing, Painting and Sculpture. ",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,

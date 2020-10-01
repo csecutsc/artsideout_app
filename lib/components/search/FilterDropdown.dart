@@ -1,3 +1,4 @@
+import 'package:artsideout_app/constants/ColorConstants.dart';
 import 'package:flutter/material.dart';
 
 class FilterDropdown extends StatefulWidget {
@@ -31,9 +32,9 @@ class _FilterDropdownState extends State<FilterDropdown> {
       padding: EdgeInsets.symmetric(horizontal: 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: Color(0xFFF9EBEB),
+        color: ColorConstants.PREVIEW_SCREEN,
         border: Border.all(
-            style: BorderStyle.solid, color: Color(0xFF6868F6), width: 2.0),
+            style: BorderStyle.solid, color: ColorConstants.PRIMARY, width: 2.0),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(

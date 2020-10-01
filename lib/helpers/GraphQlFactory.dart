@@ -36,17 +36,14 @@ class GraphQlFactory {
     if (result["artMarketVendor"] != null) {
       listMarkets.add(buildMarket(result["artMarketVendor"]));
     }
-    return Profile(
-        result["name"],
-        result["desc"] ?? "",
+    return Profile(result["name"], result["desc"] ?? "",
         id: result["id"],
         social: socialMap,
         type: result["type"] ?? "",
         profilePic: profilePic,
         installations: listInstallations,
         activities: listActivities,
-        markets: listMarkets
-    );
+        markets: listMarkets);
   }
 
   static Installation buildInstallation(Map result) {
@@ -54,11 +51,22 @@ class GraphQlFactory {
 
     List<Map<String, String>> images = [];
 
+    List<Map<String, String>> files = [];
+
     if (result["images"].length != 0) {
       for (int j = 0; j < result["images"].length; j++) {
         String url = result["images"][j]["url"];
         String altText = result["images"][j]["altText"];
-        images.add({"url": url, "altText": altText});
+        if (result["images"][j]["mimeType"] == null ||
+            result["images"][j]["mimeType"] != "application/pdf") {
+          images.add({"url": url, "altText": altText});
+        } else {
+          files.add({
+            "url": url,
+            "altText": altText,
+            "type": result["images"][j]["mimeType"]
+          });
+        }
       }
     } else {
       images.add({"url": PlaceholderConstants.GENERIC_IMAGE, "altText": null});
@@ -75,6 +83,7 @@ class GraphQlFactory {
       desc: result["desc"] ?? "",
       zone: result["zone"] ?? "",
       images: images,
+      files: files,
       videoURL: result["videoUrl"] ?? "",
       location: {
         'latitude': result["location"] == null ? 0.0 : result["latitude"],
@@ -117,7 +126,6 @@ class GraphQlFactory {
           meetingUrl: result["zoomMeeting"]["meetingUrl"] ?? "",
           meetingPass: result["zoomMeeting"]["meetingPass"] ?? "");
     }
-
 
     return Activity(
         id: result["id"],

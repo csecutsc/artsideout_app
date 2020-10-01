@@ -60,7 +60,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
         showControls: true,
         showFullscreenButton: true,
         desktopMode: false,
-        autoPlay: true,
+        autoPlay: false,
       ),
     );
   }
@@ -78,15 +78,6 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             }
           });
       });
-  }
-
-  String startTimeDisplay(String startTimeGiven, BuildContext context) {
-    if (startTimeGiven == "") {
-      return "ALL DAY";
-    } else {
-      return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven))
-          .format(context);
-    }
   }
 
   String endTimeDisplay(String endTimeGiven, BuildContext context) {
@@ -167,6 +158,37 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       );
     }
 
+    String startTimeDisplay(String startTimeGiven, BuildContext context) {
+      if (startTimeGiven == "") {
+        return "ALL DAY";
+      } else {
+        return TimeOfDay.fromDateTime(DateTime.parse(startTimeGiven).toLocal())
+            .format(context);
+      }
+    }
+
+    Widget timeWidget() {
+      if (widget.data.time.isNotEmpty ||
+          widget.data.time["startTime"].isNotEmpty) {
+        String timeText =
+            startTimeDisplay(widget.data.time["startTime"], context);
+        if (!(timeText == "ALL DAY") ||
+            (widget.data.time["endTime"].isNotEmpty)) {
+          String endTime =
+              startTimeDisplay(widget.data.time["endTime"], context);
+          timeText = "$timeText - $endTime ${DateTime.now().timeZoneName}";
+        }
+        return Center(
+            child: SelectableText(timeText.toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    .copyWith(fontSize: 16, color: ColorConstants.PRIMARY)));
+      } else {
+        return Container();
+      }
+    }
+
     return YoutubePlayerControllerProvider(
         controller: videoController,
         child: Scaffold(
@@ -189,8 +211,14 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    (widget.data.zoomMeeting != null)
+                    (widget.data.zoomMeeting != null ||
+                            widget.data.performanceType == "Workshops")
                         ? Column(children: [
+                            FittedBox(
+                                fit: BoxFit.fitWidth, child: timeWidget()),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Text("Meeting ID",
                                 style: Theme.of(context).textTheme.subtitle1),
                             SelectableText(widget.data.zoomMeeting.meetingId,
@@ -222,7 +250,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                                 .textTheme
                                                 .bodyText1
                                                 .copyWith(
-                                              color: Colors.blue,
+                                                    color: Colors.blue,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18.0,
                                                     decoration: TextDecoration
@@ -253,8 +281,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                             Center(
                                 child: Title(
                                     color: ColorConstants.PRIMARY,
-                                    child: Text(
-                                      "Click on the images above to expand or download. Also, scroll down for more information!",
+                                    child: SelectableText(
+                                      "Click on the images above to expand. Copyrights are reserved to the artists. Also, scroll down for more information!",
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style:
@@ -278,7 +306,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 _displaySize == DisplaySize.MEDIUM) &&
                             !widget.expandedScreen
                         ? RaisedButton(
-                            child: Text("VIEW PAGE",
+                            child: Text("CLICK TO VIEW FULL PAGE",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1
@@ -290,11 +318,8 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   ASORoutes.ACTIVITIES, widget.data.id);
                             })
                         : Container(),
-                    SizedBox(
-                      height: 15.0,
-                    ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -323,8 +348,15 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                             child: MarkdownBody(
                               selectable: true,
                               data: widget.data.desc,
-                              onTapLink: (url) {
-                                launch(url);
+                              onTapLink: (url) async {
+                                if (!url.startsWith("http")) {
+                                  url = "http://" + url;
+                                }
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                } else {
+                                  throw 'Could not launch';
+                                }
                               },
                               styleSheet: MarkdownStyleSheet.fromTheme(
                                       Theme.of(context))

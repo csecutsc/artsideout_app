@@ -13,10 +13,10 @@ class MobileMenu extends StatefulWidget {
 class _MobileMenuState extends State<MobileMenu> {
   final List<_MobileMenuItem> _menuItems = [
     _MobileMenuItem("Installations", Icons.palette, ASORoutes.INSTALLATIONS),
-    _MobileMenuItem("Performances", Icons.group, ASORoutes.ACTIVITIES),
-    _MobileMenuItem("Profiles", Icons.person, ASORoutes.PROFILES),
+    _MobileMenuItem("Performances", Icons.face, ASORoutes.ACTIVITIES),
+    _MobileMenuItem("Profiles", Icons.group, ASORoutes.PROFILES),
     _MobileMenuItem("Art Market", Icons.store, ASORoutes.MARKETS),
-    _MobileMenuItem("Workshops", Icons.store, ASORoutes.WORKSHOPS),
+    _MobileMenuItem("Workshops", Icons.calendar_today, ASORoutes.WORKSHOPS),
   ];
   @override
   Widget build(BuildContext context) {

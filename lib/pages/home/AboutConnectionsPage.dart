@@ -22,7 +22,7 @@ class AboutConnectionsPage extends StatelessWidget {
         ),
         elevation: 0.0,
       ),
-      body: AboutConnectionsWidget()
+      body: AboutConnectionsWidget(expandedScreen: true)
     );
   }
 }

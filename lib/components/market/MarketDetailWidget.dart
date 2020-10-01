@@ -149,8 +149,8 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                   Center(
                       child: Title(
                           color: ColorConstants.PRIMARY,
-                          child: Text(
-                            "Click on the images above to expand or download. Also, scroll down for more information!",
+                          child: SelectableText(
+                            "Click on the images above to expand. Copyrights are reserved to the artists. Also, scroll down for more information!",
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             style:
@@ -161,7 +161,7 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                 (_displaySize == DisplaySize.LARGE ||
                     _displaySize == DisplaySize.MEDIUM) && !widget.expandedScreen
                     ? RaisedButton(
-                    child: Text("VIEW PAGE",
+                    child: Text("CLICK TO VIEW FULL PAGE",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1
@@ -197,8 +197,15 @@ class _MarketDetailWidgetState extends State<MarketDetailWidget> {
                         child: MarkdownBody(
                           selectable: true,
                           data: widget.data.desc,
-                          onTapLink: (url) {
-                            launch(url);
+                          onTapLink: (url) async {
+                            if (!url.startsWith("http")) {
+                              url = "http://" + url;
+                            }
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch';
+                            }
                           },
                           styleSheet:
                               MarkdownStyleSheet.fromTheme(Theme.of(context))

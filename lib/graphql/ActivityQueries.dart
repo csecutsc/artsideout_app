@@ -1,7 +1,7 @@
 class ActivityQueries {
   String getAll = """ 
     {
-      activities(where: {performanceType_not: Workshops}) {
+      activities(where: {performanceType_not: Workshops}, orderBy: prioritized_ASC) {
         id
         title
         desc
@@ -25,6 +25,7 @@ class ActivityQueries {
           social
           type
         }
+        prioritized
       }
     }
   """;
@@ -104,7 +105,7 @@ class ActivityQueries {
 
   String getAllWorkShops = """
     {
-      activities(where: {performanceType: Workshops}) {
+      activities(where: {performanceType: Workshops}, orderBy: startTime_ASC) {
         id
         title
         desc

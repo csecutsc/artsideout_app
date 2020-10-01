@@ -9,8 +9,9 @@ import 'package:url_launcher/url_launcher.dart';
 class ASOCard extends StatefulWidget {
   final ASOCardInfo asoCardInfo;
   final bool isBigCard;
+  final double height;
 
-  ASOCard(this.asoCardInfo, this.isBigCard);
+  ASOCard(this.asoCardInfo, this.isBigCard, {this.height = double.infinity});
 
   @override
   _ASOCardState createState() => _ASOCardState();
@@ -37,7 +38,7 @@ class _ASOCardState extends State<ASOCard> {
                 children: <Widget>[
                   PlatformSvg.asset(
                     widget.asoCardInfo.imgUrl,
-                    height: double.infinity,
+                    height: widget.height,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
@@ -45,8 +46,8 @@ class _ASOCardState extends State<ASOCard> {
                   new Align(
                       alignment: Alignment(-0.8, 0.8),
                       child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(widget.asoCardInfo.title,
+                        fit: BoxFit.cover,
+                        child: Text(widget.asoCardInfo.title.split(":")[0],
                             maxLines: 3,
                             style: Theme.of(context)
                                 .textTheme

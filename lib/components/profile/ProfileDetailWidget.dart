@@ -34,7 +34,6 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
     NavigationService _navigationService = serviceLocator<NavigationService>();
     DisplaySize _displaySize = serviceLocator<DisplayService>().displaySize;
     int width = MediaQuery.of(context).size.width.toInt();
-    print(width);
     return Scaffold(
         backgroundColor: ColorConstants.PREVIEW_SCREEN,
         body: LayoutBuilder(builder: (context, constraints) {
@@ -62,7 +61,7 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                             _displaySize == DisplaySize.MEDIUM) &&
                         !widget.expandedScreen
                     ? RaisedButton(
-                        child: Text("VIEW PAGE",
+                        child: Text("CLICK TO VIEW FULL PAGE",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
@@ -89,8 +88,15 @@ class _ProfileDetailWidgetState extends State<ProfileDetailWidget> {
                         child: MarkdownBody(
                           selectable: true,
                           data: widget.profile.desc,
-                          onTapLink: (url) {
-                            launch(url);
+                          onTapLink: (url) async{
+                            if (!url.startsWith("http")) {
+                              url = "http://" + url;
+                            }
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch';
+                            }
                           },
                           styleSheet:
                               MarkdownStyleSheet.fromTheme(Theme.of(context))

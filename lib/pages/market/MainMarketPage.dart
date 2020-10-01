@@ -106,33 +106,7 @@ class _MainMarketPageState extends State<MainMarketPage> {
     }
     Widget mainPageWidget = Stack(children: [
       Positioned(
-        top: 45,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Container(
-            height: 85,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // SearchBarFilter(
-                //   handleTextChange: handleTextChange,
-                //   handleTextClear: _fillList,
-                //   handleFilterChange: handleFilterChange,
-                //   optionsMap: optionsMap,
-                // ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Positioned(
-        top: 125,
+        top: (_displaySize == DisplaySize.SMALL) ? 60 : 55,
         left: 0,
         right: 0,
         bottom: 0,
@@ -188,7 +162,7 @@ class _MainMarketPageState extends State<MainMarketPage> {
         : Container());
     return MasterPageLayout(
       pageName: "Art Market",
-      pageDesc: "Blah Blah Blah",
+      pageDesc: "The art market hosts amazing vendors with the beautiful art pieces as a feast to your eyes.",
       mainPageWidget: mainPageWidget,
       secondPageWidget: secondPageWidget,
       loading: loading,
