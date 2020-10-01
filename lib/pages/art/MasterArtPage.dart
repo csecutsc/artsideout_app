@@ -49,7 +49,7 @@ class _MasterArtPageState extends State<MasterArtPage> {
   Map<String, bool> optionsMap = {
     "Sculpture": true,
     "DigitalMedia": true,
-    "MixMedia": true,
+    "MixedMedia": true,
     "DrawingsAndPaintings": true,
     "Other": true,
   };

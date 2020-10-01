@@ -29,9 +29,8 @@ class _MasterActivityPageState extends State<MasterActivityPage> {
 
   Map<String, bool> optionsMap = {
     "Music": true,
-    "Spoken Word": true,
+    "SpokenWord": true,
     "Theatre": true,
-    "Sculpture": true,
     "Other": true,
   };
 

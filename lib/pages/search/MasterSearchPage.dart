@@ -34,11 +34,11 @@ class _MasterSearchPageState extends State<MasterSearchPage> {
   String queryResult = "";
   Map<String, bool> optionsMap = {
     "Music": true,
-    "Spoken Word": true,
+    "SpokenWord": true,
     "Theatre": true,
     "Sculpture": true,
     "DigitalMedia": true,
-    "MixMedia": true,
+    "MixedMedia": true,
     "DrawingsAndPaintings": true,
     "Artist": true,
     "Organizer": true,
